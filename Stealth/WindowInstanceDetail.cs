@@ -7,7 +7,9 @@ namespace Stealth
 {
     public class WindowInstanceDetail: WindowInstanceInfo
     {
-        public bool NotObsolete { set; get; }
+        public bool IsAlive { set; get; }  //if the windows is not destoried
         public bool IsModified { set; get; }
+        
+        public int Opacity { set; get; }
     }
 }

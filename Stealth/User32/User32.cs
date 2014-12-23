@@ -69,6 +69,23 @@ namespace Stealth
 
 
         /// <summary>
+        /// Gets the opacity and transparency color key of a layered window
+        /// </summary>
+        /// <param name="hWnd">A handle to the layered window</param>
+        /// <param name="crKey">RGB: such as 0xFFAA00</param>
+        /// <param name="bAlpha">When bAlpha is 0, the window is completely transparent.
+        /// When bAlpha is 255, the window is opaque.</param>
+        /// <param name="dwFlags">An action to be taken. This parameter can be one or more of the following values.
+        /// LWA_ALPHA: 0x2
+        /// LWA_COLORKEY: 0x1</param>
+        /// <returns></returns>
+        [DllImport("user32.dll", EntryPoint = "GetLayeredWindowAttributes",
+            ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetLayeredWindowAttributes(IntPtr hWnd, out uint crKey, out byte bAlpha, out uint dwFlags);
+
+
+        /// <summary>
         /// Changes an attribute of the specified window.
         /// The function also sets a value at the specified offset in the extra window memory.
         /// </summary>
