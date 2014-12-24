@@ -26,8 +26,10 @@ namespace Stealth
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+            flowLayoutPanelMain.Visible = false;
             RefreshWindowInfoList();
             RefreshWindowInstanceDetailList();
+            flowLayoutPanelMain.Visible = true;
         }
 
         #region Regenerate the list of WindowInstance Information
@@ -77,6 +79,7 @@ namespace Stealth
                 windowInstanceDetailList = new Dictionary<long, WindowInstanceDetail>();
             }
             windowInstanceDetailList.Clear();  //todo: the list will audit any updates
+            flowLayoutPanelMain.Controls.Clear();
             foreach (WindowInstanceInfo windowInfo in windowInstanceInfoList)
             {
                 WindowInstanceDetail detail = new WindowInstanceDetail();
@@ -92,11 +95,30 @@ namespace Stealth
                 detail.Opacity = (int)bAlpha;
 
                 windowInstanceDetailList.Add((long)windowInfo.hWnd, detail);
+                UserControlWindowItem windowItem = new UserControlWindowItem();
+                windowItem.SethWnd(windowInfo.hWnd);
+                windowItem.SetWindowTitle(windowInfo.WindowTitle);
+                windowItem.SetStatusColor(RandomColor());
+                flowLayoutPanelMain.Controls.Add(windowItem);
             }
-            dataGridViewMain.DataSource = windowInstanceDetailList.Values.ToArray();
+            //dataGridViewMain.DataSource = windowInstanceDetailList.Values.ToArray();
+           
         }
         #endregion
 
+
+        //temp, just generate random color
+        StatusColorTag RandomColor()
+        {
+            var r=new Random(DateTime.Now.Millisecond);
+            switch(r.Next(4))
+            {
+                case 0: return StatusColorTag.BLOCKED;
+                case 1: return StatusColorTag.MATCHED;
+                case 2: return StatusColorTag.MODIFIED;
+                default: return StatusColorTag.NORMAL;
+            }
+        }
 
     }
 }
