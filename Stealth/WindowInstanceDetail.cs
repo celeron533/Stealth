@@ -5,11 +5,12 @@ using System.Text;
 
 namespace Stealth
 {
-    public class WindowInstanceDetail: WindowInstanceInfo
+    public class WindowInstanceDetail: WindowInstanceBase
     {
         public bool IsAlive { set; get; }  //if the windows is not destoried
         public bool IsModified { set; get; }
-        
-        public int Opacity { set; get; }
+        public bool IsTransparency { set; get; }
+        public int Transparency { set; get; }
+        public int PinOnTop { set; get; }
     }
 }

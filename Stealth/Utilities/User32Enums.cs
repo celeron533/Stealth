@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Stealth
+namespace Stealth.Utilities
 {
     /// <summary>
     /// Define useful enum Flags of User32.dll

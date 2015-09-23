@@ -4,19 +4,10 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Stealth
+namespace Stealth.Utilities
 {
     public partial class User32
     {
-        /// <summary>
-        /// filter function
-        /// </summary>
-        /// <param name="hWnd"></param>
-        /// <param name="lParam"></param>
-        /// <returns></returns>
-        public delegate bool EnumDelegate(IntPtr hWnd, int lParam);
-
-
         /// <summary>
         /// Determines the visibility state of the specified window.
         /// </summary>
@@ -49,6 +40,8 @@ namespace Stealth
         [DllImport("user32.dll", EntryPoint = "EnumDesktopWindows",
         ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool EnumDesktopWindows(IntPtr hDesktop, EnumDelegate lpEnumCallbackFunction, IntPtr lParam);
+
+        public delegate bool EnumDelegate(IntPtr hWnd, int lParam);
 
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Stealth.Utilities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,7 +17,7 @@ namespace Stealth
             InitializeComponent();
         }
 
-        public List<WindowInstanceInfo> windowInstanceInfoList;
+        public List<WindowInstanceBase> windowInstanceInfoList;
         public Dictionary<long, WindowInstanceDetail> windowInstanceDetailList;
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -38,12 +39,12 @@ namespace Stealth
         {
             if (windowInstanceInfoList == null)
             {
-                windowInstanceInfoList = new List<WindowInstanceInfo>();
+                windowInstanceInfoList = new List<WindowInstanceBase>();
             }
             windowInstanceInfoList.Clear();
 
             //get all desktop windows handler
-            User32.EnumDelegate filter = delegate(IntPtr hWnd, int lParam)
+            User32.EnumDelegate filter = (IntPtr hWnd, int lParam) =>
             {
                 StringBuilder strbTitle = new StringBuilder(255);
                 int nLength = User32.GetWindowText(hWnd, strbTitle, strbTitle.Capacity + 1);
@@ -51,7 +52,7 @@ namespace Stealth
 
                 if (User32.IsWindowVisible(hWnd) && !string.IsNullOrEmpty(strTitle))
                 {
-                    windowInstanceInfoList.Add(new WindowInstanceInfo() { hWnd = hWnd, WindowTitle = strTitle });
+                    windowInstanceInfoList.Add(new WindowInstanceBase() { hWnd = hWnd, WindowTitle = strTitle });
                 }
                 return true;
             };
@@ -80,7 +81,7 @@ namespace Stealth
             }
             windowInstanceDetailList.Clear();  //todo: the list will audit any updates
             flowLayoutPanelMain.Controls.Clear();
-            foreach (WindowInstanceInfo windowInfo in windowInstanceInfoList)
+            foreach (WindowInstanceBase windowInfo in windowInstanceInfoList)
             {
                 WindowInstanceDetail detail = new WindowInstanceDetail();
                 detail.hWnd = windowInfo.hWnd;

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Stealth
 {
-    public class WindowInstanceInfo
+    public class WindowInstanceBase
     {
         public IntPtr hWnd { set; get; }
         public string WindowTitle { set; get; }
