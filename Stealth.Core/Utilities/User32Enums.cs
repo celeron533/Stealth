@@ -11,15 +11,16 @@ namespace Stealth.Core.Utilities
     public partial class User32
     {
         [Flags]
-        public enum LWA
+        public enum LWA : uint
         {
-            LWA_ALPHA = 0x2,  //Use bAlpha to determine the opacity of the layered window.
-            LWA_COLOYKEY = 0x1  //Use crKey as the transparency color.
+            LWA_UNDEFINED = 0x0,
+            LWA_COLOYKEY = 0x1,  //Use crKey as the transparency color.
+            LWA_ALPHA = 0x2  //Use bAlpha to determine the opacity of the layered window.
         }
 
 
         [Flags]
-        public enum GWL
+        public enum GWL : int
         {
             GWL_EXSTYLE = -20, //Sets a new extended window style.
             GWL_HINSTANCE = -6, //Sets a new application instance handle.

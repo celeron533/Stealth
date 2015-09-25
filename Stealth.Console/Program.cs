@@ -10,14 +10,19 @@ namespace Stealth.Console
     {
         static void Main(string[] args)
         {
-            WindowInstanceService windowInstanceService = new WindowInstanceService();
-            var list = windowInstanceService.GetWindowInstanceInfoDetailList()
-                .Where(c=>c.isWindowVisible && !string.IsNullOrEmpty(c.windowTitle));
-            foreach(var item in list)
+            while (true)
             {
-                System.Console.WriteLine(item.ToString());
+                System.Console.WriteLine("=====");
+                WindowInstanceService windowInstanceService = new WindowInstanceService();
+                var list = windowInstanceService.GetWindowInstanceInfoDetailList()
+                    .Where(c => c.isWindowVisible && !string.IsNullOrEmpty(c.windowTitle));
+                foreach (var item in list)
+                {
+                    System.Console.WriteLine(item.ToString());
+                    System.Console.WriteLine("{0}, {1}, {2}", item.transparencyProperty.crKey, item.transparencyProperty.bAlpha, item.transparencyProperty.dwFlags);
+                }
+                System.Console.ReadLine();
             }
-            System.Console.ReadLine();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Stealth.Core.WindowInstance
                 , (IntPtr hWnd, int lParam) =>
                     {
                         WindowInstanceInfoResultList.Add(new WindowInstanceInfoDetail(hWnd));
-                        return true;
+                        return true;    //always return true
                     }
                 , IntPtr.Zero);
 
