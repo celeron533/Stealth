@@ -48,24 +48,24 @@ namespace Stealth.Console
 
 
             //////////////
-            while (false)
-            {
-                System.Console.WriteLine("=====");
-                WindowInstanceService windowInstanceService = new WindowInstanceService();
-                var list = windowInstanceService.GetWindowInstanceInfoDetailList()
-                    .Where(c => c.isWindowVisible && !string.IsNullOrEmpty(c.windowTitle));
-                foreach (var item in list)
-                {
-                    if (item.windowTitle== "无标题 - 记事本")
-                    {
-                        item.isLayered = !item.isLayered;
-                        item.transparencyProperty.dwFlags = (uint)User32.LWA.LWA_ALPHA;
-                        item.transparencyProperty.bAlpha = 200;
-                    }
-                    System.Console.WriteLine(item.ToString());
-                }
-                System.Console.ReadLine();
-            }
+            //while (false)
+            //{
+            //    System.Console.WriteLine("=====");
+            //    WindowInstanceService windowInstanceService = new WindowInstanceService();
+            //    var list = windowInstanceService.GetWindowInstanceInfoDetailList()
+            //        .Where(c => c.isWindowVisible && !string.IsNullOrEmpty(c.windowTitle));
+            //    foreach (var item in list)
+            //    {
+            //        if (item.windowTitle== "无标题 - 记事本")
+            //        {
+            //            item.isLayered = !item.isLayered;
+            //            item.transparencyProperty.dwFlags = (uint)User32.LWA.LWA_ALPHA;
+            //            item.transparencyProperty.bAlpha = 200;
+            //        }
+            //        System.Console.WriteLine(item.ToString());
+            //    }
+            //    System.Console.ReadLine();
+            //}
         }
     }
 }
