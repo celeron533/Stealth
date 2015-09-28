@@ -103,6 +103,11 @@ namespace Stealth.Core.Utilities
         public static extern long GetWindowLongPtr(IntPtr hWnd, int nIndex);
 
 
+        [DllImport("user32.dll", EntryPoint ="SetWindowPos",
+            ExactSpelling =false, CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, SetWindowPosFlags uFlags);
+
+
         /// <summary>
         /// Retrieves a handle to the foreground window (the window with which the user is currently working).
         /// </summary>

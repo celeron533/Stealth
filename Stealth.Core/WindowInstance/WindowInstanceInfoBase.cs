@@ -42,5 +42,10 @@ namespace Stealth.Core.WindowInstance
         {
             get { return _isWindowVisible; }
         }
+
+        public override string ToString()
+        {
+            return string.Format("hWnd={0}, Title={1}, Visible={2}", hWnd, windowTitle, isWindowVisible);
+        }
     }
 }
