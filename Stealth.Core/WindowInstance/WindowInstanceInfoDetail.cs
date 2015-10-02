@@ -49,13 +49,12 @@ namespace Stealth.Core.WindowInstance
         //local
         public bool isAlive { set; get; }  //if the windows is not destoried
         public bool isModified { set; get; }
-
         public bool isOnTop { set; get; }
 
 
         public override string ToString()
         {
-            return base.ToString() + "\n" + transparencyProperty.ToString() +"\n" + isLayered;
+            return base.ToString() + "\n  " + transparencyProperty.ToString() + ", isLayered: " +isLayered;
         }
 
 
