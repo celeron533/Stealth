@@ -40,6 +40,7 @@ namespace Stealth.Console
                     }
                     else
                     {
+                        window.isTopMost = options.TopMost;
                         window.isLayered = true;
                         window.transparencyProperty.bAlpha = (byte)options.bAlpha;
                         window.transparencyProperty.dwFlags = (uint)User32.LWA.LWA_ALPHA;

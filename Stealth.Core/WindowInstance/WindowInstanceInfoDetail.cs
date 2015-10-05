@@ -21,8 +21,14 @@ namespace Stealth.Core.WindowInstance
             //todo: refresh other members
         }
 
+        /// <summary>
+        /// This class controls the window transparency
+        /// </summary>
         public TransparencyProperty transparencyProperty;
 
+        /// <summary>
+        /// "IsLayered" is a flag of ExtendedStyle
+        /// </summary>
         public bool isLayered
         {
             set
@@ -35,6 +41,7 @@ namespace Stealth.Core.WindowInstance
             get { return (extendedStyle & (long)User32.WS_EX.WS_EX_LAYERED) != 0; }
         }
 
+        //ExtendedStyle
         private long _extendedStyle;
         public long extendedStyle
         {
@@ -46,11 +53,25 @@ namespace Stealth.Core.WindowInstance
             get { return _extendedStyle; }
         }
 
+        //IsTopMost, only set
+        public bool isTopMost
+        {
+            set
+            {
+                // hack: you should initial z-order before apply topmost
+                User32.SetWindowPos(hWnd, (IntPtr)User32.SpecialWindowHandles.HWND_BOTTOM, 0, 0, 0, 0,
+                User32.SetWindowPosFlags.SWP_NOMOVE | User32.SetWindowPosFlags.SWP_NOSIZE | User32.SetWindowPosFlags.SWP_NOACTIVATE);
+                if (value)
+                {
+                    User32.SetWindowPos(hWnd, (IntPtr)User32.SpecialWindowHandles.HWND_TOPMOST, 0, 0, 0, 0,
+                    User32.SetWindowPosFlags.SWP_NOMOVE | User32.SetWindowPosFlags.SWP_NOSIZE | User32.SetWindowPosFlags.SWP_NOACTIVATE);
+                }
+            }
+        }
+        
         //local
         public bool isAlive { set; get; }  //if the windows is not destoried
         public bool isModified { set; get; }
-        public bool isOnTop { set; get; }
-
 
         public override string ToString()
         {
@@ -58,7 +79,9 @@ namespace Stealth.Core.WindowInstance
         }
 
 
-
+        /// <summary>
+        /// crKey, bAlpha, dwFlags
+        /// </summary>
         public class TransparencyProperty
         {
             public TransparencyProperty(IntPtr hWnd)
@@ -121,7 +144,5 @@ namespace Stealth.Core.WindowInstance
                     _hWnd, crKey, bAlpha, dwFlags);
             }
         }
-
-
     }
 }

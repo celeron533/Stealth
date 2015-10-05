@@ -17,7 +17,7 @@ namespace Stealth.Core.Utilities
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool IsWindowVisible(IntPtr hWnd);
 
-
+        #region WindowText
         /// <summary>
         /// Copies the text of the specified window's title bar (if it has one) into a buffer. 
         /// </summary>
@@ -28,8 +28,9 @@ namespace Stealth.Core.Utilities
         [DllImport("user32.dll", EntryPoint = "GetWindowText",
         ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int GetWindowText(IntPtr hWnd, StringBuilder lpWindowText, int nMaxCount);
+        #endregion
 
-
+        #region EnumDesktopWindows
         /// <summary>
         /// Enumerates all top-level windows associated with the specified desktop.
         /// </summary>
@@ -42,8 +43,9 @@ namespace Stealth.Core.Utilities
         public static extern bool EnumDesktopWindows(IntPtr hDesktop, EnumDelegate lpEnumCallbackFunction, IntPtr lParam);
 
         public delegate bool EnumDelegate(IntPtr hWnd, int lParam);
+        #endregion
 
-
+        #region LayeredWindowAttributes
         /// <summary>
         /// Sets the opacity and transparency color key of a layered window
         /// </summary>
@@ -76,8 +78,9 @@ namespace Stealth.Core.Utilities
             ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetLayeredWindowAttributes(IntPtr hWnd, out uint crKey, out byte bAlpha, out uint dwFlags);
+        #endregion
 
-
+        #region WindowLongPtr
         /// <summary>
         /// Changes an attribute of the specified window.
         /// The function also sets a value at the specified offset in the extra window memory.
@@ -101,8 +104,24 @@ namespace Stealth.Core.Utilities
         [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr",
             ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern long GetWindowLongPtr(IntPtr hWnd, int nIndex);
+        #endregion
 
-
+        /// <summary>
+        /// Changes the size, position, and Z order of a child, pop-up, or top-level window.
+        /// These windows are ordered according to their appearance on the screen.
+        /// The topmost window receives the highest rank and is the first window in the Z order.
+        /// </summary>
+        /// <param name="hWnd">A handle to the window.</param>
+        /// <param name="hWndInsertAfter">A handle to the window to precede the positioned window in the Z order.
+        /// This parameter must be a window handle or one of the following values.
+        /// <seealso cref="SpecialWindowHandles"/></param>
+        /// <param name="X">The new position of the left side of the window, in client coordinates.</param>
+        /// <param name="Y">The new position of the top side of the window, in client coordinates.</param>
+        /// <param name="cx">The new width of the window, in pixels.</param>
+        /// <param name="cy">The new height of the window, in pixels.</param>
+        /// <param name="uFlags">The window sizing and positioning flags.
+        /// This parameter can be a combination of the following values.</param>
+        /// <returns></returns>
         [DllImport("user32.dll", EntryPoint ="SetWindowPos",
             ExactSpelling =false, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, SetWindowPosFlags uFlags);
