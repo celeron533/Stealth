@@ -27,7 +27,8 @@ namespace Stealth.Core.WindowInstance
         public TransparencyProperty transparencyProperty;
 
         /// <summary>
-        /// "IsLayered" is a flag of ExtendedStyle
+        /// "IsLayered" is a flag of ExtendedStyle.
+        /// This flag is mandatory before apply Transparency attributes.
         /// </summary>
         public bool isLayered
         {
@@ -53,7 +54,9 @@ namespace Stealth.Core.WindowInstance
             get { return _extendedStyle; }
         }
 
-        //IsTopMost, only set
+        /// <summary>
+        /// Set the TopMost attribute of the target.
+        /// </summary>
         public bool isTopMost
         {
             set
@@ -68,10 +71,6 @@ namespace Stealth.Core.WindowInstance
                 }
             }
         }
-        
-        //local
-        public bool isAlive { set; get; }  //if the windows is not destoried
-        public bool isModified { set; get; }
 
         public override string ToString()
         {
@@ -80,6 +79,7 @@ namespace Stealth.Core.WindowInstance
 
 
         /// <summary>
+        /// Set/get transparency properties of target window.
         /// crKey, bAlpha, dwFlags
         /// </summary>
         public class TransparencyProperty
