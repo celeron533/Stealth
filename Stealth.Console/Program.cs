@@ -15,7 +15,7 @@ namespace Stealth.Console
             if (CommandLine.Parser.Default.ParseArguments(args, options))
             {
                 //list all windows
-                if (options.hWnd==0)
+                if (options.hWnd == 0)
                 {
                     WindowInstanceService windowInstanceService = new WindowInstanceService();
                     var list = windowInstanceService.GetWindowInstanceInfoDetailList()
