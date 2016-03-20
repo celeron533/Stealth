@@ -79,7 +79,7 @@
             this.dataGridView_WindowList.ShowCellErrors = false;
             this.dataGridView_WindowList.ShowEditingIcon = false;
             this.dataGridView_WindowList.ShowRowErrors = false;
-            this.dataGridView_WindowList.Size = new System.Drawing.Size(479, 178);
+            this.dataGridView_WindowList.Size = new System.Drawing.Size(479, 201);
             this.dataGridView_WindowList.TabIndex = 0;
             this.dataGridView_WindowList.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_WindowList_RowEnter);
             this.dataGridView_WindowList.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_WindowList_RowLeave);
@@ -105,7 +105,7 @@
             // button_Refresh
             // 
             this.button_Refresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Refresh.Location = new System.Drawing.Point(419, 187);
+            this.button_Refresh.Location = new System.Drawing.Point(419, 210);
             this.button_Refresh.Name = "button_Refresh";
             this.button_Refresh.Size = new System.Drawing.Size(63, 23);
             this.button_Refresh.TabIndex = 1;
@@ -117,7 +117,7 @@
             // 
             this.groupBox_WindowDetail.Controls.Add(this.tableLayoutPanel_WindowDetail);
             this.groupBox_WindowDetail.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox_WindowDetail.Location = new System.Drawing.Point(3, 222);
+            this.groupBox_WindowDetail.Location = new System.Drawing.Point(3, 245);
             this.groupBox_WindowDetail.Name = "groupBox_WindowDetail";
             this.groupBox_WindowDetail.Size = new System.Drawing.Size(485, 158);
             this.groupBox_WindowDetail.TabIndex = 2;
@@ -245,13 +245,13 @@
             this.tableLayoutPanel_WindowList.RowCount = 2;
             this.tableLayoutPanel_WindowList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel_WindowList.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel_WindowList.Size = new System.Drawing.Size(485, 213);
+            this.tableLayoutPanel_WindowList.Size = new System.Drawing.Size(485, 236);
             this.tableLayoutPanel_WindowList.TabIndex = 0;
             // 
             // textBox_Filter
             // 
             this.textBox_Filter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox_Filter.Location = new System.Drawing.Point(3, 187);
+            this.textBox_Filter.Location = new System.Drawing.Point(3, 210);
             this.textBox_Filter.Name = "textBox_Filter";
             this.textBox_Filter.Size = new System.Drawing.Size(410, 21);
             this.textBox_Filter.TabIndex = 2;

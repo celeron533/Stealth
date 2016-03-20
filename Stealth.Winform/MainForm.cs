@@ -16,12 +16,12 @@ namespace Stealth.Winform
         public MainForm()
         {
             InitializeComponent();
-            RefreshWindowList();
             FormInit();
         }
 
         private void FormInit()
         {
+            RefreshWindowList();
             UpdateTransLabel();
         }
 
@@ -31,11 +31,14 @@ namespace Stealth.Winform
 
         private WindowInstanceInfoDetail selectedWindow = null;
 
+        #region WindowList
+
         private void button_Refresh_Click(object sender, EventArgs e)
         {
             RefreshWindowList();
         }
 
+        //refresh the entire the window info list, the filter will be kept
         private void RefreshWindowList()
         {
             windowInfoList = windowInstanceService.GetWindowInstanceInfoDetailList()
@@ -44,12 +47,37 @@ namespace Stealth.Winform
             WindowListFilter();
             //dataGridView_WindowList.DataSource = windowInfoList;
         }
+
+        //realtime window filter: by Title name
         private void WindowListFilter()
         {
             filteredWindowList = windowInfoList.Where(c => c.windowTitle.ToLower().Contains(textBox_Filter.Text.ToLower())).ToList();
             dataGridView_WindowList.DataSource = filteredWindowList;
         }
 
+        //filter
+        private void textBox_Filter_TextChanged(object sender, EventArgs e)
+        {
+            WindowListFilter();
+        }
+
+        //when user select a row
+        private void dataGridView_WindowList_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            selectedWindow = filteredWindowList[e.RowIndex];
+            textBox_Title.Text = selectedWindow.windowTitle;
+        }
+
+        //when user deselect a row
+        private void dataGridView_WindowList_RowLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            selectedWindow = null;
+            textBox_Title.Text = string.Empty;
+        }
+
+        #endregion
+
+        #region WindowDetail
         private void trackBar_Trans_Scroll(object sender, EventArgs e)
         {
             UpdateTransLabel();
@@ -67,12 +95,6 @@ namespace Stealth.Winform
             SetWindow();
         }
 
-        private void dataGridView_WindowList_RowEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            selectedWindow = filteredWindowList[e.RowIndex];
-            textBox_Title.Text = selectedWindow.windowTitle;
-        }
-
         private void button_Set_Click(object sender, EventArgs e)
         {
             SetWindow();
@@ -88,6 +110,10 @@ namespace Stealth.Winform
             selectedWindow.transparencyProperty.dwFlags = (uint)User32.LWA.LWA_ALPHA;
         }
 
+        #endregion
+
+        #region Menu
+
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Environment.Exit(0);
@@ -98,15 +124,7 @@ namespace Stealth.Winform
             new AboutBox().ShowDialog();
         }
 
-        private void textBox_Filter_TextChanged(object sender, EventArgs e)
-        {
-            WindowListFilter();
-        }
+        #endregion
 
-        private void dataGridView_WindowList_RowLeave(object sender, DataGridViewCellEventArgs e)
-        {
-            selectedWindow = null;
-            textBox_Title.Text = string.Empty;
-        }
     }
 }
