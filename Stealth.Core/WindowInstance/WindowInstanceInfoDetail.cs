@@ -72,6 +72,9 @@ namespace Stealth.Core.WindowInstance
             }
         }
 
+        public bool isModified { get; set; }
+        public bool isRemoved { get; set; }
+
         public override string ToString()
         {
             return base.ToString() + "\n  " + transparencyProperty.ToString() + ", isLayered: " +isLayered;

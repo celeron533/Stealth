@@ -31,6 +31,8 @@
             this.dataGridView_WindowList = new System.Windows.Forms.DataGridView();
             this.hWnd = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.isModified = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.isRemoved = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.button_Refresh = new System.Windows.Forms.Button();
             this.groupBox_WindowDetail = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel_WindowDetail = new System.Windows.Forms.TableLayoutPanel();
@@ -65,7 +67,9 @@
             this.dataGridView_WindowList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView_WindowList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.hWnd,
-            this.Title});
+            this.Title,
+            this.isModified,
+            this.isRemoved});
             this.tableLayoutPanel_WindowList.SetColumnSpan(this.dataGridView_WindowList, 2);
             this.dataGridView_WindowList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView_WindowList.Location = new System.Drawing.Point(3, 3);
@@ -100,6 +104,26 @@
             this.Title.Name = "Title";
             this.Title.ReadOnly = true;
             this.Title.Width = 60;
+            // 
+            // isModified
+            // 
+            this.isModified.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+            this.isModified.DataPropertyName = "isModified";
+            this.isModified.HeaderText = "Modified";
+            this.isModified.MinimumWidth = 25;
+            this.isModified.Name = "isModified";
+            this.isModified.ReadOnly = true;
+            this.isModified.Width = 25;
+            // 
+            // isRemoved
+            // 
+            this.isRemoved.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+            this.isRemoved.DataPropertyName = "isRemoved";
+            this.isRemoved.HeaderText = "Removed";
+            this.isRemoved.MinimumWidth = 25;
+            this.isRemoved.Name = "isRemoved";
+            this.isRemoved.ReadOnly = true;
+            this.isRemoved.Width = 25;
             // 
             // button_Refresh
             // 
@@ -331,8 +355,6 @@
         private System.Windows.Forms.Button button_Reset;
         private System.Windows.Forms.TextBox textBox_Title;
         private System.Windows.Forms.DataGridView dataGridView_WindowList;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Title;
-        private System.Windows.Forms.DataGridViewTextBoxColumn hWnd;
         private System.Windows.Forms.CheckBox checkBox_Top;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel_WindowDetail;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
@@ -343,6 +365,10 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.TextBox textBox_Filter;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn isRemoved;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn isModified;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Title;
+        private System.Windows.Forms.DataGridViewTextBoxColumn hWnd;
     }
 }
 

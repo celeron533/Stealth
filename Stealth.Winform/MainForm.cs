@@ -1,6 +1,7 @@
 ﻿using Stealth.Core.Utilities;
 using Stealth.Core.WindowInstance;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,12 +27,13 @@ namespace Stealth.Winform
         }
 
         private WindowInstanceService windowInstanceService = new WindowInstanceService();
-        private List<WindowInstanceInfoDetail> windowInfoList = new List<WindowInstanceInfoDetail>();
+        private List<WindowInstanceInfoDetail> windowList = new List<WindowInstanceInfoDetail>();
+        private List<WindowInstanceInfoDetail> scanWindowList = new List<WindowInstanceInfoDetail>();
         private List<WindowInstanceInfoDetail> filteredWindowList = new List<WindowInstanceInfoDetail>();
 
         private WindowInstanceInfoDetail selectedWindow = null;
 
-        #region WindowList
+        #region WindowList Section
 
         private void button_Refresh_Click(object sender, EventArgs e)
         {
@@ -41,8 +43,36 @@ namespace Stealth.Winform
         //refresh the entire the window info list, the filter will be kept
         private void RefreshWindowList()
         {
-            windowInfoList = windowInstanceService.GetWindowInstanceInfoDetailList()
+            scanWindowList = windowInstanceService.GetWindowInstanceInfoDetailList()
                 .Where(c => c.isWindowVisible && !string.IsNullOrEmpty(c.windowTitle)).ToList();
+
+            WindowComparer<WindowInstanceInfoDetail> windowComparer = new WindowComparer<WindowInstanceInfoDetail>();
+
+            //check the removed windows
+            windowList.ForEach(c =>
+            {
+                c.isRemoved = !scanWindowList.Contains(c, windowComparer);
+            });
+
+            //add/update scan result to current list
+            scanWindowList.ForEach(c =>
+            {
+                //update
+                if (windowList.Contains(c, windowComparer))
+                {
+                    //update
+                    var target = windowList.Where(d => d.hWnd == c.hWnd).FirstOrDefault();
+                    bool isModified = target.isModified;
+                    target = c;
+                    target.isModified = isModified;
+                }
+                //add
+                else
+                {
+                    windowList.Add(c);
+                }
+            });
+
             dataGridView_WindowList.AutoGenerateColumns = false;
             WindowListFilter();
             //dataGridView_WindowList.DataSource = windowInfoList;
@@ -51,7 +81,7 @@ namespace Stealth.Winform
         //realtime window filter: by Title name
         private void WindowListFilter()
         {
-            filteredWindowList = windowInfoList.Where(c => c.windowTitle.ToLower().Contains(textBox_Filter.Text.ToLower())).ToList();
+            filteredWindowList = windowList.Where(c => c.windowTitle.ToLower().Contains(textBox_Filter.Text.ToLower())).ToList();
             dataGridView_WindowList.DataSource = filteredWindowList;
         }
 
@@ -64,13 +94,32 @@ namespace Stealth.Winform
         //when user select a row
         private void dataGridView_WindowList_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            selectedWindow = filteredWindowList[e.RowIndex];
+            selectedWindow = windowList.Find(c => c.hWnd == filteredWindowList[e.RowIndex].hWnd);
             textBox_Title.Text = selectedWindow.windowTitle;
+            if (selectedWindow.isModified)
+            {
+                trackBar_Trans.Value = selectedWindow.transparencyProperty.bAlpha;
+            }
+            else
+            {
+                trackBar_Trans.Value = trackBar_Trans.Maximum;
+            }
         }
+
+        //style
+        DataGridViewCellStyle isRemovedStyle = new DataGridViewCellStyle()
+        {
+            ForeColor = Color.Gray
+        };
+
+        DataGridViewCellStyle isModifiedStyle = new DataGridViewCellStyle()
+        {
+            BackColor = Color.LightYellow
+        };
 
         #endregion
 
-        #region WindowDetail
+        #region WindowDetail Section
         private void trackBar_Trans_Scroll(object sender, EventArgs e)
         {
             UpdateTransLabel();
@@ -101,6 +150,7 @@ namespace Stealth.Winform
             selectedWindow.isLayered = true;
             selectedWindow.transparencyProperty.bAlpha = (byte)trackBar_Trans.Value;
             selectedWindow.transparencyProperty.dwFlags = (uint)User32.LWA.LWA_ALPHA;
+            selectedWindow.isModified = true;
         }
 
         #endregion
@@ -119,5 +169,19 @@ namespace Stealth.Winform
 
         #endregion
 
+    }
+
+    public class WindowComparer<T> : IEqualityComparer<T>
+        where T : WindowInstanceInfoDetail
+    {
+        public bool Equals(T x, T y)
+        {
+            return x.hWnd == y.hWnd;
+        }
+
+        public int GetHashCode(T obj)
+        {
+            return base.GetHashCode();
+        }
     }
 }

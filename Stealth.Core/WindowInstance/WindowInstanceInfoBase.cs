@@ -35,6 +35,7 @@ namespace Stealth.Core.WindowInstance
         public string windowTitle
         {
             get { return _windiwsTitle; }
+            set { _windiwsTitle = value; }
         }
 
         private bool _isWindowVisible;
