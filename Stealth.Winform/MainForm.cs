@@ -68,13 +68,6 @@ namespace Stealth.Winform
             textBox_Title.Text = selectedWindow.windowTitle;
         }
 
-        //when user deselect a row
-        private void dataGridView_WindowList_RowLeave(object sender, DataGridViewCellEventArgs e)
-        {
-            selectedWindow = null;
-            textBox_Title.Text = string.Empty;
-        }
-
         #endregion
 
         #region WindowDetail

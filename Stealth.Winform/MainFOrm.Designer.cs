@@ -82,7 +82,6 @@
             this.dataGridView_WindowList.Size = new System.Drawing.Size(479, 201);
             this.dataGridView_WindowList.TabIndex = 0;
             this.dataGridView_WindowList.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_WindowList_RowEnter);
-            this.dataGridView_WindowList.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_WindowList_RowLeave);
             // 
             // hWnd
             // 
@@ -307,7 +306,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "Form1";
+            this.Text = "Stealth";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_WindowList)).EndInit();
             this.groupBox_WindowDetail.ResumeLayout(false);
             this.tableLayoutPanel_WindowDetail.ResumeLayout(false);
