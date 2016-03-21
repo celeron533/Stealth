@@ -120,7 +120,7 @@ namespace Stealth.Winform
         #endregion
 
         #region WindowDetail Section
-        private void trackBar_Trans_Scroll(object sender, EventArgs e)
+        private void trackBar_Trans_ValueChanged(object sender, EventArgs e)
         {
             UpdateTransLabel();
         }

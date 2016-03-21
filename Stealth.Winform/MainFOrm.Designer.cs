@@ -225,7 +225,7 @@
             this.trackBar_Trans.TabIndex = 0;
             this.trackBar_Trans.TickFrequency = 15;
             this.trackBar_Trans.Value = 255;
-            this.trackBar_Trans.Scroll += new System.EventHandler(this.trackBar_Trans_Scroll);
+            this.trackBar_Trans.ValueChanged += new System.EventHandler(this.trackBar_Trans_ValueChanged);
             // 
             // label_Trans
             // 
@@ -238,6 +238,7 @@
             this.label_Trans.Size = new System.Drawing.Size(302, 34);
             this.label_Trans.TabIndex = 2;
             this.label_Trans.Text = "255/255";
+            this.label_Trans.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel1
             // 
