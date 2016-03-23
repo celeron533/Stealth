@@ -29,10 +29,6 @@
         private void InitializeComponent()
         {
             this.dataGridView_WindowList = new System.Windows.Forms.DataGridView();
-            this.hWnd = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.isModified = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.isRemoved = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.button_Refresh = new System.Windows.Forms.Button();
             this.groupBox_WindowDetail = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel_WindowDetail = new System.Windows.Forms.TableLayoutPanel();
@@ -48,8 +44,15 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.modifiedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hWnd = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.isModified = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.isRemoved = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_WindowList)).BeginInit();
             this.groupBox_WindowDetail.SuspendLayout();
             this.tableLayoutPanel_WindowDetail.SuspendLayout();
@@ -86,44 +89,6 @@
             this.dataGridView_WindowList.Size = new System.Drawing.Size(479, 201);
             this.dataGridView_WindowList.TabIndex = 0;
             this.dataGridView_WindowList.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_WindowList_RowEnter);
-            // 
-            // hWnd
-            // 
-            this.hWnd.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.hWnd.DataPropertyName = "hWnd";
-            this.hWnd.HeaderText = "hWnd";
-            this.hWnd.Name = "hWnd";
-            this.hWnd.ReadOnly = true;
-            this.hWnd.Width = 54;
-            // 
-            // Title
-            // 
-            this.Title.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            this.Title.DataPropertyName = "windowTitle";
-            this.Title.HeaderText = "Title";
-            this.Title.Name = "Title";
-            this.Title.ReadOnly = true;
-            this.Title.Width = 60;
-            // 
-            // isModified
-            // 
-            this.isModified.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-            this.isModified.DataPropertyName = "isModified";
-            this.isModified.HeaderText = "Modified";
-            this.isModified.MinimumWidth = 25;
-            this.isModified.Name = "isModified";
-            this.isModified.ReadOnly = true;
-            this.isModified.Width = 25;
-            // 
-            // isRemoved
-            // 
-            this.isRemoved.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-            this.isRemoved.DataPropertyName = "isRemoved";
-            this.isRemoved.HeaderText = "Removed";
-            this.isRemoved.MinimumWidth = 25;
-            this.isRemoved.Name = "isRemoved";
-            this.isRemoved.ReadOnly = true;
-            this.isRemoved.Width = 25;
             // 
             // button_Refresh
             // 
@@ -285,6 +250,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.viewToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -307,6 +273,31 @@
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.modifiedToolStripMenuItem,
+            this.removedToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(47, 21);
+            this.viewToolStripMenuItem.Text = "&View";
+            // 
+            // modifiedToolStripMenuItem
+            // 
+            this.modifiedToolStripMenuItem.CheckOnClick = true;
+            this.modifiedToolStripMenuItem.Name = "modifiedToolStripMenuItem";
+            this.modifiedToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.modifiedToolStripMenuItem.Text = "Show Modified Only";
+            this.modifiedToolStripMenuItem.Click += new System.EventHandler(this.modifiedToolStripMenuItem_Click);
+            // 
+            // removedToolStripMenuItem
+            // 
+            this.removedToolStripMenuItem.CheckOnClick = true;
+            this.removedToolStripMenuItem.Name = "removedToolStripMenuItem";
+            this.removedToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.removedToolStripMenuItem.Text = "Hide Removed";
+            this.removedToolStripMenuItem.Click += new System.EventHandler(this.removedToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -321,6 +312,43 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
+            // hWnd
+            // 
+            this.hWnd.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.hWnd.DataPropertyName = "hWnd";
+            this.hWnd.HeaderText = "hWnd";
+            this.hWnd.Name = "hWnd";
+            this.hWnd.ReadOnly = true;
+            this.hWnd.Width = 54;
+            // 
+            // Title
+            // 
+            this.Title.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Title.DataPropertyName = "windowTitle";
+            this.Title.HeaderText = "Title";
+            this.Title.Name = "Title";
+            this.Title.ReadOnly = true;
+            // 
+            // isModified
+            // 
+            this.isModified.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+            this.isModified.DataPropertyName = "isModified";
+            this.isModified.HeaderText = "Modified";
+            this.isModified.MinimumWidth = 25;
+            this.isModified.Name = "isModified";
+            this.isModified.ReadOnly = true;
+            this.isModified.Width = 25;
+            // 
+            // isRemoved
+            // 
+            this.isRemoved.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+            this.isRemoved.DataPropertyName = "isRemoved";
+            this.isRemoved.HeaderText = "Removed";
+            this.isRemoved.MinimumWidth = 25;
+            this.isRemoved.Name = "isRemoved";
+            this.isRemoved.ReadOnly = true;
+            this.isRemoved.Width = 25;
             // 
             // MainForm
             // 
@@ -366,10 +394,13 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.TextBox textBox_Filter;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn isRemoved;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn isModified;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Title;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem modifiedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removedToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn hWnd;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Title;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn isModified;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn isRemoved;
     }
 }
 

@@ -81,7 +81,32 @@ namespace Stealth.Winform
         //realtime window filter: by Title name
         private void WindowListFilter()
         {
-            filteredWindowList = windowList.Where(c => c.windowTitle.ToLower().Contains(textBox_Filter.Text.ToLower())).ToList();
+            filteredWindowList =
+                //text filter
+                windowList.Where(c => c.windowTitle.ToLower().Contains(textBox_Filter.Text.ToLower()))
+                //show modified/removed
+                .Where(c =>
+                    //show modified only
+                    !((modifiedToolStripMenuItem.Checked && !c.isModified)
+                        //hide removed
+                    || (removedToolStripMenuItem.Checked && c.isRemoved))
+                
+                    // logic:
+                    //{
+                    //    //show modified only
+                    //    if (modifiedToolStripMenuItem.Checked)
+                    //        if (!c.isModified)
+                    //            return false;
+
+                    //    //hide removed
+                    //    if (removedToolStripMenuItem.Checked)
+                    //        if (c.isRemoved)
+                    //            return false;
+                    //    return true;
+                    //}
+                )
+                .ToList();
+
             dataGridView_WindowList.DataSource = filteredWindowList;
         }
 
@@ -94,6 +119,7 @@ namespace Stealth.Winform
         //when user select a row
         private void dataGridView_WindowList_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
+            //use hwnd to find from windowList
             selectedWindow = windowList.Find(c => c.hWnd == filteredWindowList[e.RowIndex].hWnd);
             textBox_Title.Text = selectedWindow.windowTitle;
             if (selectedWindow.isModified)
@@ -162,12 +188,24 @@ namespace Stealth.Winform
             Environment.Exit(0);
         }
 
+        private void modifiedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowListFilter();
+        }
+
+        private void removedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowListFilter();
+        }
+
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new AboutBox().ShowDialog();
         }
 
         #endregion
+
+
 
     }
 
