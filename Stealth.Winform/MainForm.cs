@@ -90,20 +90,20 @@ namespace Stealth.Winform
                     !((modifiedToolStripMenuItem.Checked && !c.isModified)
                         //hide removed
                     || (removedToolStripMenuItem.Checked && c.isRemoved))
-                
+
                     // logic:
-                    //{
-                    //    //show modified only
-                    //    if (modifiedToolStripMenuItem.Checked)
-                    //        if (!c.isModified)
-                    //            return false;
+                //{
+                //    //show modified only
+                //    if (modifiedToolStripMenuItem.Checked)
+                //        if (!c.isModified)
+                //            return false;
 
                     //    //hide removed
-                    //    if (removedToolStripMenuItem.Checked)
-                    //        if (c.isRemoved)
-                    //            return false;
-                    //    return true;
-                    //}
+                //    if (removedToolStripMenuItem.Checked)
+                //        if (c.isRemoved)
+                //            return false;
+                //    return true;
+                //}
                 )
                 .ToList();
 
@@ -133,15 +133,31 @@ namespace Stealth.Winform
         }
 
         //style
-        DataGridViewCellStyle isRemovedStyle = new DataGridViewCellStyle()
+        private void dataGridView_WindowList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            ForeColor = Color.Gray
-        };
+            if (e.RowIndex > 0)
+            {
+                if (e.ColumnIndex == dataGridView_WindowList.Columns["isModified"].Index)
+                {
+                    if ((bool)(e.Value))
+                    {
+                        dataGridView_WindowList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGreen;
+                    }
+                }
 
-        DataGridViewCellStyle isModifiedStyle = new DataGridViewCellStyle()
-        {
-            BackColor = Color.LightYellow
-        };
+                if (e.ColumnIndex == dataGridView_WindowList.Columns["isRemoved"].Index)
+                {
+                    if ((bool)(e.Value))
+                    {
+                        var cellStyle = dataGridView_WindowList.Rows[e.RowIndex].DefaultCellStyle;
+                        cellStyle.ForeColor = Color.Gray;
+                        if (cellStyle.Font == null)
+                            cellStyle.Font = dataGridView_WindowList.DefaultCellStyle.Font;
+                        cellStyle.Font = new Font(cellStyle.Font, FontStyle.Strikeout);
+                    }
+                }
+            }
+        }
 
         #endregion
 
@@ -204,9 +220,6 @@ namespace Stealth.Winform
         }
 
         #endregion
-
-
-
     }
 
     public class WindowComparer<T> : IEqualityComparer<T>
