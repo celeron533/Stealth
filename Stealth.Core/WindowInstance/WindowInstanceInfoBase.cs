@@ -21,7 +21,7 @@ namespace Stealth.Core.WindowInstance
         {
             StringBuilder strbTitle = new StringBuilder(255);
             User32.GetWindowText(hWnd, strbTitle, strbTitle.Capacity + 1);
-            this._windiwsTitle = strbTitle.ToString();
+            this._windowTitle = strbTitle.ToString();
             this._isWindowVisible = User32.IsWindowVisible(hWnd);
         }
 
@@ -31,11 +31,11 @@ namespace Stealth.Core.WindowInstance
             get { return _hWnd; }
         }
 
-        private string _windiwsTitle;
+        private string _windowTitle;
         public string windowTitle
         {
-            get { return _windiwsTitle; }
-            set { _windiwsTitle = value; }
+            get { return _windowTitle; }
+            set { _windowTitle = value; }
         }
 
         private bool _isWindowVisible;
