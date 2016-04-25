@@ -5,12 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Stealth.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="418" Width="579">
     <Grid>
-        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="132,66,0,0" VerticalAlignment="Top" Width="75" 
-                Command="{Binding refreshWindowList}"/>
-        <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Margin="70,127,0,0" VerticalAlignment="Top" Height="129" Width="293" 
-                  ItemsSource="{Binding model.windowList}"/>
+        <Button x:Name="button" Content="Refresh" HorizontalAlignment="Left" Margin="419,210,0,0" VerticalAlignment="Top" Width="75" 
+                Command="{Binding refreshWindowList}" RenderTransformOrigin="0.933,1.421"/>
+        <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="168" Width="497" 
+                  ItemsSource="{Binding model.windowList}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False">
+            <DataGrid.Columns>
+                <!--hWnd-->
+                <DataGridTemplateColumn x:Name="hWnd"
+                    Header="hWnd"
+                    Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding hWnd}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--window title-->
+                <DataGridTemplateColumn x:Name="windowTitle"
+                    Header="Title"
+                    Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding windowTitle}" ToolTip="{Binding windowTitle}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Label Content="Label" HorizontalAlignment="Left" Margin="24,204,0,0" VerticalAlignment="Top"/>
+        <Slider HorizontalAlignment="Left" Margin="24,255,0,0" VerticalAlignment="Top" Width="432" Maximum="255" SmallChange="1" Value="255"/>
 
 
     </Grid>
