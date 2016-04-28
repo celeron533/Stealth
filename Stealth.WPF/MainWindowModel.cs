@@ -28,7 +28,8 @@ namespace Stealth.WPF
 
         public void RefreshList(object obj)
         {
-            windowList = new WindowInstanceService().GetWindowInstanceInfoDetailList();
+            windowList = new WindowInstanceService().GetWindowInstanceInfoDetailList()
+                .Where(c => c.isWindowVisible && !string.IsNullOrEmpty(c.windowTitle)).ToList();
         }
 
 
