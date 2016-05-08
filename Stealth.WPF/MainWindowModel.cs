@@ -1,6 +1,8 @@
-﻿using Stealth.Core.WindowInstance;
+﻿using Stealth.Core.Utilities;
+using Stealth.Core.WindowInstance;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -8,55 +10,73 @@ namespace Stealth.WPF
 {
     public class MainWindowModel : NotificationObject
     {
-
-        #region windowList
-        private List<WindowInstanceInfoDetail> _windowList = new List<WindowInstanceInfoDetail>();
-
-        public List<WindowInstanceInfoDetail> windowList
+        private ObservableCollection<WindowListModel> _windowListModel = new ObservableCollection<WindowListModel>();
+        public ObservableCollection<WindowListModel> windowListModel
         {
-            get { return _windowList; }
+            get { return _windowListModel; }
             set
             {
-                if (_windowList != value)
+                if (_windowListModel != value)
                 {
-                    _windowList = value;
-                    OnPropertyChanged("windowList");
+                    _windowListModel = value;
+                    OnPropertyChanged("windowListModel");
                 }
             }
         }
-        #endregion
+
+        private string _textFilter = "todo";
+        public string textFilter
+        {
+            get { return _textFilter; }
+            set
+            {
+                if (_textFilter != value)
+                {
+                    _textFilter = value;
+                    OnPropertyChanged("textFilter");
+                }
+            }
+        }
+
+
+
+        private List<WindowInstanceInfoDetail> windowList = new List<WindowInstanceInfoDetail>();
 
         public void RefreshList(object obj)
         {
             windowList = new WindowInstanceService().GetWindowInstanceInfoDetailList()
                 .Where(c => c.isWindowVisible && !string.IsNullOrEmpty(c.windowTitle)).ToList();
-        }
-
-
-        #region Test
-        private string _test = "";
-
-        public string test
-        {
-            get
+            //map to view model
+            windowListModel.Clear();
+            foreach (var w in windowList)
             {
-                return _test;
-            }
-            set
-            {
-                if (_test != value)
-                {
-                    _test = value;
-                    OnPropertyChanged("test");
-                }
+                var window = new WindowListModel();
+                window.hWnd = w.hWnd.ToInt32();
+                window.windowTitle = w.windowTitle;
+                window.alpha = w.transparencyProperty.dwFlags == (uint)User32.LWA.LWA_ALPHA ?
+                    w.transparencyProperty.bAlpha : 255;
+
+                windowListModel.Add(window);
             }
         }
 
-        public void DoTest(object obj)
+        /// <summary>
+        /// Set the Window Properties
+        /// </summary>
+        /// <param name="obj">hWnd</param>
+        public void SetWindow(object obj)
         {
-            this.test += "!";
+            var windowView = windowListModel.First(w => w.hWnd == (int)obj);
+            var targetWindow = windowList.Find(w => w.hWnd.ToInt32() == (int)obj);
+            if (targetWindow != null)
+            {
+                //targetWindow.isTopMost = checkBox_Top.Checked;
+                targetWindow.isLayered = true;
+                targetWindow.transparencyProperty.bAlpha = (byte)windowView.alpha;
+                targetWindow.transparencyProperty.dwFlags = (uint)User32.LWA.LWA_ALPHA;
+                //targetWindow.isModified = true;
+            }
         }
 
-        #endregion
     }
 }

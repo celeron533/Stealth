@@ -10,7 +10,7 @@
         <Button x:Name="button" Content="Refresh" HorizontalAlignment="Left" Margin="486,336,0,0" VerticalAlignment="Top" Width="75" 
                 Command="{Binding refreshWindowList}" RenderTransformOrigin="0.933,1.421"/>
         <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="295" Width="551" 
-                  ItemsSource="{Binding model.windowList}"
+                  ItemsSource="{Binding model.windowListModel}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserSortColumns="True"
@@ -24,7 +24,7 @@
                                         CanUserSort="True" SortMemberPath="hWnd">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Label Content="{Binding hWnd}"/>
+                            <Label Content="{Binding Path=hWnd}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -36,19 +36,22 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <Label Content="{Binding windowTitle}" ToolTip="{Binding windowTitle}"/>
-                                <Button Content="test"
-                                        Command="{Binding Path=DataContext.cmd, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"/>
-                                <Slider x:Name="transparency" Maximum="255" SmallChange="1" 
-                                       Value="255"/>
+                                <Label Content="{Binding Path=windowTitle}" ToolTip="{Binding Path=windowTitle}"/>
+                                <Slider x:Name="alphaSlider" Maximum="255" Minimum="31" SmallChange="1" IsSnapToTickEnabled="True"
+                                        Value="{Binding Path=alpha, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                                <StackPanel Orientation="Horizontal" >
+                                    <Label Content="{Binding ElementName=alphaSlider, Path=Value}"/>
+                                    <Button Content="Set"
+                                        Command="{Binding Path=DataContext.cmd, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
+                                        CommandParameter="{Binding Path=hWnd}"/>
+                                </StackPanel>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-
-
-
+        <TextBox x:Name="textFilterInput" HorizontalAlignment="Left" Height="23" Margin="38,336,0,0" VerticalAlignment="Top" Width="342"
+                 Text="{Binding Path=model.textFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" /> <!--update the Model property when inputing-->
     </Grid>
 </Window>

@@ -18,7 +18,7 @@ namespace Stealth.WPF
             model = new MainWindowModel();
 
             cmd = new DelegateCommand();
-            cmd.ExecuteCommand = new Action<object>(model.DoTest);
+            cmd.ExecuteCommand = new Action<object>(model.SetWindow);
 
             refreshWindowList = new DelegateCommand();
             refreshWindowList.ExecuteCommand = new Action<object>(model.RefreshList);
