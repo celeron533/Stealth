@@ -7,9 +7,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="418" Width="579">
     <Grid>
-        <Button x:Name="button" Content="Refresh" HorizontalAlignment="Left" Margin="486,336,0,0" VerticalAlignment="Top" Width="75" 
-                Command="{Binding refreshWindowList}" RenderTransformOrigin="0.933,1.421"/>
-        <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="295" Width="551" 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <DataGrid x:Name="dataGrid" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"
                   ItemsSource="{Binding model.windowListModels}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
@@ -56,8 +63,12 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <TextBox x:Name="textFilterInput" HorizontalAlignment="Left" Height="23" Margin="38,336,0,0" VerticalAlignment="Top" Width="342"
+        <TextBox x:Name="textFilterInput" Grid.Column="0" Grid.Row="1"
+                 Margin="10" Padding="5,5,0,0" VerticalAlignment="Center"
                  Text="{Binding Path=model.textFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <Button x:Name="button" Content="Refresh" Grid.Column="1" Grid.Row="1"
+                Margin="10" Padding="10"
+                Command="{Binding refreshWindowList}"/>
         <!--update the Model property when inputing-->
     </Grid>
 </Window>
