@@ -5,26 +5,27 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace Stealth.WPF
 {
     public class MainWindowModel : NotificationObject
     {
-        private ObservableCollection<WindowListModel> _windowListModel = new ObservableCollection<WindowListModel>();
-        public ObservableCollection<WindowListModel> windowListModel
+        private ObservableCollection<WindowListModel> _windowListModels = new ObservableCollection<WindowListModel>();
+        public ObservableCollection<WindowListModel> windowListModels
         {
-            get { return _windowListModel; }
+            get { return _windowListModels; }
             set
             {
-                if (_windowListModel != value)
+                if (_windowListModels != value)
                 {
-                    _windowListModel = value;
+                    _windowListModels = value;
                     OnPropertyChanged("windowListModel");
                 }
             }
         }
 
-        private string _textFilter = "todo";
+        private string _textFilter = "";
         public string textFilter
         {
             get { return _textFilter; }
@@ -34,6 +35,7 @@ namespace Stealth.WPF
                 {
                     _textFilter = value;
                     OnPropertyChanged("textFilter");
+                    UpdateWindowListViewByFilter(_textFilter);
                 }
             }
         }
@@ -42,12 +44,16 @@ namespace Stealth.WPF
 
         private List<WindowInstanceInfoDetail> windowList = new List<WindowInstanceInfoDetail>();
 
+        /// <summary>
+        /// Refresh the window list
+        /// </summary>
+        /// <param name="obj"></param>
         public void RefreshList(object obj)
         {
             windowList = new WindowInstanceService().GetWindowInstanceInfoDetailList()
                 .Where(c => c.isWindowVisible && !string.IsNullOrEmpty(c.windowTitle)).ToList();
             //map to view model
-            windowListModel.Clear();
+            windowListModels.Clear();
             foreach (var w in windowList)
             {
                 var window = new WindowListModel();
@@ -55,9 +61,12 @@ namespace Stealth.WPF
                 window.windowTitle = w.windowTitle;
                 window.alpha = w.transparencyProperty.dwFlags == (uint)User32.LWA.LWA_ALPHA ?
                     w.transparencyProperty.bAlpha : 255;
+                window.isRowVisible = Visibility.Visible;
 
-                windowListModel.Add(window);
+                windowListModels.Add(window);
             }
+            //update by filter
+            UpdateWindowListViewByFilter(textFilter);
         }
 
         /// <summary>
@@ -66,7 +75,7 @@ namespace Stealth.WPF
         /// <param name="obj">hWnd</param>
         public void SetWindow(object obj)
         {
-            var windowView = windowListModel.First(w => w.hWnd == (int)obj);
+            var windowView = windowListModels.First(w => w.hWnd == (int)obj);
             var targetWindow = windowList.Find(w => w.hWnd.ToInt32() == (int)obj);
             if (targetWindow != null)
             {
@@ -75,6 +84,26 @@ namespace Stealth.WPF
                 targetWindow.transparencyProperty.bAlpha = (byte)windowView.alpha;
                 targetWindow.transparencyProperty.dwFlags = (uint)User32.LWA.LWA_ALPHA;
                 //targetWindow.isModified = true;
+            }
+        }
+
+
+        private void UpdateWindowListViewByFilter(string title)
+        {
+            if (windowListModels != null && windowListModels.Count > 0)
+            {
+                foreach (var window in windowListModels)
+                {
+                    if (string.IsNullOrWhiteSpace(title) ||
+                        window.windowTitle.ToLower().Contains(title.ToLower()))
+                    {
+                        window.isRowVisible = Visibility.Visible;
+                    }
+                    else
+                    {
+                        window.isRowVisible = Visibility.Collapsed;
+                    }
+                }
             }
         }
 

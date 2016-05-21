@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace Stealth.WPF
 {
@@ -45,6 +46,20 @@ namespace Stealth.WPF
                 {
                     _alpha = value;
                     OnPropertyChanged("alpha");
+                }
+            }
+        }
+
+        private Visibility _isRowVisible;
+        public Visibility isRowVisible
+        {
+            get { return _isRowVisible; }
+            set
+            {
+                if (_isRowVisible != value)
+                {
+                    _isRowVisible = value;
+                    OnPropertyChanged("isRowVisible");
                 }
             }
         }

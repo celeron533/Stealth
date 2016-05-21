@@ -9,18 +9,17 @@ namespace Stealth.WPF
     {
         public MainWindowModel model { get; set; }
 
-        public DelegateCommand cmd { get; set; }
+        public DelegateCommand setWindow { get; set; }
         public DelegateCommand refreshWindowList { get; set; }
-        
 
         public MainWindowViewModel()
         {
             model = new MainWindowModel();
 
-            cmd = new DelegateCommand();
-            cmd.ExecuteCommand = new Action<object>(model.SetWindow);
-
+            setWindow = new DelegateCommand();
             refreshWindowList = new DelegateCommand();
+
+            setWindow.ExecuteCommand = new Action<object>(model.SetWindow);
             refreshWindowList.ExecuteCommand = new Action<object>(model.RefreshList);
         }
     }

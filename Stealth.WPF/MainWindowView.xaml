@@ -10,12 +10,17 @@
         <Button x:Name="button" Content="Refresh" HorizontalAlignment="Left" Margin="486,336,0,0" VerticalAlignment="Top" Width="75" 
                 Command="{Binding refreshWindowList}" RenderTransformOrigin="0.933,1.421"/>
         <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="295" Width="551" 
-                  ItemsSource="{Binding model.windowListModel}"
+                  ItemsSource="{Binding model.windowListModels}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserSortColumns="True"
                   CanUserDeleteRows="False" SelectionMode="Single"
                   CanUserResizeRows="False">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Visibility" Value="{Binding Path=isRowVisible}"/>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <!--hWnd-->
                 <DataGridTemplateColumn x:Name="hWnd"
@@ -42,7 +47,7 @@
                                 <StackPanel Orientation="Horizontal" >
                                     <Label Content="{Binding ElementName=alphaSlider, Path=Value}"/>
                                     <Button Content="Set"
-                                        Command="{Binding Path=DataContext.cmd, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
+                                        Command="{Binding Path=DataContext.setWindow, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
                                         CommandParameter="{Binding Path=hWnd}"/>
                                 </StackPanel>
                             </StackPanel>
@@ -52,6 +57,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <TextBox x:Name="textFilterInput" HorizontalAlignment="Left" Height="23" Margin="38,336,0,0" VerticalAlignment="Top" Width="342"
-                 Text="{Binding Path=model.textFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" /> <!--update the Model property when inputing-->
+                 Text="{Binding Path=model.textFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <!--update the Model property when inputing-->
     </Grid>
 </Window>
