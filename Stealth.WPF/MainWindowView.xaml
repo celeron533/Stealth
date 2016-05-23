@@ -9,12 +9,12 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <DataGrid x:Name="dataGrid" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"
                   ItemsSource="{Binding model.windowListModels}"
@@ -49,26 +49,41 @@
                         <DataTemplate>
                             <StackPanel>
                                 <Label Content="{Binding Path=windowTitle}" ToolTip="{Binding Path=windowTitle}"/>
-                                <Slider x:Name="alphaSlider" Maximum="255" Minimum="31" SmallChange="1" IsSnapToTickEnabled="True"
-                                        Value="{Binding Path=alpha, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
-                                <StackPanel Orientation="Horizontal" >
-                                    <Label Content="{Binding ElementName=alphaSlider, Path=Value}"/>
-                                    <Button Content="Set"
+                                <DockPanel HorizontalAlignment="Stretch">
+                                    <Label DockPanel.Dock="Left" HorizontalAlignment="Center"
+                                           Content="{Binding ElementName=alphaSlider, Path=Value}" />
+                                    <Slider x:Name="alphaSlider" DockPanel.Dock="Right" Margin="5,0,5,0"
+                                            Maximum="255" Minimum="31" SmallChange="1" IsSnapToTickEnabled="True"
+                                            Width="Auto"
+                                            Value="{Binding Path=alpha, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                                </DockPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--button-->
+                <DataGridTemplateColumn Header="" Width="60">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Button Content="Set"
+                                        Margin="3" Padding="4"
+                                        Width="Auto"
                                         Command="{Binding Path=DataContext.setWindow, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
                                         CommandParameter="{Binding Path=hWnd}"/>
-                                </StackPanel>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <!--update the Model property when inputing the filter-->
         <TextBox x:Name="textFilterInput" Grid.Column="0" Grid.Row="1"
                  Margin="10" Padding="5,5,0,0" VerticalAlignment="Center"
                  Text="{Binding Path=model.textFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <Button x:Name="button" Content="Refresh" Grid.Column="1" Grid.Row="1"
                 Margin="10" Padding="10"
                 Command="{Binding refreshWindowList}"/>
-        <!--update the Model property when inputing-->
+
     </Grid>
 </Window>
