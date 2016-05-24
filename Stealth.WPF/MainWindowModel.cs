@@ -62,6 +62,7 @@ namespace Stealth.WPF
                 window.alpha = w.transparencyProperty.dwFlags == (uint)User32.LWA.LWA_ALPHA ?
                     w.transparencyProperty.bAlpha : 255;
                 window.isRowVisible = Visibility.Visible;
+                window.isTop = null;
 
                 windowListModels.Add(window);
             }
@@ -79,10 +80,11 @@ namespace Stealth.WPF
             var targetWindow = windowList.Find(w => w.hWnd.ToInt32() == (int)obj);
             if (targetWindow != null)
             {
-                //targetWindow.isTopMost = checkBox_Top.Checked;
                 targetWindow.isLayered = true;
                 targetWindow.transparencyProperty.bAlpha = (byte)windowView.alpha;
                 targetWindow.transparencyProperty.dwFlags = (uint)User32.LWA.LWA_ALPHA;
+                if (windowView.isTop != null)
+                    targetWindow.isTopMost = (bool)windowView.isTop;
                 //targetWindow.isModified = true;
             }
         }

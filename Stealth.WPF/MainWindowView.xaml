@@ -49,14 +49,21 @@
                         <DataTemplate>
                             <StackPanel>
                                 <Label Content="{Binding Path=windowTitle}" ToolTip="{Binding Path=windowTitle}"/>
-                                <DockPanel HorizontalAlignment="Stretch">
-                                    <Label DockPanel.Dock="Left" HorizontalAlignment="Center"
+                                <Grid HorizontalAlignment="Stretch">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" MinWidth="35"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label HorizontalAlignment="Center" Grid.Column="0"
                                            Content="{Binding ElementName=alphaSlider, Path=Value}" />
-                                    <Slider x:Name="alphaSlider" DockPanel.Dock="Right" Margin="5,0,5,0"
+                                    <Slider x:Name="alphaSlider" Grid.Column="1" Margin="0,0,4,0"
                                             Maximum="255" Minimum="31" SmallChange="1" IsSnapToTickEnabled="True"
-                                            Width="Auto"
                                             Value="{Binding Path=alpha, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
-                                </DockPanel>
+                                    <CheckBox Content="Top" Grid.Column="2" Margin="4,0,4,0"
+                                              IsThreeState="True"
+                                              IsChecked="{Binding Path=isTop, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                                </Grid>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

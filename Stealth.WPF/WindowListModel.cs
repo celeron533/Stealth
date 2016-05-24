@@ -64,5 +64,19 @@ namespace Stealth.WPF
             }
         }
 
+        private bool? _isTop;
+        public bool? isTop
+        {
+            get { return _isTop; }
+            set
+            {
+                if (_isTop != value)
+                {
+                    _isTop = value;
+                    OnPropertyChanged("isTop");
+                }
+            }
+        }
+
     }
 }
