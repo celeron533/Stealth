@@ -7,9 +7,9 @@
         mc:Ignorable="d ignore"
         Height="300"
         Width="300"
-        Title="MVVM Light Application"
+        Title="Stealth"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
-    
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,15 +18,72 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid x:Name="LayoutRoot">
-
-        <TextBlock FontSize="36"
-                   FontWeight="Bold"
-                   Foreground="Purple"
+    <DockPanel x:Name="LayoutRoot">
+        <Menu x:Name="MainMenu" IsMainMenu="True" DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="Exit"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="About"/>
+            </MenuItem>
+        </Menu>
+        
+        <StatusBar x:Name="MainStatus" DockPanel.Dock="Bottom">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Grid.Column="0">
+                <TextBlock Text="hello"/>
+            </StatusBarItem>
+            <Separator Grid.Column="1"/>
+            <StatusBarItem Grid.Column="2"/>
+            <Separator Grid.Column="3"/>
+            <StatusBarItem Grid.Column="4">
+                <TextBlock Text="world"/>
+            </StatusBarItem>
+        </StatusBar>
+        
+        <!--Last child in DockPanel fills the space-->
+        <Grid x:Name="MainGrid" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <DataGrid x:Name="dataGrid" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"
+                  ItemsSource="{Binding }"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserSortColumns="True"
+                  CanUserDeleteRows="False" SelectionMode="Single"
+                  CanUserResizeRows="False">
+            </DataGrid>
+            <TextBox x:Name="textFilterInput" Grid.Column="0" Grid.Row="1"
+                 Margin="10" Padding="5,5,0,0" VerticalAlignment="Center"
+                 Text="{Binding Path=model.textFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button x:Name="button" Content="Refresh" Grid.Column="1" Grid.Row="1"
+                Margin="10" Padding="10"
+                Command="{Binding refreshWindowList}"/>
+            
+            <TextBlock Foreground="Purple"
                    Text="{Binding WelcomeTitle}"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
                    TextWrapping="Wrap" />
-
-    </Grid>
+        </Grid>
+    </DockPanel>
 </Window>
