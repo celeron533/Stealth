@@ -93,7 +93,7 @@
     </ApplicationDefinition>
     <Compile Include="Core\MyUser32.cs" />
     <Compile Include="Core\WindowInstanceInfo.cs" />
-    <Compile Include="Core\WindowInstanceList.cs" />
+    <Compile Include="Core\WindowInstanceUtil.cs" />
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="Model\DataItem.cs" />
     <Compile Include="Model\DataService.cs" />

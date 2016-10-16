@@ -14,7 +14,7 @@ namespace Stealth.Core.Tests
         [TestMethod()]
         public void ListAllWindowsTest()
         {
-            WindowInstanceList wil = new WindowInstanceList();
+            WindowInstanceUtil wil = new WindowInstanceUtil();
             var expected = wil.ListAllWindows();
             CollectionAssert.AllItemsAreNotNull(expected);
         }
