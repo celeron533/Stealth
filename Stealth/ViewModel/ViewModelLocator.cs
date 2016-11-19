@@ -32,10 +32,12 @@ namespace Stealth.ViewModel
             if (ViewModelBase.IsInDesignModeStatic)
             {
                 SimpleIoc.Default.Register<IDataService, Design.DesignDataService>();
+                SimpleIoc.Default.Register<IMainService, Design.MainService>();
             }
             else
             {
                 SimpleIoc.Default.Register<IDataService, DataService>();
+                SimpleIoc.Default.Register<IMainService, MainService>();
             }
 
             SimpleIoc.Default.Register<MainViewModel>();

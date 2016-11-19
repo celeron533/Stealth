@@ -12,10 +12,10 @@ namespace Stealth.Core.Tests
     public class WindowInstanceListTests
     {
         [TestMethod()]
-        public void ListAllWindowsTest()
+        public void RetrieveAllWindowsTest()
         {
             WindowInstanceUtil wil = new WindowInstanceUtil();
-            var expected = wil.ListAllWindows();
+            var expected = wil.RetrieveAllWindows();
             CollectionAssert.AllItemsAreNotNull(expected);
         }
     }

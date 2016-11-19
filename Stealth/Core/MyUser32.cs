@@ -29,7 +29,6 @@ namespace Stealth.Core
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetLayeredWindowAttributes(IntPtr hWnd, uint crKey, byte bAlpha, uint dwFlags);
 
-
         /// <summary>
         /// Gets the opacity and transparency color key of a layered window
         /// </summary>

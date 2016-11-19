@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
-        Height="300"
-        Width="300"
+        Height="400"
+        Width="572"
         Title="Stealth"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
 
@@ -18,6 +18,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
+    <!-- Menu, Main container, StatusBar -->
     <DockPanel x:Name="LayoutRoot">
         <Menu x:Name="MainMenu" IsMainMenu="True" DockPanel.Dock="Top">
             <MenuItem Header="_File">
@@ -27,7 +28,7 @@
                 <MenuItem Header="About"/>
             </MenuItem>
         </Menu>
-        
+
         <StatusBar x:Name="MainStatus" DockPanel.Dock="Bottom">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -52,9 +53,59 @@
                 <TextBlock Text="world"/>
             </StatusBarItem>
         </StatusBar>
-        
+
+        <DockPanel LastChildFill="True">
+            <TextBox x:Name="textFilterInput" DockPanel.Dock="Top"
+                 Margin="10" Padding="5,5,0,0" VerticalAlignment="Top"
+                 Text="{Binding Path=model.textFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button x:Name="button" DockPanel.Dock="Top"
+                    Content="Refresh" Command="{Binding RefreshCommand}"/>
+            <ListBox ItemsSource="{Binding windowsInfoItemList, Mode=TwoWay}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel MinWidth="200"
+                                        Width="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=ActualWidth}">
+                            <Grid DockPanel.Dock="Right" Width="40"/>
+                            <Border BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left">
+                                <StackPanel>
+                                    <StackPanel Orientation="Vertical">
+                                        <DockPanel x:Name="SummaryPanel">
+                                            <Label Content="icon" DockPanel.Dock="Left"/>
+                                            <Label DockPanel.Dock="Top">
+                                                <TextBlock Text="{Binding title, Mode=OneWay}" TextWrapping="Wrap"/>
+                                            </Label>
+                                            <Label Content="{Binding opacity, Mode=OneWay}" DockPanel.Dock="Left"/>
+                                            <Label Content="[x] On top" DockPanel.Dock="Left"/>
+                                            <Grid/>
+                                        </DockPanel>
+                                        <StackPanel x:Name="DetailsPanel" Orientation="Vertical" Visibility="Visible">
+                                            <DockPanel x:Name="OpacityPanel">
+                                                <Button Content="reset" Width="70" DockPanel.Dock="Right"/>
+                                                <Slider Value="{Binding opacity, Mode=TwoWay}" Maximum="255" MinWidth="100" DockPanel.Dock="Left"/>
+                                            </DockPanel>
+                                            <CheckBox Content="pin on top"/>
+                                            <CheckBox Content="IsRemoved" Checked="{Binding isRemoved}" IsEnabled="False"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                            
+                        </DockPanel>
+                        
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <!--<ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Width" Value="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=ListBox}}" />
+                    </Style>
+                </ListBox.ItemContainerStyle>-->
+            </ListBox>
+
+
+        </DockPanel>
+
         <!--Last child in DockPanel fills the space-->
-        <Grid x:Name="MainGrid" >
+        <!--<Grid x:Name="MainGrid" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="Auto"/>
@@ -64,7 +115,10 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <DataGrid x:Name="dataGrid" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"
+            <TextBox x:Name="textFilterInput" Grid.Column="0" Grid.Row="0"
+                 Margin="10" Padding="5,5,0,0" VerticalAlignment="Center"
+                 Text="{Binding Path=model.textFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <DataGrid x:Name="dataGrid" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"
                   ItemsSource="{Binding }"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
@@ -72,9 +126,7 @@
                   CanUserDeleteRows="False" SelectionMode="Single"
                   CanUserResizeRows="False">
             </DataGrid>
-            <TextBox x:Name="textFilterInput" Grid.Column="0" Grid.Row="1"
-                 Margin="10" Padding="5,5,0,0" VerticalAlignment="Center"
-                 Text="{Binding Path=model.textFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+           
             <Button x:Name="button" Content="Refresh" Grid.Column="1" Grid.Row="1"
                 Margin="10" Padding="10"
                 Command="{Binding refreshWindowList}"/>
@@ -84,6 +136,6 @@
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
                    TextWrapping="Wrap" />
-        </Grid>
+        </Grid>-->
     </DockPanel>
 </Window>
