@@ -1,4 +1,5 @@
-﻿using Stealth.Core;
+﻿using GalaSoft.MvvmLight;
+using Stealth.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Stealth.Model
 {
-    public class WindowInfoItem : GalaSoft.MvvmLight.ViewModelBase
+    public class WindowInfoItem : ViewModelBase
     {
         private int _hWnd;
         public int hWnd

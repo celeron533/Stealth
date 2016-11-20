@@ -66,7 +66,7 @@
                     <DataTemplate>
                         <DockPanel MinWidth="200"
                                         Width="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=ActualWidth}">
-                            <Grid DockPanel.Dock="Right" Width="40"/>
+                            <Grid DockPanel.Dock="Right" Width="40" Visibility="Hidden"/>
                             <Border BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left">
                                 <StackPanel>
                                     <StackPanel Orientation="Vertical">
@@ -81,7 +81,8 @@
                                         </DockPanel>
                                         <StackPanel x:Name="DetailsPanel" Orientation="Vertical" Visibility="Visible">
                                             <DockPanel x:Name="OpacityPanel">
-                                                <Button Content="reset" Width="70" DockPanel.Dock="Right"/>
+                                                <Button Content="reset" Width="70" DockPanel.Dock="Right"
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=ResetCommand}"/>
                                                 <Slider Value="{Binding opacity}" Maximum="255" MinWidth="100" DockPanel.Dock="Left"/>
                                             </DockPanel>
                                             <CheckBox Content="pin on top"/>
@@ -90,9 +91,9 @@
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
-                            
+
                         </DockPanel>
-                        
+
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <!--<ListBox.ItemContainerStyle>

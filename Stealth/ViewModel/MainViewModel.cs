@@ -42,7 +42,40 @@ namespace Stealth.ViewModel
         //}
 
         public ObservableCollection<WindowInfoItem> windowsInfoItemList { get; set; }
-        public RelayCommand RefreshCommand { get; private set; }
+
+
+        private RelayCommand _refreshCommand;
+        public RelayCommand RefreshCommand
+        {
+            get
+            {
+                if (_refreshCommand == null)
+                    _refreshCommand = new RelayCommand(
+                        () =>
+                        {
+                            _mainService.RefreshWindowData();
+                        }
+                        );
+                return _refreshCommand;
+            }
+        }
+
+
+        private RelayCommand _resetCommand;
+        public RelayCommand ResetCommand
+        {
+            get
+            {
+                if (_resetCommand == null)
+                    _resetCommand = new RelayCommand(
+                        () =>
+                        {
+                            _mainService.ResetWindow();
+                        }
+                        );
+                return _resetCommand;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -68,11 +101,6 @@ namespace Stealth.ViewModel
         {
             _mainService = mainService;
             windowsInfoItemList = _mainService.GetWindowData();
-
-            RefreshCommand = new RelayCommand(() =>
-            {
-                _mainService.RefreshWindowData();
-            });
         }
 
         ////public override void Cleanup()

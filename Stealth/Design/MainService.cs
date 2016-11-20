@@ -24,10 +24,9 @@ namespace Stealth.Design
             return windowInfoItemList;
         }
 
-        public void RefreshWindowData()
-        {
-            //do nothing.
-        }
+        public void RefreshWindowData() { }
+
+        public void ResetWindow() { }
 
         private void DummyDataSource()
         {

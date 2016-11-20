@@ -18,9 +18,6 @@ namespace Stealth.Model
         // window info for view
         public ObservableCollection<WindowInfoItem> windowInfoViewList { get; set; }
 
-        // commands
-        public RelayCommand RefreshCommand { get; private set; }
-
         public MainService()
         {
             util = new WindowInstanceUtil();
@@ -66,6 +63,12 @@ namespace Stealth.Model
             //please note that the UI (ListBoxItem) content is not refershed if updating nested elements
             windowsInstanceList = util.RetrieveAllWindows(true);
             UpdateWindowInfoViewList(windowInfoViewList, windowsInstanceList);
+        }
+
+
+        public void ResetWindow()
+        {
+            Console.WriteLine("reset");
         }
 
 
