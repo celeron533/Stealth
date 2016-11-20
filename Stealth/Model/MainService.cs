@@ -63,6 +63,7 @@ namespace Stealth.Model
 
         public void RefreshWindowData()
         {
+            //please note that the UI (ListBoxItem) content is not refershed if updating nested elements
             windowsInstanceList = util.RetrieveAllWindows(true);
             UpdateWindowInfoViewList(windowInfoViewList, windowsInstanceList);
         }

@@ -69,7 +69,10 @@ namespace Stealth.ViewModel
             _mainService = mainService;
             windowsInfoItemList = _mainService.GetWindowData();
 
-            RefreshCommand = new RelayCommand(() => _mainService.RefreshWindowData());
+            RefreshCommand = new RelayCommand(() =>
+            {
+                _mainService.RefreshWindowData();
+            });
         }
 
         ////public override void Cleanup()

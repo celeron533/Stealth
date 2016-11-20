@@ -54,13 +54,14 @@
             </StatusBarItem>
         </StatusBar>
 
-        <DockPanel LastChildFill="True">
+        <DockPanel>
             <TextBox x:Name="textFilterInput" DockPanel.Dock="Top"
-                 Margin="10" Padding="5,5,0,0" VerticalAlignment="Top"
-                 Text="{Binding Path=model.textFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                 Margin="10" Padding="5,5,0,0" VerticalAlignment="Top"/>
+            <!--Text="{Binding Path=model.textFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
             <Button x:Name="button" DockPanel.Dock="Top"
                     Content="Refresh" Command="{Binding RefreshCommand}"/>
-            <ListBox ItemsSource="{Binding windowsInfoItemList, Mode=TwoWay}">
+            <ListBox ItemsSource="{Binding windowsInfoItemList, Mode=TwoWay}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <DockPanel MinWidth="200"
@@ -72,19 +73,19 @@
                                         <DockPanel x:Name="SummaryPanel">
                                             <Label Content="icon" DockPanel.Dock="Left"/>
                                             <Label DockPanel.Dock="Top">
-                                                <TextBlock Text="{Binding title, Mode=OneWay}" TextWrapping="Wrap"/>
+                                                <TextBlock Text="{Binding title}" TextWrapping="Wrap"/>
                                             </Label>
-                                            <Label Content="{Binding opacity, Mode=OneWay}" DockPanel.Dock="Left"/>
+                                            <Label Content="{Binding opacity}" DockPanel.Dock="Left"/>
                                             <Label Content="[x] On top" DockPanel.Dock="Left"/>
                                             <Grid/>
                                         </DockPanel>
                                         <StackPanel x:Name="DetailsPanel" Orientation="Vertical" Visibility="Visible">
                                             <DockPanel x:Name="OpacityPanel">
                                                 <Button Content="reset" Width="70" DockPanel.Dock="Right"/>
-                                                <Slider Value="{Binding opacity, Mode=TwoWay}" Maximum="255" MinWidth="100" DockPanel.Dock="Left"/>
+                                                <Slider Value="{Binding opacity}" Maximum="255" MinWidth="100" DockPanel.Dock="Left"/>
                                             </DockPanel>
                                             <CheckBox Content="pin on top"/>
-                                            <CheckBox Content="IsRemoved" Checked="{Binding isRemoved}" IsEnabled="False"/>
+                                            <!--<CheckBox Content="IsRemoved" Checked="{Binding isRemoved}" IsEnabled="False"/>-->
                                         </StackPanel>
                                     </StackPanel>
                                 </StackPanel>
