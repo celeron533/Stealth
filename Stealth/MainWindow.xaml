@@ -56,16 +56,19 @@
 
         <DockPanel>
             <TextBox x:Name="textFilterInput" DockPanel.Dock="Top"
-                 Margin="10" Padding="5,5,0,0" VerticalAlignment="Top"/>
+                     Margin="10" Padding="5,5,0,0" VerticalAlignment="Top">
+            </TextBox>
             <!--Text="{Binding Path=model.textFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
             <Button x:Name="button" DockPanel.Dock="Top"
                     Content="Refresh" Command="{Binding RefreshCommand}"/>
             <ListBox ItemsSource="{Binding windowsInfoItemList, Mode=TwoWay}"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ScrollViewer.CanContentScroll="false">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <DockPanel MinWidth="200"
-                                        Width="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=ActualWidth}">
+                                   Width="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=ActualWidth}"
+                                   >
                             <Grid DockPanel.Dock="Right" Width="40" Visibility="Hidden"/>
                             <Border BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left">
                                 <StackPanel>

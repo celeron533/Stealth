@@ -2,6 +2,7 @@
 using Stealth.Core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,6 +44,22 @@ namespace Stealth.Model
         {
             get { return _isRemoved; }
             set { Set(ref _isRemoved, value); }
+        }
+
+        private bool _isFiltered;
+        public bool isFiltered
+        {
+            get { return _isFiltered; }
+            set { Set(ref _isFiltered, value); }
+        }
+
+        // TODO: Computed from isRemoved, isFiltered or other attributes based on settings.
+        [DefaultValue(true)]
+        private bool _isVisible;
+        public bool isVisible
+        {
+            get { return _isVisible; }
+            set { Set(ref _isVisible, value); }
         }
 
 

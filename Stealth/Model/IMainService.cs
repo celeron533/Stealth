@@ -12,5 +12,6 @@ namespace Stealth.Model
         ObservableCollection<WindowInfoItem> GetWindowData();
         void RefreshWindowData();
         void ResetWindow(WindowInfoItem item);
+        void FilterByTitle(string titleText);
     }
 }

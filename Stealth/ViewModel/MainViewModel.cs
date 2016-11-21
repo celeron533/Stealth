@@ -43,7 +43,6 @@ namespace Stealth.ViewModel
 
         public ObservableCollection<WindowInfoItem> windowsInfoItemList { get; set; }
 
-
         private RelayCommand _refreshCommand;
         public RelayCommand RefreshCommand
         {
@@ -51,10 +50,7 @@ namespace Stealth.ViewModel
             {
                 if (_refreshCommand == null)
                     _refreshCommand = new RelayCommand(
-                        () =>
-                        {
-                            _mainService.RefreshWindowData();
-                        }
+                        () => _mainService.RefreshWindowData()
                         );
                 return _refreshCommand;
             }
@@ -68,12 +64,22 @@ namespace Stealth.ViewModel
             {
                 if (_resetCommand == null)
                     _resetCommand = new RelayCommand<WindowInfoItem>(
-                        (item) =>
-                        {
-                            _mainService.ResetWindow(item);
-                        }
+                        (item) => _mainService.ResetWindow(item)
                         );
                 return _resetCommand;
+            }
+        }
+
+        private RelayCommand<string> _titleFilterCommand;
+        public RelayCommand<string> titleFilterCommand
+        {
+            get
+            {
+                if (_titleFilterCommand == null)
+                    _titleFilterCommand = new RelayCommand<string>(
+                        (title) => _mainService.FilterByTitle(title)
+                        );
+                return _titleFilterCommand;
             }
         }
 

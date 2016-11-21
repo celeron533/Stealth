@@ -72,5 +72,28 @@ namespace Stealth.Model
         }
 
 
+        public void FilterByTitle(string titleText)
+        {
+            if (string.IsNullOrWhiteSpace(titleText)) //disable filter
+            {
+                foreach (var item in windowInfoViewList)
+                {
+                    item.isFiltered = true;
+                }
+            }
+            else
+            {
+                string titleText_Lower = titleText.ToLower();
+                foreach (var item in windowInfoViewList)
+                {
+                    if (item.title.ToLower().Contains(titleText_Lower))
+                        item.isFiltered = true;
+                    else
+                        item.isFiltered = false;
+                }
+            }
+
+        }
+
     }
 }

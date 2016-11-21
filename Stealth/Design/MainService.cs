@@ -28,6 +28,8 @@ namespace Stealth.Design
 
         public void ResetWindow(WindowInfoItem item) { }
 
+        public void FilterByTitle(string titleText) { }
+
         private void DummyDataSource()
         {
             windowInfoItemList.Add(new WindowInfoItem() { hWnd = 100, title = "Stealth Design", opacity = 127 });
