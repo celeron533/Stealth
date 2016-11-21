@@ -26,7 +26,7 @@ namespace Stealth.Design
 
         public void RefreshWindowData() { }
 
-        public void ResetWindow() { }
+        public void ResetWindow(WindowInfoItem item) { }
 
         private void DummyDataSource()
         {

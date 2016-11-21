@@ -44,7 +44,7 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem Grid.Column="0">
-                <TextBlock Text="hello"/>
+                <TextBlock Text="{Binding windowsInfoItemList.Count}"/>
             </StatusBarItem>
             <Separator Grid.Column="1"/>
             <StatusBarItem Grid.Column="2"/>
@@ -81,8 +81,9 @@
                                         </DockPanel>
                                         <StackPanel x:Name="DetailsPanel" Orientation="Vertical" Visibility="Visible">
                                             <DockPanel x:Name="OpacityPanel">
-                                                <Button Content="reset" Width="70" DockPanel.Dock="Right"
-                                                        Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=ResetCommand}"/>
+                                                <Button Content="Reset" Width="70" DockPanel.Dock="Right"
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.ResetCommand}"
+                                                        CommandParameter="{Binding}"/>
                                                 <Slider Value="{Binding opacity}" Maximum="255" MinWidth="100" DockPanel.Dock="Left"/>
                                             </DockPanel>
                                             <CheckBox Content="pin on top"/>

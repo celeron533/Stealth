@@ -66,9 +66,9 @@ namespace Stealth.Model
         }
 
 
-        public void ResetWindow()
+        public void ResetWindow(WindowInfoItem item)
         {
-            Console.WriteLine("reset");
+            Console.WriteLine(string.Format($"Reset window: {item.hWnd}, {item.title}"));
         }
 
 

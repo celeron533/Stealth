@@ -61,16 +61,16 @@ namespace Stealth.ViewModel
         }
 
 
-        private RelayCommand _resetCommand;
-        public RelayCommand ResetCommand
+        private RelayCommand<WindowInfoItem> _resetCommand;
+        public RelayCommand<WindowInfoItem> ResetCommand
         {
             get
             {
                 if (_resetCommand == null)
-                    _resetCommand = new RelayCommand(
-                        () =>
+                    _resetCommand = new RelayCommand<WindowInfoItem>(
+                        (item) =>
                         {
-                            _mainService.ResetWindow();
+                            _mainService.ResetWindow(item);
                         }
                         );
                 return _resetCommand;
