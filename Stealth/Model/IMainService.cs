@@ -13,5 +13,6 @@ namespace Stealth.Model
         void RefreshWindowData();
         void ResetWindow(WindowInfoItem item);
         void FilterByTitle(string titleText);
+        void ChangeOpacity(WindowInfoItem item);
     }
 }

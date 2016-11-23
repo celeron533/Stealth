@@ -30,6 +30,8 @@ namespace Stealth.Design
 
         public void FilterByTitle(string titleText) { }
 
+        public void ChangeOpacity(WindowInfoItem item) { }
+
         private void DummyDataSource()
         {
             windowInfoItemList.Add(new WindowInfoItem() { hWnd = 100, title = "Stealth Design", opacity = 127 });

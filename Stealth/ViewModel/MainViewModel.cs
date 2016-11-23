@@ -71,7 +71,7 @@ namespace Stealth.ViewModel
         }
 
         private RelayCommand<string> _titleFilterCommand;
-        public RelayCommand<string> titleFilterCommand
+        public RelayCommand<string> TitleFilterCommand
         {
             get
             {
@@ -80,6 +80,19 @@ namespace Stealth.ViewModel
                         (title) => _mainService.FilterByTitle(title)
                         );
                 return _titleFilterCommand;
+            }
+        }
+
+        private RelayCommand<WindowInfoItem> _changeOpacityCommand;
+        public RelayCommand<WindowInfoItem> ChangeOpacityCommand
+        {
+            get
+            {
+                if (_changeOpacityCommand == null)
+                    _changeOpacityCommand = new RelayCommand<WindowInfoItem>(
+                        (item) => _mainService.ChangeOpacity(item)
+                        );
+                return _changeOpacityCommand;
             }
         }
 

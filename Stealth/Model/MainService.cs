@@ -72,6 +72,20 @@ namespace Stealth.Model
         }
 
 
+        public void ChangeOpacity(WindowInfoItem item)
+        {
+            Console.WriteLine(string.Format($"Change opacity: {item.title}, {item.opacity}"));
+            var nativeWindow = windowsInstanceList.SingleOrDefault(window => window.hWnd == (IntPtr)item.hWnd);
+            if (nativeWindow != null)
+            {
+                nativeWindow.isLayered = true;
+                nativeWindow.bAlpha = (byte)item.opacity;
+                nativeWindow.dwFlags = (int)MyUser32.LWA.LWA_ALPHA;
+                nativeWindow.CommitDetailedInfo();
+            }
+        }
+
+
         public void FilterByTitle(string titleText)
         {
             if (string.IsNullOrWhiteSpace(titleText)) //disable filter

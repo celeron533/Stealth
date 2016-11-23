@@ -77,6 +77,8 @@ namespace Stealth.Core
                 //     AND  1011[0]11
                 _extendedStyle &= ~(int)MyUser32.WS_EX.WS_EX_LAYERED;
 
+            MyUser32.SetWindowLongPtr(hWnd, (int)MyUser32.GWL.GWL_EXSTYLE, (IntPtr)_extendedStyle);
+
             MyUser32.SetLayeredWindowAttributes(hWnd, crKey, bAlpha, dwFlags);
         }
 

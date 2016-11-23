@@ -46,6 +46,43 @@ namespace Stealth.Core
         public static extern bool GetLayeredWindowAttributes(IntPtr hWnd, out uint crKey, out byte bAlpha, out uint dwFlags);
         #endregion
 
+        #region WindowLongPtr
+        /// <summary>
+        /// Changes an attribute of the specified window.
+        /// The function also sets a value at the specified offset in the extra window memory.
+        /// </summary>
+        /// <param name="hWnd">A handle to the window and, indirectly, the class to which the window belongs.</param>
+        /// <param name="nIndex">The zero-based offset to the value to be set. </param>
+        /// <param name="dwNewLong">The replacement value.</param>
+        /// <returns>If the function succeeds, the return value is the previous value of the specified offset.
+        /// If the function fails, the return value is zero.</returns>
+        public static IntPtr SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong)
+        {
+            if (IntPtr.Size == 8)
+                return SetWindowLongPtr64(hWnd, nIndex, dwNewLong);
+            else
+                return new IntPtr(SetWindowLong32(hWnd, nIndex, dwNewLong.ToInt32()));
+        }
+
+        [DllImport("user32.dll", EntryPoint = "SetWindowLong",
+                ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern int SetWindowLong32(IntPtr hWnd, int nIndex, int dwNewLong);
+        [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr",
+            ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr SetWindowLongPtr64(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+
+
+        /// <summary>
+        /// Get an attribute of the specified window.
+        /// </summary>
+        /// <param name="hWnd">A handle to the window</param>
+        /// <param name="nIndex">The zero-based offset to the value to be retrieved. </param>
+        /// <returns>the requested value</returns>
+        [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr",
+            ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern long GetWindowLongPtr(IntPtr hWnd, int nIndex);
+        #endregion
+
         [Flags]
         public enum LWA : uint
         {

@@ -1,14 +1,15 @@
-﻿<Window x:Class="Stealth.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:Custom="http://www.galasoft.ch/mvvmlight" x:Class="Stealth.MainWindow"
         mc:Ignorable="d ignore"
         Height="400"
         Width="572"
         Title="Stealth"
-        DataContext="{Binding Main, Source={StaticResource Locator}}">
+        >
 
     <Window.Resources>
         <ResourceDictionary>
@@ -18,6 +19,9 @@
         </ResourceDictionary>
     </Window.Resources>
 
+    <Window.DataContext>
+        <Binding Path="Main" Source="{StaticResource Locator}"/>
+    </Window.DataContext>
     <!-- Menu, Main container, StatusBar -->
     <DockPanel x:Name="LayoutRoot">
         <Menu x:Name="MainMenu" IsMainMenu="True" DockPanel.Dock="Top">
@@ -57,6 +61,11 @@
         <DockPanel>
             <TextBox x:Name="textFilterInput" DockPanel.Dock="Top"
                      Margin="10" Padding="5,5,0,0" VerticalAlignment="Top">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <Custom:EventToCommand Command="{Binding titleFilterCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
             </TextBox>
             <!--Text="{Binding Path=model.textFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
             <Button x:Name="button" DockPanel.Dock="Top"
@@ -67,7 +76,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <DockPanel MinWidth="200"
-                                   Width="{Binding RelativeSource={RelativeSource AncestorType=ListBox},Path=ActualWidth}"
+                                   Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
                                    >
                             <Grid DockPanel.Dock="Right" Width="40" Visibility="Hidden"/>
                             <Border BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left">
@@ -85,9 +94,16 @@
                                         <StackPanel x:Name="DetailsPanel" Orientation="Vertical" Visibility="Visible">
                                             <DockPanel x:Name="OpacityPanel">
                                                 <Button Content="Reset" Width="70" DockPanel.Dock="Right"
-                                                        Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.ResetCommand}"
+                                                        Command="{Binding Main.RefreshCommand, Source={StaticResource Locator}}"
                                                         CommandParameter="{Binding}"/>
-                                                <Slider Value="{Binding opacity}" Maximum="255" MinWidth="100" DockPanel.Dock="Left"/>
+                                                <Slider Value="{Binding opacity}" Maximum="255" MinWidth="100" DockPanel.Dock="Left">
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="ValueChanged">
+                                                            <Custom:EventToCommand Command="{Binding Main.ChangeOpacityCommand, Source={StaticResource Locator}}"
+                                                                                   CommandParameter="{Binding}"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </Slider>
                                             </DockPanel>
                                             <CheckBox Content="pin on top"/>
                                             <!--<CheckBox Content="IsRemoved" Checked="{Binding isRemoved}" IsEnabled="False"/>-->
