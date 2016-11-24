@@ -86,6 +86,18 @@ namespace Stealth.Model
         }
 
 
+        public void SetTopMost(WindowInfoItem item)
+        {
+            Console.WriteLine(string.Format($"Set TopMost: {item.title}, {item.isTopMost}"));
+            var nativeWindow = windowsInstanceList.SingleOrDefault(window => window.hWnd == (IntPtr)item.hWnd);
+            if (nativeWindow != null)
+            {
+                nativeWindow.isTopMost = item.isTopMost;
+                nativeWindow.CommitDetailedInfo();
+            }
+        }
+
+
         public void FilterByTitle(string titleText)
         {
             if (string.IsNullOrWhiteSpace(titleText)) //disable filter

@@ -19,6 +19,7 @@ namespace Stealth.Core
 
         #region Detailed Info
         private int _extendedStyle;
+        public bool isTopMost;
         public bool isLayered;
         public uint crKey;
         public byte bAlpha; //uint
@@ -50,15 +51,16 @@ namespace Stealth.Core
         /// </summary>
         public void GetDetailedInfo()
         {
-            //todo: topmost
             //windowInfo.dwExStyle: WS_EX_LAYERED 0x00080000 before you start working on alpha
             //transparency  https://msdn.microsoft.com/en-us/library/windows/desktop/ms632599(v=vs.85).aspx#layered
 
-            // Get transparency
+            // Get opacity
             MyUser32.GetLayeredWindowAttributes(hWnd, out crKey, out bAlpha, out dwFlags);
             // Get IsLayered. Opacity works when IsLayered = true
             _extendedStyle = User32.GetWindowLong(hWnd, User32.WindowLongIndexFlags.GWL_EXSTYLE);
             isLayered = (_extendedStyle & (int)MyUser32.WS_EX.WS_EX_LAYERED) == (int)MyUser32.WS_EX.WS_EX_LAYERED;
+            isTopMost = (_extendedStyle & (int)MyUser32.WS_EX.WS_EX_TOPMOST) == (int)MyUser32.WS_EX.WS_EX_TOPMOST;
+
         }
 
         /// <summary>
@@ -66,16 +68,8 @@ namespace Stealth.Core
         /// </summary>
         public void CommitDetailedInfo()
         {
-            if (isLayered)
-                //   style  1011[0]11
-                // layered  0000[1]00
-                //      OR  1011[1]11
-                _extendedStyle |= (int)MyUser32.WS_EX.WS_EX_LAYERED;
-            else
-                //   style  1011[1]11
-                //~layered  1111[0]11
-                //     AND  1011[0]11
-                _extendedStyle &= ~(int)MyUser32.WS_EX.WS_EX_LAYERED;
+            SetBitFlag(ref _extendedStyle, (int)MyUser32.WS_EX.WS_EX_LAYERED, isLayered);
+            //SetBitFlag(ref _extendedStyle, (int)MyUser32.WS_EX.WS_EX_TOPMOST, isTopMost);
 
             MyUser32.SetWindowLongPtr(hWnd, (int)MyUser32.GWL.GWL_EXSTYLE, (IntPtr)_extendedStyle);
 
@@ -83,6 +77,19 @@ namespace Stealth.Core
         }
 
 
+        private void SetBitFlag(ref int sourceBits, int targetBit, bool value)
+        {
+            if (value)
+                //   sourceBits  1011[0]11
+                //    targetBit  0000[1]00
+                //      OR       1011[1]11
+                sourceBits |= targetBit;
+            else
+                //   sourceBits  1011[1]11
+                //   ~targetBit  1111[0]11
+                //      AND      1011[0]11
+                sourceBits &= ~targetBit;
+        }
 
 
         public override string ToString()

@@ -96,6 +96,19 @@ namespace Stealth.ViewModel
             }
         }
 
+        private RelayCommand<WindowInfoItem> _setTopMostCommand;
+        public RelayCommand<WindowInfoItem> SetTopMostCommand
+        {
+            get
+            {
+                if (_setTopMostCommand == null)
+                    _setTopMostCommand = new RelayCommand<WindowInfoItem>(
+                        (item) => _mainService.SetTopMost(item)
+                        );
+                return _setTopMostCommand;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>

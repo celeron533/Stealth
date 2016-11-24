@@ -32,6 +32,13 @@ namespace Stealth.Model
             set { Set(ref _opacity, value); }
         }
 
+        private bool _isTopMost;
+        public bool isTopMost
+        {
+            get { return _isTopMost; }
+            set { Set(ref _isTopMost, value); }
+        }
+
         private bool _isModified;
         public bool isModified
         {
@@ -68,6 +75,7 @@ namespace Stealth.Model
             hWnd = nativeSource.hWnd.ToInt32();
             title = nativeSource.title;
             opacity = nativeSource.bAlpha;
+            isTopMost = nativeSource.isTopMost;
         }
 
 

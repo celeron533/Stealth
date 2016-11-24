@@ -32,6 +32,8 @@ namespace Stealth.Design
 
         public void ChangeOpacity(WindowInfoItem item) { }
 
+        public void SetTopMost(WindowInfoItem item) { }
+
         private void DummyDataSource()
         {
             windowInfoItemList.Add(new WindowInfoItem() { hWnd = 100, title = "Stealth Design", opacity = 127 });

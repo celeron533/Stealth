@@ -145,7 +145,8 @@ namespace Stealth.Core
             /// <summary>
             /// The window is a layered window.
             /// </summary>
-            WS_EX_LAYERED = 0x00080000
+            WS_EX_LAYERED = 0x00080000,
+            WS_EX_TOPMOST = 0x00000008
         }
 
 

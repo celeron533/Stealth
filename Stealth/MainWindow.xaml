@@ -105,7 +105,9 @@
                                                     </i:Interaction.Triggers>
                                                 </Slider>
                                             </DockPanel>
-                                            <CheckBox Content="pin on top"/>
+                                            <CheckBox Content="pin on top" IsChecked="{Binding isTopMost}"
+                                                      Command="{Binding Main.SetTopMostCommand, Source={StaticResource Locator}}"
+                                                      CommandParameter="{Binding}"/>
                                             <!--<CheckBox Content="IsRemoved" Checked="{Binding isRemoved}" IsEnabled="False"/>-->
                                         </StackPanel>
                                     </StackPanel>

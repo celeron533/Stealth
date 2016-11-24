@@ -14,5 +14,6 @@ namespace Stealth.Model
         void ResetWindow(WindowInfoItem item);
         void FilterByTitle(string titleText);
         void ChangeOpacity(WindowInfoItem item);
+        void SetTopMost(WindowInfoItem item);
     }
 }
