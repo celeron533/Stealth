@@ -19,11 +19,66 @@ namespace Stealth.Core
 
         #region Detailed Info
         private int _extendedStyle;
-        public bool isTopMost;
-        public bool isLayered;
-        public uint crKey;
-        public byte bAlpha; //uint
-        public uint dwFlags;
+
+        private bool _isTopMostChanged;
+        private bool _isTopMost;
+        public bool isTopMost
+        {
+            get { return _isTopMost; }
+            set
+            {
+                if (_isTopMostChanged = (_isTopMost != value))
+                    _isTopMost = value;
+            }
+        }
+
+        private bool _isLayeredChanged;
+        private bool _isLayered;
+        public bool isLayered
+        {
+            get { return _isLayered; }
+            set
+            {
+                if (_isLayeredChanged = (_isLayered != value))
+                    _isLayered = value;
+            }
+        }
+
+        public bool _crKeyChanged;
+        private uint _crkey;
+        public uint crKey
+        {
+            get { return _crkey; }
+            set
+            {
+                if (_crKeyChanged = (_crkey != value))
+                    _crkey = value;
+            }
+        }
+
+        public bool _bAlphaChanged;
+        private byte _bAlpha;
+        public byte bAlpha //uint
+        {
+            get { return _bAlpha; }
+            set
+            {
+                if (_bAlphaChanged = (_bAlpha != value))
+                    _bAlpha = value;
+            }
+        }
+
+        public bool _dwFlagsChanged;
+        private uint _dwFlags;
+        public uint dwFlags
+        {
+            get { return _dwFlags; }
+            set
+            {
+                if (_dwFlagsChanged = (_dwFlags != value))
+                    _dwFlags = value;
+            }
+        }
         #endregion
 
         public WindowInstanceInfo(IntPtr hWnd) : base()
@@ -55,7 +110,13 @@ namespace Stealth.Core
             //transparency  https://msdn.microsoft.com/en-us/library/windows/desktop/ms632599(v=vs.85).aspx#layered
 
             // Get opacity
-            MyUser32.GetLayeredWindowAttributes(hWnd, out crKey, out bAlpha, out dwFlags);
+            uint tempCrKey, tempDwFlags;
+            byte tempBAlpha;
+            MyUser32.GetLayeredWindowAttributes(hWnd, out tempCrKey, out tempBAlpha, out tempDwFlags);
+            crKey = tempCrKey;
+            bAlpha = tempBAlpha;
+            dwFlags = tempDwFlags;
+
             // Get IsLayered. Opacity works when IsLayered = true
             _extendedStyle = User32.GetWindowLong(hWnd, User32.WindowLongIndexFlags.GWL_EXSTYLE);
             isLayered = (_extendedStyle & (int)MyUser32.WS_EX.WS_EX_LAYERED) == (int)MyUser32.WS_EX.WS_EX_LAYERED;
@@ -66,14 +127,39 @@ namespace Stealth.Core
         /// <summary>
         /// Commit changes to the window
         /// </summary>
-        public void CommitDetailedInfo()
+        public void CommitChanges()
         {
-            SetBitFlag(ref _extendedStyle, (int)MyUser32.WS_EX.WS_EX_LAYERED, isLayered);
-            //SetBitFlag(ref _extendedStyle, (int)MyUser32.WS_EX.WS_EX_TOPMOST, isTopMost);
+            if (_isTopMostChanged)
+            {
+                _isTopMostChanged = false;
+                if (isTopMost)
+                {
+                    User32.SetWindowPos(hWnd,
+                                        User32.SpecialWindowHandles.HWND_TOPMOST, 0, 0, 0, 0,
+                                        User32.SetWindowPosFlags.SWP_NOMOVE | User32.SetWindowPosFlags.SWP_NOSIZE | User32.SetWindowPosFlags.SWP_NOACTIVATE);
+                }
+                else
+                {
+                    User32.SetWindowPos(hWnd,
+                                        User32.SpecialWindowHandles.HWND_NOTOPMOST, 0, 0, 0, 0,
+                                        User32.SetWindowPosFlags.SWP_NOMOVE | User32.SetWindowPosFlags.SWP_NOSIZE);
+                }
+            }
 
-            MyUser32.SetWindowLongPtr(hWnd, (int)MyUser32.GWL.GWL_EXSTYLE, (IntPtr)_extendedStyle);
+            if (_isLayeredChanged)
+            {
+                _isLayeredChanged = false;
+                SetBitFlag(ref _extendedStyle, (int)MyUser32.WS_EX.WS_EX_LAYERED, isLayered);
+                MyUser32.SetWindowLongPtr(hWnd, (int)MyUser32.GWL.GWL_EXSTYLE, (IntPtr)_extendedStyle);
+            }
 
-            MyUser32.SetLayeredWindowAttributes(hWnd, crKey, bAlpha, dwFlags);
+            if (_crKeyChanged || _bAlphaChanged || _dwFlagsChanged)
+            {
+                _crKeyChanged = false;
+                _bAlphaChanged = false;
+                _dwFlagsChanged = false;
+                MyUser32.SetLayeredWindowAttributes(hWnd, crKey, bAlpha, dwFlags);
+            }
         }
 
 

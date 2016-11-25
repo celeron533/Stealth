@@ -81,7 +81,7 @@ namespace Stealth.Model
                 nativeWindow.isLayered = true;
                 nativeWindow.bAlpha = (byte)item.opacity;
                 nativeWindow.dwFlags = (int)MyUser32.LWA.LWA_ALPHA;
-                nativeWindow.CommitDetailedInfo();
+                nativeWindow.CommitChanges();
             }
         }
 
@@ -93,7 +93,7 @@ namespace Stealth.Model
             if (nativeWindow != null)
             {
                 nativeWindow.isTopMost = item.isTopMost;
-                nativeWindow.CommitDetailedInfo();
+                nativeWindow.CommitChanges();
             }
         }
 
