@@ -4,6 +4,7 @@ using Stealth.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Windows.Controls;
 
 namespace Stealth.ViewModel
 {
@@ -70,14 +71,14 @@ namespace Stealth.ViewModel
             }
         }
 
-        private RelayCommand<string> _titleFilterCommand;
-        public RelayCommand<string> TitleFilterCommand
+        private RelayCommand<TextBox> _titleFilterCommand;
+        public RelayCommand<TextBox> TitleFilterCommand
         {
             get
             {
                 if (_titleFilterCommand == null)
-                    _titleFilterCommand = new RelayCommand<string>(
-                        (title) => _mainService.FilterByTitle(title)
+                    _titleFilterCommand = new RelayCommand<TextBox>(
+                        (textbox) => _mainService.FilterByTitle(textbox.Text)
                         );
                 return _titleFilterCommand;
             }

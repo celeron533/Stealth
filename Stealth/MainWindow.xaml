@@ -63,7 +63,7 @@
                      Margin="10" Padding="5,5,0,0" VerticalAlignment="Top">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
-                        <Custom:EventToCommand Command="{Binding titleFilterCommand}"/>
+                        <Custom:EventToCommand Command="{Binding TitleFilterCommand}" CommandParameter="{Binding ElementName=textFilterInput, Mode=OneWay}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
@@ -77,7 +77,7 @@
                     <DataTemplate>
                         <DockPanel MinWidth="200"
                                    Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
-                                   >
+                                   Visibility="{Binding isVisible, Converter={StaticResource BoolToVisibility}}">
                             <Grid DockPanel.Dock="Right" Width="40" Visibility="Hidden"/>
                             <Border BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left">
                                 <StackPanel>

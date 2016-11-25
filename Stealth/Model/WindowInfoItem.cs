@@ -53,20 +53,29 @@ namespace Stealth.Model
             set { Set(ref _isRemoved, value); }
         }
 
-        private bool _isFiltered;
-        public bool isFiltered
+        private bool _isFilteredVisible;
+        public bool isFilteredVisible
         {
-            get { return _isFiltered; }
-            set { Set(ref _isFiltered, value); }
+            get { return _isFilteredVisible; }
+            set
+            {
+                Set(ref _isFilteredVisible, value);
+                UpdateVisibility();
+            }
         }
 
-        // TODO: Computed from isRemoved, isFiltered or other attributes based on settings.
-        [DefaultValue(true)]
-        private bool _isVisible;
+        // TODO: Computed from isRemoved, isFilteredVisible or other attributes based on settings.
+        private bool _isVisible = true;
         public bool isVisible
         {
             get { return _isVisible; }
             set { Set(ref _isVisible, value); }
+        }
+
+
+        private void UpdateVisibility()
+        {
+            isVisible = isFilteredVisible;
         }
 
 

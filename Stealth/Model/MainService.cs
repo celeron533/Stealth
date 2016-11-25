@@ -104,7 +104,7 @@ namespace Stealth.Model
             {
                 foreach (var item in windowInfoViewList)
                 {
-                    item.isFiltered = true;
+                    item.isFilteredVisible = true;
                 }
             }
             else
@@ -113,9 +113,9 @@ namespace Stealth.Model
                 foreach (var item in windowInfoViewList)
                 {
                     if (item.title.ToLower().Contains(titleText_Lower))
-                        item.isFiltered = true;
+                        item.isFilteredVisible = true;
                     else
-                        item.isFiltered = false;
+                        item.isFilteredVisible = false;
                 }
             }
 
