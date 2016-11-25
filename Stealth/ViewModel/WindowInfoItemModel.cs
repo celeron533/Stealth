@@ -11,6 +11,8 @@ namespace Stealth.ViewModel
 {
     public class WindowInfoItemModel : ViewModelBase
     {
+        //// Base Properties
+
         private int _hWnd;
         public int hWnd
         {
@@ -38,6 +40,9 @@ namespace Stealth.ViewModel
             get { return _isTopMost; }
             set { Set(ref _isTopMost, value); }
         }
+
+
+        //// Extended Properties
 
         private bool _isModified;
         public bool isModified
@@ -72,13 +77,18 @@ namespace Stealth.ViewModel
             set { Set(ref _isVisible, value); }
         }
 
-
-        private void UpdateVisibility()
+        /// <summary>
+        /// Will be called when global setting changed. Such as 'hide all removed windows'
+        /// </summary>
+        public void UpdateVisibility()
         {
             isVisible = isFilteredVisible;
         }
 
-
+        /// <summary>
+        /// Copy the base properties from native entity.
+        /// </summary>
+        /// <param name="nativeSource">Native entity</param>
         public void CopyFrom(WindowInstanceInfo nativeSource)
         {
             hWnd = nativeSource.hWnd.ToInt32();

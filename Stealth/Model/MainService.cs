@@ -29,16 +29,23 @@ namespace Stealth.Model
 
         public ObservableCollection<WindowInfoItemModel> GetWindowData()
         {
-            UpdateWindowInfoViewList(windowInfoViewList, windowsInstanceList);
+            UpdateWindowInfoItemModelList(windowInfoViewList, windowsInstanceList);
             return windowInfoViewList;
         }
 
 
-        private void UpdateWindowInfoViewList(ObservableCollection<WindowInfoItemModel> targetViewList,
+        /// <summary>
+        /// Update the WindowInfoItemModel list from known WindowInstanceInfo(native) list.
+        /// If a window is no longer exist in WindowInstanceInfo(native) list, 
+        /// it will be marked as 'isRemoved' in WindowInfoItemModel list
+        /// </summary>
+        /// <param name="targetModelList"></param>
+        /// <param name="sourceNativeList"></param>
+        private void UpdateWindowInfoItemModelList(ObservableCollection<WindowInfoItemModel> targetModelList,
                                                 List<WindowInstanceInfo> sourceNativeList)
         {
             // first, tag all current target item status as 'removed'
-            foreach (var targetViewListItem in targetViewList)
+            foreach (var targetViewListItem in targetModelList)
             {
                 targetViewListItem.isRemoved = true;
             }
@@ -46,11 +53,11 @@ namespace Stealth.Model
             // then using the source to match target items one by one
             foreach (var windowInsatnceItem in sourceNativeList)
             {
-                var matchedTargetItem = targetViewList.SingleOrDefault(item => item.hWnd == windowInsatnceItem.hWnd.ToInt32());
+                var matchedTargetItem = targetModelList.SingleOrDefault(item => item.hWnd == windowInsatnceItem.hWnd.ToInt32());
                 if (matchedTargetItem == null)    // new (matchedTargetItem is created from default value)
                 {
                     matchedTargetItem = new WindowInfoItemModel();
-                    targetViewList.Add(matchedTargetItem);
+                    targetModelList.Add(matchedTargetItem);
 
                 }
                 matchedTargetItem.CopyFrom(windowInsatnceItem);
@@ -63,7 +70,7 @@ namespace Stealth.Model
         {
             //please note that the UI (ListBoxItem) content is not refershed if updating nested elements
             windowsInstanceList = util.RetrieveAllWindows(true);
-            UpdateWindowInfoViewList(windowInfoViewList, windowsInstanceList);
+            UpdateWindowInfoItemModelList(windowInfoViewList, windowsInstanceList);
         }
 
 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Stealth.Model;
+using Stealth.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,7 +15,7 @@ namespace Stealth.Model.Tests
         [TestMethod()]
         public void GetWindowDataTest()
         {
-            var result = new ObservableCollection<WindowInfoItem>();
+            var result = new ObservableCollection<WindowInfoItemModel>();
             MainService mainService = new MainService();
             mainService.GetWindowData();
             if (mainService.windowInfoViewList.Count > 2)
