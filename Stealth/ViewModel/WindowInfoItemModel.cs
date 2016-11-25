@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Stealth.Model
+namespace Stealth.ViewModel
 {
-    public class WindowInfoItem : ViewModelBase
+    public class WindowInfoItemModel : ViewModelBase
     {
         private int _hWnd;
         public int hWnd

@@ -98,7 +98,7 @@
     <Compile Include="Design\DesignMainService.cs" />
     <Compile Include="Model\IMainService.cs" />
     <Compile Include="Model\MainService.cs" />
-    <Compile Include="Model\WindowInfoItem.cs" />
+    <Compile Include="ViewModel\WindowInfoItemModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">

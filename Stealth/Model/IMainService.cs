@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Stealth.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,11 +10,11 @@ namespace Stealth.Model
 {
     public interface IMainService
     {
-        ObservableCollection<WindowInfoItem> GetWindowData();
+        ObservableCollection<WindowInfoItemModel> GetWindowData();
         void RefreshWindowData();
-        void ResetWindow(WindowInfoItem item);
+        void ResetWindow(WindowInfoItemModel item);
         void FilterByTitle(string titleText);
-        void ChangeOpacity(WindowInfoItem item);
-        void SetTopMost(WindowInfoItem item);
+        void ChangeOpacity(WindowInfoItemModel item);
+        void SetTopMost(WindowInfoItemModel item);
     }
 }

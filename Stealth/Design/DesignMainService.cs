@@ -5,19 +5,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using Stealth.ViewModel;
 
 namespace Stealth.Design
 {
     public class DesignMainService : IMainService
     {
-        ObservableCollection<WindowInfoItem> windowInfoItemList;
+        ObservableCollection<WindowInfoItemModel> windowInfoItemList;
 
         public DesignMainService()
         {
-            windowInfoItemList = new ObservableCollection<WindowInfoItem>();
+            windowInfoItemList = new ObservableCollection<WindowInfoItemModel>();
         }
 
-        public ObservableCollection<WindowInfoItem> GetWindowData()
+        public ObservableCollection<WindowInfoItemModel> GetWindowData()
         {
             windowInfoItemList.Clear();
             DummyDataSource();
@@ -26,18 +27,18 @@ namespace Stealth.Design
 
         public void RefreshWindowData() { }
 
-        public void ResetWindow(WindowInfoItem item) { }
+        public void ResetWindow(WindowInfoItemModel item) { }
 
         public void FilterByTitle(string titleText) { }
 
-        public void ChangeOpacity(WindowInfoItem item) { }
+        public void ChangeOpacity(WindowInfoItemModel item) { }
 
-        public void SetTopMost(WindowInfoItem item) { }
+        public void SetTopMost(WindowInfoItemModel item) { }
 
         private void DummyDataSource()
         {
-            windowInfoItemList.Add(new WindowInfoItem() { hWnd = 100, title = "Stealth Design", opacity = 127 });
-            windowInfoItemList.Add(new WindowInfoItem() { hWnd = 899646, title = "Stealth Design", opacity = 127 });
+            windowInfoItemList.Add(new WindowInfoItemModel() { hWnd = 100, title = "Stealth Design", opacity = 127 });
+            windowInfoItemList.Add(new WindowInfoItemModel() { hWnd = 899646, title = "Stealth Design", opacity = 127 });
         }
     }
 }

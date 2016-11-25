@@ -18,7 +18,7 @@ namespace Stealth.ViewModel
     {
         private readonly IMainService _mainService;
 
-        public ObservableCollection<WindowInfoItem> windowsInfoItemList { get; set; }
+        public ObservableCollection<WindowInfoItemModel> windowsInfoItemList { get; set; }
 
         #region Commands
         private RelayCommand _refreshCommand;
@@ -33,14 +33,13 @@ namespace Stealth.ViewModel
             }
         }
 
-
-        private RelayCommand<WindowInfoItem> _resetCommand;
-        public RelayCommand<WindowInfoItem> ResetCommand
+        private RelayCommand<WindowInfoItemModel> _resetCommand;
+        public RelayCommand<WindowInfoItemModel> ResetCommand
         {
             get
             {
                 return _resetCommand
-                    ?? (_resetCommand = new RelayCommand<WindowInfoItem>(
+                    ?? (_resetCommand = new RelayCommand<WindowInfoItemModel>(
                         (item) => _mainService.ResetWindow(item)
                         ));
             }
@@ -58,25 +57,25 @@ namespace Stealth.ViewModel
             }
         }
 
-        private RelayCommand<WindowInfoItem> _changeOpacityCommand;
-        public RelayCommand<WindowInfoItem> ChangeOpacityCommand
+        private RelayCommand<WindowInfoItemModel> _changeOpacityCommand;
+        public RelayCommand<WindowInfoItemModel> ChangeOpacityCommand
         {
             get
             {
                 return _changeOpacityCommand
-                    ?? (_changeOpacityCommand = new RelayCommand<WindowInfoItem>(
+                    ?? (_changeOpacityCommand = new RelayCommand<WindowInfoItemModel>(
                         (item) => _mainService.ChangeOpacity(item)
                         ));
             }
         }
 
-        private RelayCommand<WindowInfoItem> _setTopMostCommand;
-        public RelayCommand<WindowInfoItem> SetTopMostCommand
+        private RelayCommand<WindowInfoItemModel> _setTopMostCommand;
+        public RelayCommand<WindowInfoItemModel> SetTopMostCommand
         {
             get
             {
                 return _setTopMostCommand
-                    ?? (_setTopMostCommand = new RelayCommand<WindowInfoItem>(
+                    ?? (_setTopMostCommand = new RelayCommand<WindowInfoItemModel>(
                         (item) => _mainService.SetTopMost(item)
                         ));
             }

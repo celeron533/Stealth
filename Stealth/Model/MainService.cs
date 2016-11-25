@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using Stealth.Core;
+using Stealth.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,24 +17,24 @@ namespace Stealth.Model
         private List<WindowInstanceInfo> windowsInstanceList;
 
         // window info for view
-        public ObservableCollection<WindowInfoItem> windowInfoViewList { get; set; }
+        public ObservableCollection<WindowInfoItemModel> windowInfoViewList { get; set; }
 
         public MainService()
         {
             util = new WindowInstanceUtil();
-            windowInfoViewList = new ObservableCollection<WindowInfoItem>();
+            windowInfoViewList = new ObservableCollection<WindowInfoItemModel>();
             RefreshWindowData();
         }
 
 
-        public ObservableCollection<WindowInfoItem> GetWindowData()
+        public ObservableCollection<WindowInfoItemModel> GetWindowData()
         {
             UpdateWindowInfoViewList(windowInfoViewList, windowsInstanceList);
             return windowInfoViewList;
         }
 
 
-        private void UpdateWindowInfoViewList(ObservableCollection<WindowInfoItem> targetViewList,
+        private void UpdateWindowInfoViewList(ObservableCollection<WindowInfoItemModel> targetViewList,
                                                 List<WindowInstanceInfo> sourceNativeList)
         {
             // first, tag all current target item status as 'removed'
@@ -48,7 +49,7 @@ namespace Stealth.Model
                 var matchedTargetItem = targetViewList.SingleOrDefault(item => item.hWnd == windowInsatnceItem.hWnd.ToInt32());
                 if (matchedTargetItem == null)    // new (matchedTargetItem is created from default value)
                 {
-                    matchedTargetItem = new WindowInfoItem();
+                    matchedTargetItem = new WindowInfoItemModel();
                     targetViewList.Add(matchedTargetItem);
 
                 }
@@ -66,13 +67,13 @@ namespace Stealth.Model
         }
 
 
-        public void ResetWindow(WindowInfoItem item)
+        public void ResetWindow(WindowInfoItemModel item)
         {
             Console.WriteLine(string.Format($"Reset window: {item.hWnd}, {item.title}"));
         }
 
 
-        public void ChangeOpacity(WindowInfoItem item)
+        public void ChangeOpacity(WindowInfoItemModel item)
         {
             Console.WriteLine(string.Format($"Change opacity: {item.title}, {item.opacity}"));
             var nativeWindow = windowsInstanceList.SingleOrDefault(window => window.hWnd == (IntPtr)item.hWnd);
@@ -86,7 +87,7 @@ namespace Stealth.Model
         }
 
 
-        public void SetTopMost(WindowInfoItem item)
+        public void SetTopMost(WindowInfoItemModel item)
         {
             Console.WriteLine(string.Format($"Set TopMost: {item.title}, {item.isTopMost}"));
             var nativeWindow = windowsInstanceList.SingleOrDefault(window => window.hWnd == (IntPtr)item.hWnd);
