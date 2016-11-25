@@ -95,11 +95,7 @@
     <Compile Include="Core\MyUser32.cs" />
     <Compile Include="Core\WindowInstanceInfo.cs" />
     <Compile Include="Core\WindowInstanceUtil.cs" />
-    <Compile Include="Design\DesignDataService.cs" />
-    <Compile Include="Design\MainService.cs" />
-    <Compile Include="Model\DataItem.cs" />
-    <Compile Include="Model\DataService.cs" />
-    <Compile Include="Model\IDataService.cs" />
+    <Compile Include="Design\DesignMainService.cs" />
     <Compile Include="Model\IMainService.cs" />
     <Compile Include="Model\MainService.cs" />
     <Compile Include="Model\WindowInfoItem.cs" />

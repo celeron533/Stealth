@@ -16,44 +16,20 @@ namespace Stealth.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        //private readonly IDataService _dataService;
         private readonly IMainService _mainService;
-
-        ///// <summary>
-        ///// The <see cref="WelcomeTitle" /> property's name.
-        ///// </summary>
-        //public const string WelcomeTitlePropertyName = "WelcomeTitle";
-
-        //private string _welcomeTitle = string.Empty;
-
-        ///// <summary>
-        ///// Gets the WelcomeTitle property.
-        ///// Changes to that property's value raise the PropertyChanged event. 
-        ///// </summary>
-        //public string WelcomeTitle
-        //{
-        //    get
-        //    {
-        //        return _welcomeTitle;
-        //    }
-        //    set
-        //    {
-        //        Set(ref _welcomeTitle, value);
-        //    }
-        //}
 
         public ObservableCollection<WindowInfoItem> windowsInfoItemList { get; set; }
 
+        #region Commands
         private RelayCommand _refreshCommand;
         public RelayCommand RefreshCommand
         {
             get
             {
-                if (_refreshCommand == null)
-                    _refreshCommand = new RelayCommand(
+                return _refreshCommand
+                    ?? (_refreshCommand = new RelayCommand(
                         () => _mainService.RefreshWindowData()
-                        );
-                return _refreshCommand;
+                        ));
             }
         }
 
@@ -63,11 +39,10 @@ namespace Stealth.ViewModel
         {
             get
             {
-                if (_resetCommand == null)
-                    _resetCommand = new RelayCommand<WindowInfoItem>(
+                return _resetCommand
+                    ?? (_resetCommand = new RelayCommand<WindowInfoItem>(
                         (item) => _mainService.ResetWindow(item)
-                        );
-                return _resetCommand;
+                        ));
             }
         }
 
@@ -76,11 +51,10 @@ namespace Stealth.ViewModel
         {
             get
             {
-                if (_titleFilterCommand == null)
-                    _titleFilterCommand = new RelayCommand<TextBox>(
+                return _titleFilterCommand
+                    ?? (_titleFilterCommand = new RelayCommand<TextBox>(
                         (textbox) => _mainService.FilterByTitle(textbox.Text)
-                        );
-                return _titleFilterCommand;
+                        ));
             }
         }
 
@@ -89,11 +63,10 @@ namespace Stealth.ViewModel
         {
             get
             {
-                if (_changeOpacityCommand == null)
-                    _changeOpacityCommand = new RelayCommand<WindowInfoItem>(
+                return _changeOpacityCommand
+                    ?? (_changeOpacityCommand = new RelayCommand<WindowInfoItem>(
                         (item) => _mainService.ChangeOpacity(item)
-                        );
-                return _changeOpacityCommand;
+                        ));
             }
         }
 
@@ -102,34 +75,17 @@ namespace Stealth.ViewModel
         {
             get
             {
-                if (_setTopMostCommand == null)
-                    _setTopMostCommand = new RelayCommand<WindowInfoItem>(
+                return _setTopMostCommand
+                    ?? (_setTopMostCommand = new RelayCommand<WindowInfoItem>(
                         (item) => _mainService.SetTopMost(item)
-                        );
-                return _setTopMostCommand;
+                        ));
             }
         }
+        #endregion
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        //public MainViewModel(IDataService dataService)
-        //{
-        //    _dataService = dataService;
-        //    _dataService.GetData(
-        //        (item, error) =>
-        //        {
-        //            if (error != null)
-        //            {
-        //                // Report error here
-        //                Debug.WriteLine(error.ToString());
-        //                return;
-        //            }
-
-        //            WelcomeTitle = item.Title;
-        //        });
-        //}
-
         public MainViewModel(IMainService mainService)
         {
             _mainService = mainService;

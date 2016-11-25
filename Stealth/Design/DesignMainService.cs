@@ -8,11 +8,11 @@ using System.Collections.ObjectModel;
 
 namespace Stealth.Design
 {
-    public class MainService : IMainService
+    public class DesignMainService : IMainService
     {
         ObservableCollection<WindowInfoItem> windowInfoItemList;
 
-        public MainService()
+        public DesignMainService()
         {
             windowInfoItemList = new ObservableCollection<WindowInfoItem>();
         }
