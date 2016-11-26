@@ -67,17 +67,14 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <!--Text="{Binding Path=model.textFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
             <Button x:Name="button" DockPanel.Dock="Top"
                     Content="Refresh" Command="{Binding RefreshCommand}"/>
             <ListBox ItemsSource="{Binding windowsInfoItemList, Mode=TwoWay}"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     HorizontalContentAlignment="Stretch"
                      ScrollViewer.CanContentScroll="false">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <DockPanel MinWidth="200"
-                                   Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}">
-                            <Grid DockPanel.Dock="Right" Width="40" Visibility="Hidden"/>
+                        <DockPanel>
                             <Border BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left">
                                 <StackPanel>
                                     <StackPanel Orientation="Vertical">
@@ -90,12 +87,12 @@
                                             <Label Content="[x] On top" DockPanel.Dock="Left"/>
                                             <Grid/>
                                         </DockPanel>
-                                        <StackPanel x:Name="DetailsPanel" Orientation="Vertical" Visibility="Visible">
+                                        <StackPanel x:Name="DetailsPanel" Orientation="Vertical">
                                             <DockPanel x:Name="OpacityPanel">
                                                 <Button Content="Reset" Width="70" DockPanel.Dock="Right"
-                                                        Command="{Binding Main.RefreshCommand, Source={StaticResource Locator}}"
+                                                        Command="{Binding Main.ResetCommand, Source={StaticResource Locator}}"
                                                         CommandParameter="{Binding}"/>
-                                                <Slider Value="{Binding opacity}" Maximum="255" MinWidth="100" DockPanel.Dock="Left">
+                                                <Slider Value="{Binding opacity}" Maximum="255" DockPanel.Dock="Left">
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger EventName="ValueChanged">
                                                             <Custom:EventToCommand Command="{Binding Main.ChangeOpacityCommand, Source={StaticResource Locator}}"
@@ -112,9 +109,7 @@
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
-
                         </DockPanel>
-
                     </DataTemplate>
                 </ListBox.ItemTemplate>
                 <ListBox.ItemContainerStyle>
@@ -123,42 +118,6 @@
                     </Style>
                 </ListBox.ItemContainerStyle>
             </ListBox>
-
-
         </DockPanel>
-
-        <!--Last child in DockPanel fills the space-->
-        <!--<Grid x:Name="MainGrid" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="10"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBox x:Name="textFilterInput" Grid.Column="0" Grid.Row="0"
-                 Margin="10" Padding="5,5,0,0" VerticalAlignment="Center"
-                 Text="{Binding Path=model.textFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <DataGrid x:Name="dataGrid" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"
-                  ItemsSource="{Binding }"
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="False"
-                  CanUserSortColumns="True"
-                  CanUserDeleteRows="False" SelectionMode="Single"
-                  CanUserResizeRows="False">
-            </DataGrid>
-           
-            <Button x:Name="button" Content="Refresh" Grid.Column="1" Grid.Row="1"
-                Margin="10" Padding="10"
-                Command="{Binding refreshWindowList}"/>
-            
-            <TextBlock Foreground="Purple"
-                   Text="{Binding WelcomeTitle}"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   TextWrapping="Wrap" />
-        </Grid>-->
     </DockPanel>
 </Window>
