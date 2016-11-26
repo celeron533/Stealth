@@ -92,15 +92,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Core\MyUser32.cs" />
     <Compile Include="Core\WindowInstanceInfo.cs" />
     <Compile Include="Core\WindowInstanceUtil.cs" />
+    <Compile Include="Design\DesignAboutService.cs" />
     <Compile Include="Design\DesignMainService.cs" />
+    <Compile Include="Model\AboutService.cs" />
+    <Compile Include="Model\IAboutService.cs" />
     <Compile Include="Model\IMainService.cs" />
     <Compile Include="Model\MainService.cs" />
+    <Compile Include="ViewModel\AboutViewModel.cs" />
     <Compile Include="ViewModel\WindowInfoItemModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Page Include="AboutView.xaml">
+      <SubType>Form</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

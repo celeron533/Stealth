@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using Stealth.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,6 +34,31 @@ namespace Stealth.ViewModel
             }
         }
 
+        private RelayCommand<TextBox> _titleFilterCommand;
+        public RelayCommand<TextBox> TitleFilterCommand
+        {
+            get
+            {
+                return _titleFilterCommand
+                    ?? (_titleFilterCommand = new RelayCommand<TextBox>(
+                        (textbox) => _mainService.FilterByTitle(textbox.Text)
+                        ));
+            }
+        }
+
+        private RelayCommand _aboutCommand;
+        public RelayCommand AboutCommand
+        {
+            get
+            {
+                return _aboutCommand
+                  ?? (_aboutCommand = new RelayCommand(
+                      () => Messenger.Default.Send(new NotificationMessage("ShowAboutView"))
+                      ));
+            }
+        }
+
+        //items
         private RelayCommand<WindowInfoItemModel> _resetCommand;
         public RelayCommand<WindowInfoItemModel> ResetCommand
         {
@@ -45,17 +71,6 @@ namespace Stealth.ViewModel
             }
         }
 
-        private RelayCommand<TextBox> _titleFilterCommand;
-        public RelayCommand<TextBox> TitleFilterCommand
-        {
-            get
-            {
-                return _titleFilterCommand
-                    ?? (_titleFilterCommand = new RelayCommand<TextBox>(
-                        (textbox) => _mainService.FilterByTitle(textbox.Text)
-                        ));
-            }
-        }
 
         private RelayCommand<WindowInfoItemModel> _changeOpacityCommand;
         public RelayCommand<WindowInfoItemModel> ChangeOpacityCommand

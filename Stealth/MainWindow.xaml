@@ -29,7 +29,7 @@
                 <MenuItem Header="Exit"/>
             </MenuItem>
             <MenuItem Header="_Help">
-                <MenuItem Header="About"/>
+                <MenuItem Header="About" Command="{Binding AboutCommand}"/>
             </MenuItem>
         </Menu>
 
