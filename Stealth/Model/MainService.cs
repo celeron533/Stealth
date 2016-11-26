@@ -88,7 +88,7 @@ namespace Stealth.Model
             {
                 nativeWindow.isLayered = true;
                 nativeWindow.bAlpha = (byte)item.opacity;
-                nativeWindow.dwFlags = (int)MyUser32.LWA.LWA_ALPHA;
+                nativeWindow.dwFlags = (int)NativeMethods.LWA.LWA_ALPHA;
                 nativeWindow.CommitChanges();
             }
         }

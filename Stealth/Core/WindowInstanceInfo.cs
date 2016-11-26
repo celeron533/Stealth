@@ -11,7 +11,7 @@ namespace Stealth.Core
     public class WindowInstanceInfo
     {
         #region Basic Info
-        public IntPtr hWnd;
+        public readonly IntPtr hWnd;
         public string title;
         public bool isVisible;
         public User32.WINDOWINFO windowInfo;
@@ -112,15 +112,15 @@ namespace Stealth.Core
             // Get opacity
             uint tempCrKey, tempDwFlags;
             byte tempBAlpha;
-            MyUser32.GetLayeredWindowAttributes(hWnd, out tempCrKey, out tempBAlpha, out tempDwFlags);
+            NativeMethods.GetLayeredWindowAttributes(hWnd, out tempCrKey, out tempBAlpha, out tempDwFlags);
             crKey = tempCrKey;
             bAlpha = tempBAlpha;
             dwFlags = tempDwFlags;
 
             // Get IsLayered. Opacity works when IsLayered = true
             _extendedStyle = User32.GetWindowLong(hWnd, User32.WindowLongIndexFlags.GWL_EXSTYLE);
-            isLayered = (_extendedStyle & (int)MyUser32.WS_EX.WS_EX_LAYERED) == (int)MyUser32.WS_EX.WS_EX_LAYERED;
-            isTopMost = (_extendedStyle & (int)MyUser32.WS_EX.WS_EX_TOPMOST) == (int)MyUser32.WS_EX.WS_EX_TOPMOST;
+            isLayered = (_extendedStyle & (int)NativeMethods.WS_EX.WS_EX_LAYERED) == (int)NativeMethods.WS_EX.WS_EX_LAYERED;
+            isTopMost = (_extendedStyle & (int)NativeMethods.WS_EX.WS_EX_TOPMOST) == (int)NativeMethods.WS_EX.WS_EX_TOPMOST;
 
         }
 
@@ -149,8 +149,8 @@ namespace Stealth.Core
             if (_isLayeredChanged)
             {
                 _isLayeredChanged = false;
-                SetBitFlag(ref _extendedStyle, (int)MyUser32.WS_EX.WS_EX_LAYERED, isLayered);
-                MyUser32.SetWindowLongPtr(hWnd, (int)MyUser32.GWL.GWL_EXSTYLE, (IntPtr)_extendedStyle);
+                SetBitFlag(ref _extendedStyle, (int)NativeMethods.WS_EX.WS_EX_LAYERED, isLayered);
+                NativeMethods.SetWindowLong(hWnd, (int)NativeMethods.GWL.GWL_EXSTYLE, _extendedStyle);
             }
 
             if (_crKeyChanged || _bAlphaChanged || _dwFlagsChanged)
@@ -158,7 +158,7 @@ namespace Stealth.Core
                 _crKeyChanged = false;
                 _bAlphaChanged = false;
                 _dwFlagsChanged = false;
-                MyUser32.SetLayeredWindowAttributes(hWnd, crKey, bAlpha, dwFlags);
+                NativeMethods.SetLayeredWindowAttributes(hWnd, crKey, bAlpha, dwFlags);
             }
         }
 

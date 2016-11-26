@@ -95,7 +95,7 @@
     <Compile Include="AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Core\MyUser32.cs" />
+    <Compile Include="Core\NativeMethods.cs" />
     <Compile Include="Core\WindowInstanceInfo.cs" />
     <Compile Include="Core\WindowInstanceUtil.cs" />
     <Compile Include="Design\DesignAboutService.cs" />
@@ -157,7 +157,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Core\FunctionList_User32.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
