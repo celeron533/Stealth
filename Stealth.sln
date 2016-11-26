@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stealth.Core", "Stealth.Core\Stealth.Core.csproj", "{4590F087-E4CC-494A-896F-86BEF21E12D9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stealth", "Stealth\Stealth.csproj", "{7D9B6E68-C903-414F-99BA-55FEEA588E18}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StealthTests", "StealthTests\StealthTests.csproj", "{8D599955-F4C2-4BE8-A88D-5C4C11501238}"
@@ -15,10 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4590F087-E4CC-494A-896F-86BEF21E12D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4590F087-E4CC-494A-896F-86BEF21E12D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4590F087-E4CC-494A-896F-86BEF21E12D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4590F087-E4CC-494A-896F-86BEF21E12D9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7D9B6E68-C903-414F-99BA-55FEEA588E18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7D9B6E68-C903-414F-99BA-55FEEA588E18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D9B6E68-C903-414F-99BA-55FEEA588E18}.Release|Any CPU.ActiveCfg = Release|Any CPU
