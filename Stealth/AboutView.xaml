@@ -7,7 +7,7 @@
         xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" x:Class="Stealth.AboutView"
         mc:Ignorable="d ignore"
         DataContext="{Binding About, Source={StaticResource Locator}}" Height="300" Width="400">
-    <DockPanel>
+    <DockPanel Margin="5">
         <DockPanel DockPanel.Dock="Top">
             <Image DockPanel.Dock="Left" Width="100" Height="100"/>
             <StackPanel>
@@ -21,8 +21,8 @@
                 <TextBlock TextWrapping="Wrap"><Run Text="Copyright celeron533. All rights reserved."/><LineBreak/><Hyperlink NavigateUri="https://github.com/celeron533" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://github.com/celeron533"/></Hyperlink></TextBlock>
             </StackPanel>
         </DockPanel>
-        <ScrollViewer>
-            <TextBlock><Bold><Run Text="Open Source Components / Libraries"/></Bold><LineBreak/><Run Text="CommonServiceLocator"/><LineBreak/><Run Text="MvvmLightLibs"/><LineBreak/><Run Text="PInvoke.Kernel32"/><LineBreak/><Run Text="PInvoke.User32"/><LineBreak/><Run Text="PInvoke.Windows.Core"/><LineBreak/><Run Text="PInvoke.Windows.ShellScalingApi"/></TextBlock>
+        <ScrollViewer Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+            <TextBlock Padding="8"><Bold><Run Text="Third Party Components / Libraries"/></Bold><LineBreak/><Run Text="CommonServiceLocator"/><LineBreak/><Run Text="DeltaCompressionDotNet"/><LineBreak/><Run Text="Mono.Cecil"/><LineBreak/><Run Text="MvvmLightLibs"/><LineBreak/><Run Text="PInvoke.Kernel32"/><LineBreak/><Run Text="PInvoke.User32"/><LineBreak/><Run Text="PInvoke.Windows.Core"/><LineBreak/><Run Text="PInvoke.Windows.ShellScalingApi"/><LineBreak/><Run Text="Splat"/><LineBreak/><Run Text="squirrel.windows"/></TextBlock>
         </ScrollViewer>
     </DockPanel>
 
