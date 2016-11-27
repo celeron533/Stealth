@@ -13,6 +13,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 using Stealth.Model;
+using Stealth.ViewModel;
 
 namespace Stealth.ViewModel
 {
@@ -41,6 +42,7 @@ namespace Stealth.ViewModel
             }
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<AboutViewModel>();
         }
 
         /// <summary>
@@ -54,6 +56,14 @@ namespace Stealth.ViewModel
             get
             {
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
+            }
+        }
+
+        public AboutViewModel About
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<AboutViewModel>();
             }
         }
 

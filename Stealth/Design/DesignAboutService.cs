@@ -9,5 +9,9 @@ namespace Stealth.Design
 {
     public class DesignAboutService : IAboutService
     {
+        public string GetVersionString()
+        {
+            return "1.0.0.0";
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Stealth.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace Stealth.Model
 {
     public interface IAboutService
     {
+        string GetVersionString();
     }
 }
