@@ -89,8 +89,8 @@
                                         </DockPanel>
                                         <StackPanel x:Name="DetailsPanel" Orientation="Vertical">
                                             <DockPanel x:Name="OpacityPanel">
-                                                <Button Content="Reset" Width="70" DockPanel.Dock="Right"
-                                                        Command="{Binding Main.ResetCommand, Source={StaticResource Locator}}"
+                                                <Button Content="Detail" Width="70" DockPanel.Dock="Right"
+                                                        Command="{Binding Main.DetailCommand, Source={StaticResource Locator}}"
                                                         CommandParameter="{Binding}"/>
                                                 <Slider Value="{Binding opacity}" Maximum="255" DockPanel.Dock="Left">
                                                     <i:Interaction.Triggers>

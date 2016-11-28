@@ -12,7 +12,7 @@ namespace Stealth.Model
     {
         ObservableCollection<WindowInfoItemModel> GetWindowData();
         void RefreshWindowData();
-        void ResetWindow(WindowInfoItemModel item);
+        void Detail(WindowInfoItemModel item);
         void FilterByTitle(string titleText);
         void ChangeOpacity(WindowInfoItemModel item);
         void SetTopMost(WindowInfoItemModel item);

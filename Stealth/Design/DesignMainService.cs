@@ -27,7 +27,7 @@ namespace Stealth.Design
 
         public void RefreshWindowData() { }
 
-        public void ResetWindow(WindowInfoItemModel item) { }
+        public void Detail(WindowInfoItemModel item) { }
 
         public void FilterByTitle(string titleText) { }
 
