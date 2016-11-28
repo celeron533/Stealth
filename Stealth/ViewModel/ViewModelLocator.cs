@@ -34,15 +34,18 @@ namespace Stealth.ViewModel
             {
                 SimpleIoc.Default.Register<IMainService, Design.DesignMainService>();
                 SimpleIoc.Default.Register<IAboutService, Design.DesignAboutService>();
+                SimpleIoc.Default.Register<IUpdateService, Design.DesignUpdateService>();
             }
             else
             {
                 SimpleIoc.Default.Register<IMainService, MainService>();
                 SimpleIoc.Default.Register<IAboutService, AboutService>();
+                SimpleIoc.Default.Register<IUpdateService, UpdateService>();
             }
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<AboutViewModel>();
+            SimpleIoc.Default.Register<UpdateViewModel>();
         }
 
         /// <summary>
@@ -64,6 +67,14 @@ namespace Stealth.ViewModel
             get
             {
                 return ServiceLocator.Current.GetInstance<AboutViewModel>();
+            }
+        }
+
+        public UpdateViewModel Update
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<UpdateViewModel>();
             }
         }
 
