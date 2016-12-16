@@ -10,7 +10,7 @@ namespace Stealth.Model
 {
     public interface IMainService
     {
-        ObservableCollection<WindowInfoItemModel> GetWindowData();
+        ObservableCollection<WindowInfoItemModel> GetWindowListData();
         void RefreshWindowData();
         void Detail(WindowInfoItemModel item);
         void FilterByTitle(string titleText);

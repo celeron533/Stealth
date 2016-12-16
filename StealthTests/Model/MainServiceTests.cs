@@ -17,10 +17,10 @@ namespace Stealth.Model.Tests
         {
             var result = new ObservableCollection<WindowInfoItemModel>();
             MainService mainService = new MainService();
-            mainService.GetWindowData();
+            mainService.GetWindowListData();
             if (mainService.windowInfoViewList.Count > 2)
                 mainService.windowInfoViewList.RemoveAt(1);
-            mainService.GetWindowData();
+            mainService.GetWindowListData();
         }
     }
 }

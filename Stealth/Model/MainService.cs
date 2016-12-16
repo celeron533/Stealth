@@ -27,7 +27,7 @@ namespace Stealth.Model
         }
 
 
-        public ObservableCollection<WindowInfoItemModel> GetWindowData()
+        public ObservableCollection<WindowInfoItemModel> GetWindowListData()
         {
             UpdateWindowInfoItemModelList(windowInfoViewList, windowsInstanceList);
             return windowInfoViewList;

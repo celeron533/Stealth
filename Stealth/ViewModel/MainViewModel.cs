@@ -115,7 +115,7 @@ namespace Stealth.ViewModel
         public MainViewModel(IMainService mainService)
         {
             _mainService = mainService;
-            windowsInfoItemList = _mainService.GetWindowData();
+            windowsInfoItemList = _mainService.GetWindowListData();
         }
 
         ////public override void Cleanup()

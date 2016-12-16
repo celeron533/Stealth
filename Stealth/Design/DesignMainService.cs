@@ -18,7 +18,7 @@ namespace Stealth.Design
             windowInfoItemList = new ObservableCollection<WindowInfoItemModel>();
         }
 
-        public ObservableCollection<WindowInfoItemModel> GetWindowData()
+        public ObservableCollection<WindowInfoItemModel> GetWindowListData()
         {
             windowInfoItemList.Clear();
             DummyDataSource();
