@@ -21,6 +21,20 @@ namespace Stealth.ViewModel
 
         public ObservableCollection<WindowInfoItemModel> windowsInfoItemList { get; set; }
 
+        private bool _includeEmptyTitle;
+        public bool includeEmptyTitle
+        {
+            get { return _includeEmptyTitle; }
+            set { Set(ref _includeEmptyTitle, value); }
+        }
+
+        private bool _includeRemoved;
+        public bool includeRemoved
+        {
+            get { return _includeRemoved; }
+            set { Set(ref _includeRemoved, value); }
+        }
+
         #region Commands
         private RelayCommand _refreshCommand;
         public RelayCommand RefreshCommand
