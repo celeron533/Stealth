@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Stealth.Model.Tests
 {
+    [Ignore]
     [TestClass()]
     public class UpdateServiceTests
     {
