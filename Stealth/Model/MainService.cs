@@ -19,6 +19,10 @@ namespace Stealth.Model
         // window info for view
         public ObservableCollection<WindowInfoItemModel> windowInfoViewList { get; set; }
 
+        // filters
+        private string titleText;
+        private bool includeEmptyTitle, includeRemoved;
+
         public MainService()
         {
             util = new WindowInstanceUtil();
@@ -71,6 +75,9 @@ namespace Stealth.Model
             //please note that the UI (ListBoxItem) content is not refershed if updating nested elements
             windowsInstanceList = util.RetrieveAllWindows(true);
             UpdateWindowInfoItemModelList(windowInfoViewList, windowsInstanceList);
+            FilterByTitle(this.titleText);
+            FilterByIncludeEmptyTitle(this.includeEmptyTitle);
+            FilterByIncludeRemoved(this.includeRemoved);
         }
 
 
@@ -108,26 +115,43 @@ namespace Stealth.Model
 
         public void FilterByTitle(string titleText)
         {
-            if (string.IsNullOrWhiteSpace(titleText)) //disable filter
+            this.titleText = titleText;
+            if (string.IsNullOrWhiteSpace(this.titleText)) //disable filter
             {
                 foreach (var item in windowInfoViewList)
                 {
-                    item.isFilteredVisible = true;
+                    item.isTitleFilteredVisible = true;
                 }
             }
             else
             {
-                string titleText_Lower = titleText.ToLower();
+                string titleText_Lower = this.titleText.ToLower();
                 foreach (var item in windowInfoViewList)
                 {
                     if (item.title.ToLower().Contains(titleText_Lower))
-                        item.isFilteredVisible = true;
+                        item.isTitleFilteredVisible = true;
                     else
-                        item.isFilteredVisible = false;
+                        item.isTitleFilteredVisible = false;
                 }
             }
-
         }
 
+        public void FilterByIncludeEmptyTitle(bool? includeEmptyTitle)
+        {
+            this.includeEmptyTitle = (bool)includeEmptyTitle;
+            foreach (var item in windowInfoViewList)
+            {
+                item.isIncludeEmptyTitleVisible = this.includeEmptyTitle;
+            }
+        }
+
+        public void FilterByIncludeRemoved(bool? includeRemoved)
+        {
+            this.includeRemoved = (bool)includeRemoved;
+            foreach (var item in windowInfoViewList)
+            {
+                item.isIncludeRemovedVisible = this.includeRemoved;
+            }
+        }
     }
 }

@@ -60,6 +60,30 @@ namespace Stealth.ViewModel
             }
         }
 
+        private RelayCommand<CheckBox> _includeEmptyTitleCommand;
+        public RelayCommand<CheckBox> IncludeEmptyTitleCommand
+        {
+            get
+            {
+                return _includeEmptyTitleCommand
+                    ?? (_includeEmptyTitleCommand = new RelayCommand<CheckBox>(
+                        (checkbox) => _mainService.FilterByIncludeEmptyTitle(checkbox.IsChecked)
+                        ));
+            }
+        }
+
+        private RelayCommand<CheckBox> _includeRemovedCommand;
+        public RelayCommand<CheckBox> IncludeRemovedCommand
+        {
+            get
+            {
+                return _includeRemovedCommand
+                    ?? (_includeRemovedCommand = new RelayCommand<CheckBox>(
+                        (checkbox) => _mainService.FilterByIncludeRemoved(checkbox.IsChecked)
+                        ));
+            }
+        }
+
         private RelayCommand _aboutCommand;
         public RelayCommand AboutCommand
         {

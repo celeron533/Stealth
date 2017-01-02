@@ -68,8 +68,23 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
-            <Button x:Name="button" DockPanel.Dock="Top"
-                    Content="Refresh" Command="{Binding RefreshCommand}"/>
+            <DockPanel DockPanel.Dock="Top">
+                <CheckBox x:Name="includeRemovedCheckBox" DockPanel.Dock="Left" Content="Show closed window">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <Custom:EventToCommand Command="{Binding IncludeRemovedCommand, Mode=OneWay}" CommandParameter="{Binding ElementName=includeRemovedCheckBox}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </CheckBox>
+                <CheckBox x:Name="includeEmptyTitleCheckBox" DockPanel.Dock="Left" Content="Show empty title window">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <Custom:EventToCommand Command="{Binding IncludeEmptyTitleCommand, Mode=OneWay}" CommandParameter="{Binding ElementName=includeEmptyTitleCheckBox}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </CheckBox>
+                <Button Content="Refresh" Command="{Binding RefreshCommand}"/>
+            </DockPanel>
             <ListBox ItemsSource="{Binding windowsInfoItemList, Mode=TwoWay}"
                      HorizontalContentAlignment="Stretch"
                      ScrollViewer.CanContentScroll="false">

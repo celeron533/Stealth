@@ -42,7 +42,7 @@ namespace Stealth.ViewModel
         }
 
 
-        //// Extended Properties
+        //// Extended Properties ////
 
         private bool _isModified;
         public bool isModified
@@ -58,18 +58,41 @@ namespace Stealth.ViewModel
             set { Set(ref _isRemoved, value); }
         }
 
-        private bool _isFilteredVisible;
-        public bool isFilteredVisible
+        // filters
+        private bool _isTitleFilteredVisible;
+        public bool isTitleFilteredVisible
         {
-            get { return _isFilteredVisible; }
+            get { return _isTitleFilteredVisible; }
             set
             {
-                Set(ref _isFilteredVisible, value);
+                Set(ref _isTitleFilteredVisible, value);
                 UpdateVisibility();
             }
         }
 
-        // TODO: Computed from isRemoved, isFilteredVisible or other attributes based on settings.
+        private bool _isIncludeEmptyTitleVisible;
+        public bool isIncludeEmptyTitleVisible
+        {
+            get { return _isIncludeEmptyTitleVisible; }
+            set
+            {
+                Set(ref _isIncludeEmptyTitleVisible, value);
+                UpdateVisibility();
+            }
+        }
+
+        private bool _isIncludeRemovedVisible;
+        public bool isIncludeRemovedVisible
+        {
+            get { return _isIncludeRemovedVisible; }
+            set
+            {
+                Set(ref _isIncludeRemovedVisible, value);
+                UpdateVisibility();
+            }
+        }
+
+        // TODO: Computed from isRemoved, isTitleFilteredVisible or other attributes based on settings.
         private bool _isVisible = true;
         public bool isVisible
         {
@@ -82,7 +105,9 @@ namespace Stealth.ViewModel
         /// </summary>
         public void UpdateVisibility()
         {
-            isVisible = isFilteredVisible;
+            isVisible = isTitleFilteredVisible &&
+                        (isIncludeRemovedVisible || !isRemoved) &&
+                        (isIncludeEmptyTitleVisible || !string.IsNullOrWhiteSpace(title));
         }
 
         /// <summary>
