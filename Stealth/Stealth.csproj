@@ -229,8 +229,19 @@
     <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
       <Output TaskParameter="Assemblies" ItemName="myAssemblyInfo" />
     </GetAssemblyIdentity>
-    <Exec Command="$(SolutionDir)packages\NuGet.CommandLine.3.5.0\tools\nuget pack Stealth.nuspec -Version %(myAssemblyInfo.Version) -Properties Configuration=Release -OutputDirectory $(OutDir) -BasePath $(OutDir)" />
+    <PropertyGroup>
+		  <Version>@(myAssemblyInfo->'%(Version)')</Version>
+    </PropertyGroup>
+    <!--NuGet pack only support Major.Minor.Build version-->
+    <ItemGroup>
+      <Version Include="$(Version)" />
+      <Major Include="$(Version.Split('.')[0])" />
+      <Minor Include="$(Version.Split('.')[1])" />
+      <Build Include="$(Version.Split('.')[2])" />
+      <Revision Include="$(Version.Split('.')[3])" />
+    </ItemGroup>
+    <Exec Command="$(SolutionDir)packages\NuGet.CommandLine.3.5.0\tools\nuget pack Stealth.nuspec -Version @(Major).@(Minor).@(Build) -Properties Configuration=Release -OutputDirectory $(OutDir) -BasePath $(OutDir)" />
     <!-- AppVeyor server requires full path of squirrel.exe -->
-    <Exec Command="$(SolutionDir)packages\squirrel.windows.1.5.1\tools\squirrel --releasify $(OutDir)Stealth.%(myAssemblyInfo.Version).nupkg" />
+    <Exec Command="$(SolutionDir)packages\squirrel.windows.1.5.1\tools\squirrel --releasify $(OutDir)Stealth.@(Major).@(Minor).@(Build).nupkg" />
   </Target>
 </Project>
