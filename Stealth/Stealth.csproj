@@ -229,8 +229,8 @@
     <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
       <Output TaskParameter="Assemblies" ItemName="myAssemblyInfo" />
     </GetAssemblyIdentity>
-    <Exec Command="$(SolutionDir)\packages\NuGet.CommandLine.3.5.0\tools\nuget pack Stealth.nuspec -Version %(myAssemblyInfo.Version) -Properties Configuration=Release -OutputDirectory $(OutDir) -BasePath $(OutDir)" />
+    <Exec Command="$(SolutionDir)packages\NuGet.CommandLine.3.5.0\tools\nuget pack Stealth.nuspec -Version %(myAssemblyInfo.Version) -Properties Configuration=Release -OutputDirectory $(OutDir) -BasePath $(OutDir)" />
     <!-- AppVeyor server requires full path of squirrel.exe -->
-    <Exec Command="$(SolutionDir)\packages\squirrel.windows.1.5.1\tools\squirrel --releasify $(OutDir)Stealth.%(myAssemblyInfo.Version).nupkg" />
+    <Exec Command="$(SolutionDir)packages\squirrel.windows.1.5.1\tools\squirrel --releasify $(OutDir)Stealth.%(myAssemblyInfo.Version).nupkg" />
   </Target>
 </Project>
