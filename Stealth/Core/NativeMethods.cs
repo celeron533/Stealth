@@ -55,38 +55,6 @@ namespace Stealth.Core
         public static extern bool GetLayeredWindowAttributes(IntPtr hWnd, out uint crKey, out byte bAlpha, out uint dwFlags);
         #endregion
 
-        #region WindowLongPtr
-        /// <summary>
-        /// Changes an attribute of the specified window.
-        /// The function also sets a value at the specified offset in the extra window memory.
-        /// </summary>
-        /// <param name="hWnd">A handle to the window and, indirectly, the class to which the window belongs.</param>
-        /// <param name="nIndex">The zero-based offset to the value to be set. </param>
-        /// <param name="dwNewLong">The replacement value.</param>
-        /// <returns>If the function succeeds, the return value is the previous value of the specified offset.
-        /// If the function fails, the return value is zero.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability",
-            "CA1401:PInvokesShouldNotBeVisible",
-            Justification = "This method is needed for direct access.")]
-        [DllImport("user32.dll", EntryPoint = "SetWindowLong",
-                ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-
-
-        /// <summary>
-        /// Get an attribute of the specified window.
-        /// </summary>
-        /// <param name="hWnd">A handle to the window</param>
-        /// <param name="nIndex">The zero-based offset to the value to be retrieved. </param>
-        /// <returns>the requested value</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Interoperability",
-            "CA1401:PInvokesShouldNotBeVisible",
-            Justification = "This method is needed for direct access.")]
-        [DllImport("user32.dll", EntryPoint = "GetWindowLong",
-            ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-        #endregion
-
         [Flags]
         public enum LWA : uint
         {
@@ -103,77 +71,6 @@ namespace Stealth.Core
             /// </summary>
             LWA_ALPHA = 0x2
         }
-
-
-        [Flags]
-        public enum GWL : int
-        {
-            /// <summary>
-            /// Sets a new extended window style.
-            /// </summary>
-            GWL_EXSTYLE = -20,
-
-            /// <summary>
-            /// Sets a new application instance handle.
-            /// </summary>
-            GWL_HINSTANCE = -6,
-
-            /// <summary>
-            /// Sets a new identifier of the child window.
-            /// The window cannot be a top-level window.
-            /// </summary>
-            GWL_ID = -12,
-
-            /// <summary>
-            /// Sets a new window style.
-            /// </summary>
-            GWL_STYLE = -16,
-
-            /// <summary>
-            /// Sets the user data associated with the window.
-            /// This data is intended for use by the application that created the window. Its value is initially zero.
-            /// </summary>
-            GWL_USERDATA = -21,
-
-            /// <summary>
-            /// Sets a new address for the window procedure.
-            /// You cannot change this attribute if the window does not belong to the same process as the calling thread.
-            /// </summary>
-            GWL_WNDPROC = -4
-        }
-
-
-        [Flags]
-        public enum WS_EX : int
-        {
-            WS_EX_DLGMODALFRAME = 0x0001,
-            WS_EX_NOPARENTNOTIFY = 0x0004,
-            WS_EX_TOPMOST = 0x0008,
-            WS_EX_ACCEPTFILES = 0x0010,
-            WS_EX_TRANSPARENT = 0x0020,
-            WS_EX_MDICHILD = 0x0040,
-            WS_EX_TOOLWINDOW = 0x0080,
-            WS_EX_WINDOWEDGE = 0x0100,
-            WS_EX_CLIENTEDGE = 0x0200,
-            WS_EX_CONTEXTHELP = 0x0400,
-            WS_EX_RIGHT = 0x1000,
-            WS_EX_LEFT = 0x0000,
-            WS_EX_RTLREADING = 0x2000,
-            WS_EX_LTRREADING = 0x0000,
-            WS_EX_LEFTSCROLLBAR = 0x4000,
-            WS_EX_RIGHTSCROLLBAR = 0x0000,
-            WS_EX_CONTROLPARENT = 0x10000,
-            WS_EX_STATICEDGE = 0x20000,
-            WS_EX_APPWINDOW = 0x40000,
-            WS_EX_OVERLAPPEDWINDOW = (WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE),
-            WS_EX_PALETTEWINDOW = (WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW | WS_EX_TOPMOST),
-            WS_EX_LAYERED = 0x00080000,
-            WS_EX_NOINHERITLAYOUT = 0x00100000, // Disable inheritence of mirroring by children
-            WS_EX_LAYOUTRTL = 0x00400000, // Right to left mirroring
-            WS_EX_COMPOSITED = 0x02000000,
-            WS_EX_NOACTIVATE = 0x08000000
-        }
-
 
         /// <summary>
         /// Special window handles
