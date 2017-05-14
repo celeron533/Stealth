@@ -3,7 +3,7 @@
   <metadata>
     <id>Stealth</id>
     <!-- version will be replaced by MSBuild -->
-    <version>0.0.0.0</version>
+    <version>0.0.0</version>
     <title>Stealth WPF</title>
     <authors>celeron533</authors>
     <description>A tool to change window opacity</description>
