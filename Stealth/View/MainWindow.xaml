@@ -30,7 +30,7 @@
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="About" Command="{Binding AboutCommand}"/>
-                <MenuItem Header="Check for Updates" Command="{Binding CheckUpdateCommand}"/>
+                <MenuItem Header="Check for Updates" Command="{Binding CheckUpdateCommand}" Visibility="Collapsed"/>
             </MenuItem>
         </Menu>
 
