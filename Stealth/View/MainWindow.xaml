@@ -96,11 +96,11 @@
                                     <StackPanel Orientation="Vertical">
                                         <DockPanel x:Name="SummaryPanel">
                                             <Label Content="icon" DockPanel.Dock="Left"/>
+                                            <Image DockPanel.Dock="Left" Source="{Binding procIcon}"/>
                                             <Label DockPanel.Dock="Top">
                                                 <TextBlock Text="{Binding title}" TextWrapping="Wrap"/>
                                             </Label>
                                             <Label Content="{Binding opacity}" DockPanel.Dock="Left"/>
-                                            <Label Content="[x] On top" DockPanel.Dock="Left"/>
                                             <Grid/>
                                         </DockPanel>
                                         <StackPanel x:Name="DetailsPanel" Orientation="Vertical">

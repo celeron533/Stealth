@@ -65,6 +65,7 @@ namespace Stealth.Model
 
                 }
                 matchedTargetItem.CopyFrom(windowInsatnceItem);
+                
                 matchedTargetItem.isRemoved = false;
             }
         }

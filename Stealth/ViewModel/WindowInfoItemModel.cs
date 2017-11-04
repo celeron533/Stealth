@@ -3,9 +3,14 @@ using Stealth.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Stealth.ViewModel
 {
@@ -39,6 +44,18 @@ namespace Stealth.ViewModel
         {
             get { return _isTopMost; }
             set { Set(ref _isTopMost, value); }
+        }
+
+        private ImageSource _procIcon;
+        public ImageSource procIcon
+        {
+            get
+            {
+                if (_procIcon == null)
+                    FetchAppIcon();
+                return _procIcon;
+            }
+            set { Set(ref _procIcon, value); }
         }
 
 
@@ -120,6 +137,19 @@ namespace Stealth.ViewModel
             title = nativeSource.title;
             opacity = nativeSource.bAlpha;
             isTopMost = nativeSource.isTopMost;
+        }
+
+        public void FetchAppIcon()
+        {
+            using (Icon i = Icon.FromHandle((IntPtr)hWnd))
+            {
+                if (i.Size.IsEmpty)
+                    return;
+                procIcon = Imaging.CreateBitmapSourceFromHIcon(
+                            i.Handle,
+                            new Int32Rect(0, 0, i.Width, i.Height),
+                            BitmapSizeOptions.FromEmptyOptions());
+            }
         }
 
 

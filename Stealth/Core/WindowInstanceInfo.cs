@@ -79,6 +79,13 @@ namespace Stealth.Core
                     _dwFlags = value;
             }
         }
+
+        public Process process
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         public WindowInstanceInfo(IntPtr hWnd) : base()
@@ -122,6 +129,7 @@ namespace Stealth.Core
             isLayered = (_extendedStyle & (int)User32.SetWindowLongFlags.WS_EX_LAYERED) != 0;
             isTopMost = (_extendedStyle & (int)User32.SetWindowLongFlags.WS_EX_TOPMOST) != 0;
 
+            process = Process.GetProcessById((int)hWnd);
         }
 
         /// <summary>
