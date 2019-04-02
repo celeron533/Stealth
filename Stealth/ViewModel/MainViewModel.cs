@@ -96,18 +96,6 @@ namespace Stealth.ViewModel
             }
         }
 
-        private RelayCommand _checkUpdateCommand;
-        public RelayCommand CheckUpdateCommand
-        {
-            get
-            {
-                return _checkUpdateCommand
-                    ?? (_checkUpdateCommand = new RelayCommand(
-                        () => Messenger.Default.Send(new NotificationMessage("ShowUpdateView"))
-                    ));
-            }
-        }
-
         //items
         private RelayCommand<WindowInfoItemModel> _detailCommand;
         public RelayCommand<WindowInfoItemModel> DetailCommand

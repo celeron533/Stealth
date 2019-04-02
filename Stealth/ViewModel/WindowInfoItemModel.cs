@@ -155,7 +155,7 @@ namespace Stealth.ViewModel
 
         public override string ToString()
         {
-            return string.Format($"hWnd={_hWnd}, title={_title}, opacity={_opacity}");
+            return $"hWnd={_hWnd}, title={_title}, opacity={_opacity}";
         }
     }
 }

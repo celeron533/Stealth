@@ -9,11 +9,10 @@
   DataContext="{Binding Source={StaticResource Locator}, Path=ViewModelName}"
 */
 
+using CommonServiceLocator;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
-using Microsoft.Practices.ServiceLocation;
 using Stealth.Model;
-using Stealth.ViewModel;
 
 namespace Stealth.ViewModel
 {
@@ -34,18 +33,16 @@ namespace Stealth.ViewModel
             {
                 SimpleIoc.Default.Register<IMainService, Design.DesignMainService>();
                 SimpleIoc.Default.Register<IAboutService, Design.DesignAboutService>();
-                SimpleIoc.Default.Register<IUpdateService, Design.DesignUpdateService>();
             }
             else
             {
                 SimpleIoc.Default.Register<IMainService, MainService>();
                 SimpleIoc.Default.Register<IAboutService, AboutService>();
-                SimpleIoc.Default.Register<IUpdateService, UpdateService>();
             }
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<AboutViewModel>();
-            SimpleIoc.Default.Register<UpdateViewModel>();
+
         }
 
         /// <summary>
@@ -70,13 +67,6 @@ namespace Stealth.ViewModel
             }
         }
 
-        public UpdateViewModel Update
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<UpdateViewModel>();
-            }
-        }
 
         /// <summary>
         /// Cleans up all the resources.

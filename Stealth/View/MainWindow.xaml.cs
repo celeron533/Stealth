@@ -26,10 +26,6 @@ namespace Stealth
             {
                 new AboutView().ShowDialog();
             }
-            else if(msg.Notification=="ShowUpdateView")
-            {
-                new UpdateView().ShowDialog();
-            }
         }
     }
 }
