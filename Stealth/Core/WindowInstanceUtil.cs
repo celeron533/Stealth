@@ -20,7 +20,7 @@ namespace Stealth.Core
                                         // get basic info from targe window
                                         WindowInstanceInfo wii = new WindowInstanceInfo(hwnd);
                                         // normally only get the visible window's detailed info
-                                        if (wii.isVisible)
+                                        if (wii.IsVisible)
                                         {
                                             if (getDetailedInfo)
                                             {

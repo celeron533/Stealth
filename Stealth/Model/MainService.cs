@@ -51,13 +51,13 @@ namespace Stealth.Model
             // first, tag all current target item status as 'removed'
             foreach (var targetViewListItem in targetModelList)
             {
-                targetViewListItem.isRemoved = true;
+                targetViewListItem.IsRemoved = true;
             }
 
             // then using the source to match target items one by one
             foreach (var windowInsatnceItem in sourceNativeList)
             {
-                var matchedTargetItem = targetModelList.SingleOrDefault(item => item.hWnd == windowInsatnceItem.hWnd.ToInt32());
+                var matchedTargetItem = targetModelList.SingleOrDefault(item => item.HWnd == windowInsatnceItem.HWnd.ToInt32());
                 if (matchedTargetItem == null)    // new (matchedTargetItem is created from default value)
                 {
                     matchedTargetItem = new WindowInfoItemModel();
@@ -66,7 +66,7 @@ namespace Stealth.Model
                 }
                 matchedTargetItem.CopyFrom(windowInsatnceItem);
                 
-                matchedTargetItem.isRemoved = false;
+                matchedTargetItem.IsRemoved = false;
             }
         }
 
@@ -84,19 +84,19 @@ namespace Stealth.Model
 
         public void Detail(WindowInfoItemModel item)
         {
-            Console.WriteLine(string.Format($"Reset window: {item.hWnd}, {item.title}"));
+            Console.WriteLine(string.Format($"Reset window: {item.HWnd}, {item.Title}"));
         }
 
 
         public void ChangeOpacity(WindowInfoItemModel item)
         {
-            Console.WriteLine(string.Format($"Change opacity: {item.title}, {item.opacity}"));
-            var nativeWindow = windowsInstanceList.SingleOrDefault(window => window.hWnd == (IntPtr)item.hWnd);
+            Console.WriteLine(string.Format($"Change opacity: {item.Title}, {item.Opacity}"));
+            var nativeWindow = windowsInstanceList.SingleOrDefault(window => window.HWnd == (IntPtr)item.HWnd);
             if (nativeWindow != null)
             {
-                nativeWindow.isLayered = true;
-                nativeWindow.bAlpha = (byte)item.opacity;
-                nativeWindow.dwFlags = (int)NativeMethods.LWA.LWA_ALPHA;
+                nativeWindow.IsLayered = true;
+                nativeWindow.BAlpha = (byte)item.Opacity;
+                nativeWindow.DwFlags = (int)NativeMethods.LWA.LWA_ALPHA;
                 nativeWindow.CommitChanges();
             }
         }
@@ -104,11 +104,11 @@ namespace Stealth.Model
 
         public void SetTopMost(WindowInfoItemModel item)
         {
-            Console.WriteLine(string.Format($"Set TopMost: {item.title}, {item.isTopMost}"));
-            var nativeWindow = windowsInstanceList.SingleOrDefault(window => window.hWnd == (IntPtr)item.hWnd);
+            Console.WriteLine(string.Format($"Set TopMost: {item.Title}, {item.IsTopMost}"));
+            var nativeWindow = windowsInstanceList.SingleOrDefault(window => window.HWnd == (IntPtr)item.HWnd);
             if (nativeWindow != null)
             {
-                nativeWindow.isTopMost = item.isTopMost;
+                nativeWindow.IsTopMost = item.IsTopMost;
                 nativeWindow.CommitChanges();
             }
         }
@@ -121,7 +121,7 @@ namespace Stealth.Model
             {
                 foreach (var item in windowInfoViewList)
                 {
-                    item.isTitleFilteredVisible = true;
+                    item.IsTitleFilteredVisible = true;
                 }
             }
             else
@@ -129,10 +129,10 @@ namespace Stealth.Model
                 string titleText_Lower = this.titleText.ToLower();
                 foreach (var item in windowInfoViewList)
                 {
-                    if (item.title.ToLower().Contains(titleText_Lower))
-                        item.isTitleFilteredVisible = true;
+                    if (item.Title.ToLower().Contains(titleText_Lower))
+                        item.IsTitleFilteredVisible = true;
                     else
-                        item.isTitleFilteredVisible = false;
+                        item.IsTitleFilteredVisible = false;
                 }
             }
         }
@@ -142,7 +142,7 @@ namespace Stealth.Model
             this.includeEmptyTitle = (bool)includeEmptyTitle;
             foreach (var item in windowInfoViewList)
             {
-                item.isIncludeEmptyTitleVisible = this.includeEmptyTitle;
+                item.IsIncludeEmptyTitleVisible = this.includeEmptyTitle;
             }
         }
 
@@ -151,7 +151,7 @@ namespace Stealth.Model
             this.includeRemoved = (bool)includeRemoved;
             foreach (var item in windowInfoViewList)
             {
-                item.isIncludeRemovedVisible = this.includeRemoved;
+                item.IsIncludeRemovedVisible = this.includeRemoved;
             }
         }
     }

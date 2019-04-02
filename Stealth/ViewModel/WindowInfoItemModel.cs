@@ -3,6 +3,7 @@ using Stealth.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -19,35 +20,35 @@ namespace Stealth.ViewModel
         //// Base Properties
 
         private int _hWnd;
-        public int hWnd
+        public int HWnd
         {
             get { return _hWnd; }
             set { Set(ref _hWnd, value); }
         }
 
         private string _title;
-        public string title
+        public string Title
         {
             get { return _title; }
             set { Set(ref _title, value); }
         }
 
         private int _opacity;
-        public int opacity
+        public int Opacity
         {
             get { return _opacity; }
             set { Set(ref _opacity, value); }
         }
 
         private bool _isTopMost;
-        public bool isTopMost
+        public bool IsTopMost
         {
             get { return _isTopMost; }
             set { Set(ref _isTopMost, value); }
         }
 
         private ImageSource _procIcon;
-        public ImageSource procIcon
+        public ImageSource ProcIcon
         {
             get
             {
@@ -62,22 +63,24 @@ namespace Stealth.ViewModel
         //// Extended Properties ////
 
         private bool _isModified;
-        public bool isModified
+        public bool IsModified
         {
             get { return _isModified; }
             set { Set(ref _isModified, value); }
         }
 
         private bool _isRemoved;
-        public bool isRemoved
+        public bool IsRemoved
         {
             get { return _isRemoved; }
             set { Set(ref _isRemoved, value); }
         }
 
+        private Process _process;
+
         // filters
         private bool _isTitleFilteredVisible;
-        public bool isTitleFilteredVisible
+        public bool IsTitleFilteredVisible
         {
             get { return _isTitleFilteredVisible; }
             set
@@ -88,7 +91,7 @@ namespace Stealth.ViewModel
         }
 
         private bool _isIncludeEmptyTitleVisible;
-        public bool isIncludeEmptyTitleVisible
+        public bool IsIncludeEmptyTitleVisible
         {
             get { return _isIncludeEmptyTitleVisible; }
             set
@@ -99,7 +102,7 @@ namespace Stealth.ViewModel
         }
 
         private bool _isIncludeRemovedVisible;
-        public bool isIncludeRemovedVisible
+        public bool IsIncludeRemovedVisible
         {
             get { return _isIncludeRemovedVisible; }
             set
@@ -111,7 +114,7 @@ namespace Stealth.ViewModel
 
         // TODO: Computed from isRemoved, isTitleFilteredVisible or other attributes based on settings.
         private bool _isVisible = true;
-        public bool isVisible
+        public bool IsVisible
         {
             get { return _isVisible; }
             set { Set(ref _isVisible, value); }
@@ -122,9 +125,9 @@ namespace Stealth.ViewModel
         /// </summary>
         public void UpdateVisibility()
         {
-            isVisible = isTitleFilteredVisible &&
-                        (isIncludeRemovedVisible || !isRemoved) &&
-                        (isIncludeEmptyTitleVisible || !string.IsNullOrWhiteSpace(title));
+            IsVisible = IsTitleFilteredVisible &&
+                        (IsIncludeRemovedVisible || !IsRemoved) &&
+                        (IsIncludeEmptyTitleVisible || !string.IsNullOrWhiteSpace(Title));
         }
 
         /// <summary>
@@ -133,23 +136,35 @@ namespace Stealth.ViewModel
         /// <param name="nativeSource">Native entity</param>
         public void CopyFrom(WindowInstanceInfo nativeSource)
         {
-            hWnd = nativeSource.hWnd.ToInt32();
-            title = nativeSource.title;
-            opacity = nativeSource.bAlpha;
-            isTopMost = nativeSource.isTopMost;
+            HWnd = nativeSource.HWnd.ToInt32();
+            Title = nativeSource.Title;
+            Opacity = nativeSource.BAlpha;
+            IsTopMost = nativeSource.IsTopMost;
+            _process = nativeSource.process;
         }
 
         public void FetchAppIcon()
         {
-            using (Icon i = Icon.FromHandle((IntPtr)hWnd))
+            if (_process != null)
             {
-                if (i.Size.IsEmpty)
+                Icon ic = Icon.ExtractAssociatedIcon(_process.MainModule.FileName);
+                if (ic.Size.IsEmpty)
                     return;
-                procIcon = Imaging.CreateBitmapSourceFromHIcon(
-                            i.Handle,
-                            new Int32Rect(0, 0, i.Width, i.Height),
+                ProcIcon = Imaging.CreateBitmapSourceFromHIcon(
+                            ic.Handle,
+                            new Int32Rect(0, 0, ic.Width, ic.Height),
                             BitmapSizeOptions.FromEmptyOptions());
             }
+
+            //using (Icon i = Icon.FromHandle((IntPtr)HWnd))
+            //{
+            //    if (i.Size.IsEmpty)
+            //        return;
+            //    ProcIcon = Imaging.CreateBitmapSourceFromHIcon(
+            //                i.Handle,
+            //                new Int32Rect(0, 0, i.Width, i.Height),
+            //                BitmapSizeOptions.FromEmptyOptions());
+            //}
         }
 
 

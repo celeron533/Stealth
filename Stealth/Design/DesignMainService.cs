@@ -41,8 +41,8 @@ namespace Stealth.Design
 
         private void DummyDataSource()
         {
-            windowInfoItemList.Add(new WindowInfoItemModel() { hWnd = 100, title = "Stealth Design", opacity = 127 });
-            windowInfoItemList.Add(new WindowInfoItemModel() { hWnd = 899646, title = "Stealth Design", opacity = 127 });
+            windowInfoItemList.Add(new WindowInfoItemModel() { HWnd = 100, Title = "Stealth Design", Opacity = 127 });
+            windowInfoItemList.Add(new WindowInfoItemModel() { HWnd = 899646, Title = "Stealth Design", Opacity = 127 });
         }
     }
 }

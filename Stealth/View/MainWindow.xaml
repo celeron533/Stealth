@@ -96,11 +96,11 @@
                                     <StackPanel Orientation="Vertical">
                                         <DockPanel x:Name="SummaryPanel">
                                             <Label Content="icon" DockPanel.Dock="Left"/>
-                                            <Image DockPanel.Dock="Left" Source="{Binding procIcon}"/>
+                                            <Image DockPanel.Dock="Left" Source="{Binding ProcIcon}" MinWidth="30"/>
                                             <Label DockPanel.Dock="Top">
-                                                <TextBlock Text="{Binding title}" TextWrapping="Wrap"/>
+                                                <TextBlock Text="{Binding Title}" TextWrapping="Wrap"/>
                                             </Label>
-                                            <Label Content="{Binding opacity}" DockPanel.Dock="Left"/>
+                                            <Label Content="{Binding Opacity}" DockPanel.Dock="Left"/>
                                             <Grid/>
                                         </DockPanel>
                                         <StackPanel x:Name="DetailsPanel" Orientation="Vertical">
@@ -108,7 +108,7 @@
                                                 <Button Content="Detail" Width="70" DockPanel.Dock="Right"
                                                         Command="{Binding Main.DetailCommand, Source={StaticResource Locator}}"
                                                         CommandParameter="{Binding}"/>
-                                                <Slider Value="{Binding opacity}" Maximum="255" DockPanel.Dock="Left">
+                                                <Slider Value="{Binding Opacity}" Maximum="255" DockPanel.Dock="Left">
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger EventName="ValueChanged">
                                                             <Custom:EventToCommand Command="{Binding Main.ChangeOpacityCommand, Source={StaticResource Locator}}"
@@ -117,7 +117,7 @@
                                                     </i:Interaction.Triggers>
                                                 </Slider>
                                             </DockPanel>
-                                            <CheckBox Content="pin on top" IsChecked="{Binding isTopMost}"
+                                            <CheckBox Content="pin on top" IsChecked="{Binding IsTopMost}"
                                                       Command="{Binding Main.SetTopMostCommand, Source={StaticResource Locator}}"
                                                       CommandParameter="{Binding}"/>
                                             <!--<CheckBox Content="IsRemoved" Checked="{Binding isRemoved}" IsEnabled="False"/>-->
@@ -130,7 +130,7 @@
                 </ListBox.ItemTemplate>
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
-                        <Setter Property="Visibility" Value="{Binding isVisible, Converter={StaticResource BoolToVisibility}}" />
+                        <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BoolToVisibility}}" />
                     </Style>
                 </ListBox.ItemContainerStyle>
             </ListBox>

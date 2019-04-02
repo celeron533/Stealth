@@ -11,10 +11,26 @@ namespace Stealth.Core
     public class WindowInstanceInfo
     {
         #region Basic Info
-        public readonly IntPtr hWnd;
-        public string title;
-        public bool isVisible;
-        public User32.WINDOWINFO windowInfo;
+
+        /// <summary>
+        /// Window hWnd
+        /// </summary>
+        public readonly IntPtr HWnd;
+
+        /// <summary>
+        /// Window Title
+        /// </summary>
+        public string Title;
+
+        /// <summary>
+        /// Is this window Visible or not
+        /// </summary>
+        public bool IsVisible;
+
+        /// <summary>
+        /// User32.WINDOWINFO, contains window information
+        /// </summary>
+        public User32.WINDOWINFO WindowInfo;
         #endregion
 
         #region Detailed Info
@@ -22,7 +38,7 @@ namespace Stealth.Core
 
         private bool _isTopMostChanged;
         private bool _isTopMost;
-        public bool isTopMost
+        public bool IsTopMost
         {
             get { return _isTopMost; }
             set
@@ -34,7 +50,7 @@ namespace Stealth.Core
 
         private bool _isLayeredChanged;
         private bool _isLayered;
-        public bool isLayered
+        public bool IsLayered
         {
             get { return _isLayered; }
             set
@@ -46,7 +62,7 @@ namespace Stealth.Core
 
         public bool _crKeyChanged;
         private uint _crkey;
-        public uint crKey
+        public uint CrKey
         {
             get { return _crkey; }
             set
@@ -58,7 +74,7 @@ namespace Stealth.Core
 
         public bool _bAlphaChanged;
         private byte _bAlpha;
-        public byte bAlpha //uint
+        public byte BAlpha //uint
         {
             get { return _bAlpha; }
             set
@@ -70,7 +86,7 @@ namespace Stealth.Core
 
         public bool _dwFlagsChanged;
         private uint _dwFlags;
-        public uint dwFlags
+        public uint DwFlags
         {
             get { return _dwFlags; }
             set
@@ -90,7 +106,7 @@ namespace Stealth.Core
 
         public WindowInstanceInfo(IntPtr hWnd) : base()
         {
-            this.hWnd = hWnd;
+            this.HWnd = hWnd;
             GetBasicInfo();
         }
 
@@ -99,13 +115,13 @@ namespace Stealth.Core
         /// </summary>
         public void GetBasicInfo()
         {
-            isVisible = User32.IsWindowVisible(hWnd);
+            IsVisible = User32.IsWindowVisible(HWnd);
             char[] t = new char[255];
             // User32.GetWindowText(hWnd); may have some exceptions when accessing system processes
-            User32.GetWindowText(hWnd, t, t.Length + 1);
-            title =
+            User32.GetWindowText(HWnd, t, t.Length + 1);
+            Title =
                 t[0] == '\0' ? string.Empty : new string(t).Trim('\0');
-            User32.GetWindowInfo(hWnd, ref windowInfo);
+            User32.GetWindowInfo(HWnd, ref WindowInfo);
         }
 
         /// <summary>
@@ -119,19 +135,19 @@ namespace Stealth.Core
             // Get opacity
             uint tempCrKey, tempDwFlags;
             byte tempBAlpha;
-            NativeMethods.GetLayeredWindowAttributes(hWnd, out tempCrKey, out tempBAlpha, out tempDwFlags);
-            crKey = tempCrKey;
-            bAlpha = tempBAlpha;
-            dwFlags = tempDwFlags;
+            NativeMethods.GetLayeredWindowAttributes(HWnd, out tempCrKey, out tempBAlpha, out tempDwFlags);
+            CrKey = tempCrKey;
+            BAlpha = tempBAlpha;
+            DwFlags = tempDwFlags;
 
             // Get IsLayered. Opacity works when IsLayered = true
-            _extendedStyle = User32.GetWindowLong(hWnd, User32.WindowLongIndexFlags.GWL_EXSTYLE);
-            isLayered = (_extendedStyle & (int)User32.SetWindowLongFlags.WS_EX_LAYERED) != 0;
-            isTopMost = (_extendedStyle & (int)User32.SetWindowLongFlags.WS_EX_TOPMOST) != 0;
+            _extendedStyle = User32.GetWindowLong(HWnd, User32.WindowLongIndexFlags.GWL_EXSTYLE);
+            IsLayered = (_extendedStyle & (int)User32.SetWindowLongFlags.WS_EX_LAYERED) != 0;
+            IsTopMost = (_extendedStyle & (int)User32.SetWindowLongFlags.WS_EX_TOPMOST) != 0;
 
             try
             {
-                process = Process.GetProcessById((int)hWnd);
+                process = Process.GetProcessById((int)HWnd);
             }
             catch
             { }
@@ -145,15 +161,15 @@ namespace Stealth.Core
             if (_isTopMostChanged)
             {
                 _isTopMostChanged = false;
-                if (isTopMost)
+                if (IsTopMost)
                 {
-                    User32.SetWindowPos(hWnd,
+                    User32.SetWindowPos(HWnd,
                                         User32.SpecialWindowHandles.HWND_TOPMOST, 0, 0, 0, 0,
                                         User32.SetWindowPosFlags.SWP_NOMOVE | User32.SetWindowPosFlags.SWP_NOSIZE | User32.SetWindowPosFlags.SWP_NOACTIVATE);
                 }
                 else
                 {
-                    User32.SetWindowPos(hWnd,
+                    User32.SetWindowPos(HWnd,
                                         User32.SpecialWindowHandles.HWND_NOTOPMOST, 0, 0, 0, 0,
                                         User32.SetWindowPosFlags.SWP_NOMOVE | User32.SetWindowPosFlags.SWP_NOSIZE);
                 }
@@ -162,8 +178,8 @@ namespace Stealth.Core
             if (_isLayeredChanged)
             {
                 _isLayeredChanged = false;
-                SetBitFlag(ref _extendedStyle, (int)User32.SetWindowLongFlags.WS_EX_LAYERED, isLayered);
-                User32.SetWindowLong(hWnd, User32.WindowLongIndexFlags.GWL_EXSTYLE, (User32.SetWindowLongFlags)_extendedStyle);
+                SetBitFlag(ref _extendedStyle, (int)User32.SetWindowLongFlags.WS_EX_LAYERED, IsLayered);
+                User32.SetWindowLong(HWnd, User32.WindowLongIndexFlags.GWL_EXSTYLE, (User32.SetWindowLongFlags)_extendedStyle);
             }
 
             if (_crKeyChanged || _bAlphaChanged || _dwFlagsChanged)
@@ -171,11 +187,17 @@ namespace Stealth.Core
                 _crKeyChanged = false;
                 _bAlphaChanged = false;
                 _dwFlagsChanged = false;
-                NativeMethods.SetLayeredWindowAttributes(hWnd, crKey, bAlpha, dwFlags);
+                NativeMethods.SetLayeredWindowAttributes(HWnd, CrKey, BAlpha, DwFlags);
             }
         }
 
 
+        /// <summary>
+        /// Set or remove a specified bit in the bit flags
+        /// </summary>
+        /// <param name="sourceBits">ref int</param>
+        /// <param name="bitMask">int</param>
+        /// <param name="value">bool</param>
         private void SetBitFlag(ref int sourceBits, int bitMask, bool value)
         {
             if (value)
@@ -193,7 +215,7 @@ namespace Stealth.Core
 
         public override string ToString()
         {
-            return string.Format($"hWnd={hWnd}, title={title}, isVisible={isVisible}, crKey={crKey}, bAlpha={bAlpha}, dwFlags={dwFlags}, isLayered={isLayered}");
+            return $"hWnd={HWnd}, title={Title}, isVisible={IsVisible}, crKey={CrKey}, bAlpha={BAlpha}, dwFlags={DwFlags}, isLayered={IsLayered}";
         }
     }
 }
