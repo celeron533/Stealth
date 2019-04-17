@@ -94,7 +94,6 @@
   <ItemGroup>
     <Compile Include="Core\WindowInstanceListTests.cs" />
     <Compile Include="Model\MainServiceTests.cs" />
-    <Compile Include="Model\UpdateServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
