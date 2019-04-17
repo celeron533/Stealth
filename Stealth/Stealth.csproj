@@ -164,23 +164,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <!--NuGet pack only support Major.Minor.Build version-->
-  <ItemGroup>
-    <Version Include="1.0.0.0" />
-    <Major Include="1" />
-    <Minor Include="0" />
-    <Build Include="0" />
-    <Revision Include="0" />
-  </ItemGroup>
-  <ItemGroup />
-  <Target Name="AfterBuild" Condition=" '$(Configuration)' == 'Release'">
-    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
-      <Output TaskParameter="Assemblies" ItemName="myAssemblyInfo" />
-    </GetAssemblyIdentity>
-    <PropertyGroup>
-      <Version>@(myAssemblyInfo->'%(Version)')</Version>
-    </PropertyGroup>
-    <Exec Command="@(NugetCommandLine->'%(fullpath)') pack Stealth.nuspec -Version @(Major).@(Minor).@(Build) -Properties Configuration=Release -OutputDirectory $(OutDir) -BasePath $(OutDir)" />
-    <Exec Command="@(squirrelPackage->'%(fullpath)') --releasify $(OutDir)Stealth.@(Major).@(Minor).@(Build).nupkg" />
-  </Target>
 </Project>
