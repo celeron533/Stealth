@@ -149,8 +149,14 @@ namespace Stealth.Core
             {
                 process = Process.GetProcessById((int)HWnd);
             }
-            catch
-            { }
+            catch(ArgumentException)
+            {
+                // normally caused by process not running
+            }
+            catch(Exception)
+            {
+                // other unknown exceptions
+            }
         }
 
         /// <summary>
