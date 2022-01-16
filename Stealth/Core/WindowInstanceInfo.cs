@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PInvoke;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Stealth.Core
 {
@@ -102,6 +103,12 @@ namespace Stealth.Core
             set;
         }
 
+        public Bitmap iconBitmap
+        {
+            get;
+            private set;
+        }
+
         #endregion
 
         public WindowInstanceInfo(IntPtr hWnd) : base()
@@ -125,7 +132,7 @@ namespace Stealth.Core
         }
 
         /// <summary>
-        /// Get more detailed details from window
+        /// Get more details from a window
         /// </summary>
         public void GetDetailedInfo()
         {
@@ -147,7 +154,10 @@ namespace Stealth.Core
 
             try
             {
-                process = Process.GetProcessById((int)HWnd);
+                uint processId = 0;
+                NativeMethods.GetWindowThreadProcessId(HWnd, out processId);
+                if (processId > 0)
+                process = Process.GetProcessById((int)processId);
             }
             catch(ArgumentException)
             {
@@ -156,6 +166,38 @@ namespace Stealth.Core
             catch(Exception)
             {
                 // other unknown exceptions
+            }
+
+            GetIcon();
+        }
+
+
+        /// <summary>
+        /// Get the icon from process
+        /// </summary>
+        public void GetIcon()
+        {
+            if (process == null)
+            {
+                //iconBitmap = Bitmap.FromHicon(SystemIcons.WinLogo.Handle);
+                return;
+            }
+            // https://stackoverflow.com/a/23978207/2075611
+            try
+            {
+                iconBitmap = Icon.ExtractAssociatedIcon(process.MainModule.FileName).ToBitmap();
+            }
+            catch (Exception ex)
+            {
+                // expected errors if there is no icon or the process is 64-bit
+                if (ex is ArgumentException || ex is Win32Exception)
+                {
+                    iconBitmap = Bitmap.FromHicon(SystemIcons.Application.Handle);
+                }
+                else
+                {
+                    //iconBitmap = Bitmap.FromHicon(SystemIcons.Error.Handle);
+                }
             }
         }
 

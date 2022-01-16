@@ -94,8 +94,7 @@
                                 <StackPanel>
                                     <StackPanel Orientation="Vertical">
                                         <DockPanel x:Name="SummaryPanel">
-                                            <Label Content="icon" DockPanel.Dock="Left"/>
-                                            <Image DockPanel.Dock="Left" Source="{Binding ProcIcon}" MinWidth="30"/>
+                                            <Image DockPanel.Dock="Left" Source="{Binding ProcIcon}" MinWidth="32"/>
                                             <Label DockPanel.Dock="Top">
                                                 <TextBlock Text="{Binding Title}" TextWrapping="Wrap"/>
                                             </Label>

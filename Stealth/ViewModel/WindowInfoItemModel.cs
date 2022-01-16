@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -50,12 +51,7 @@ namespace Stealth.ViewModel
         private ImageSource _procIcon;
         public ImageSource ProcIcon
         {
-            get
-            {
-                if (_procIcon == null)
-                    FetchAppIcon();
-                return _procIcon;
-            }
+            get { return _procIcon; }
             set { Set(ref _procIcon, value); }
         }
 
@@ -141,32 +137,36 @@ namespace Stealth.ViewModel
             Opacity = nativeSource.BAlpha;
             IsTopMost = nativeSource.IsTopMost;
             _process = nativeSource.process;
+            ProcIcon = LoadBitmap(nativeSource.iconBitmap);
         }
 
-        public void FetchAppIcon()
+
+        /// <summary>
+        /// Convert the Bitmap to BitmapSource
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static BitmapSource LoadBitmap(Bitmap source)
         {
-            if (_process != null)
+            if (source == null)
+                return null;
+
+            IntPtr ip = source.GetHbitmap();
+            BitmapSource bitmapSource = null;
+            try
             {
-                Icon ic = Icon.ExtractAssociatedIcon(_process.MainModule.FileName);
-                if (ic.Size.IsEmpty)
-                    return;
-                ProcIcon = Imaging.CreateBitmapSourceFromHIcon(
-                            ic.Handle,
-                            new Int32Rect(0, 0, ic.Width, ic.Height),
-                            BitmapSizeOptions.FromEmptyOptions());
+                bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(ip,
+                   IntPtr.Zero, Int32Rect.Empty,
+                   System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+            }
+            finally
+            {
+                // prevent memory leak
+                NativeMethods.DeleteObject(ip);
             }
 
-            //using (Icon i = Icon.FromHandle((IntPtr)HWnd))
-            //{
-            //    if (i.Size.IsEmpty)
-            //        return;
-            //    ProcIcon = Imaging.CreateBitmapSourceFromHIcon(
-            //                i.Handle,
-            //                new Int32Rect(0, 0, i.Width, i.Height),
-            //                BitmapSizeOptions.FromEmptyOptions());
-            //}
+            return bitmapSource;
         }
-
 
         public override string ToString()
         {
