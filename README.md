@@ -1,7 +1,9 @@
 # Stealth
 
-A tool to change window's opacity attribute on Windows Vista and above.  
-This is a tiny personal project for .Net coding practice.  
+A tool to change window's opacity attribute on Windows Vista and above.\
+This is a tiny personal project for .Net coding practice.
+
+[![Github All Releases](https://img.shields.io/github/downloads/celeron533/Stealth/total.svg)]()
 
 ## Features
 - Set target window transparency
@@ -11,11 +13,11 @@ This is a tiny personal project for .Net coding practice.
 - Filter: hide removed windows
 - Filter: on window title
 
-## Screenshots
-![UI](screenshot/Stealth.png)
+## Screenshots (v0.6.1)
+![Stealth](screenshot/Stealth.png)
 
 ![Sample with notepad.exe](screenshot/notepad.png)
 
 ## License
-GPL.  
+[GNU GENERAL PUBLIC LICENSE (GPL)](./LICENSE)\
 (Any further development based on this code should be open-sourced)
