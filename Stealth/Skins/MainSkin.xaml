@@ -1,4 +1,14 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Controls/Button.xaml"/>
+        <ResourceDictionary Source="Controls/TextBox.xaml"/>
+        <ResourceDictionary Source="Controls/ListBox.xaml"/>
+        <ResourceDictionary Source="Controls/CheckBox.xaml"/>
+        <ResourceDictionary Source="Controls/Label.xaml"/>
+        <ResourceDictionary Source="Controls/Slider.xaml"/>
+        <ResourceDictionary Source="Controls/MenuItem.xaml"/>
+        
+    </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

@@ -5,25 +5,53 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" x:Class="Stealth.AboutView"
-        mc:Ignorable="d ignore"
+        mc:Ignorable="d ignore" WindowStartupLocation="CenterScreen"
         DataContext="{Binding About, Source={StaticResource Locator}}" Height="300" Width="400">
-    <DockPanel Margin="5">
-        <DockPanel DockPanel.Dock="Top">
-            <Image DockPanel.Dock="Left" Width="100" Height="100"/>
-            <StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Image Width="100" Height="100" Source="/Stealth.ico"/>
+            <StackPanel Grid.Column="1" Margin="8,0,0,0">
                 <TextBlock DockPanel.Dock="Top" FontSize="36">Stealth</TextBlock>
-                <TextBlock><Hyperlink NavigateUri="https://github.com/celeron533/Stealth" RequestNavigate="Hyperlink_RequestNavigate">Stealth Project</Hyperlink></TextBlock>
+                <TextBlock>
+                    <Hyperlink NavigateUri="https://github.com/celeron533/Stealth" 
+                               RequestNavigate="Hyperlink_RequestNavigate">Stealth Project</Hyperlink></TextBlock>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock>Version</TextBlock>
                     <TextBlock Width="8px"/>
                     <TextBlock Text="{Binding version}"/>
                 </StackPanel>
-                <TextBlock TextWrapping="Wrap"><Run Text="Copyright celeron533. All rights reserved."/><LineBreak/><Hyperlink NavigateUri="https://github.com/celeron533" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://github.com/celeron533"/></Hyperlink></TextBlock>
+                <TextBlock TextWrapping="Wrap">
+                    <Run Text="Copyright celeron533. All rights reserved."/><LineBreak/>
+                    <Hyperlink NavigateUri="https://github.com/celeron533" 
+                               RequestNavigate="Hyperlink_RequestNavigate">
+                        <Run Text="https://github.com/celeron533"/></Hyperlink></TextBlock>
             </StackPanel>
-        </DockPanel>
-        <ScrollViewer Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
-            <TextBlock Padding="8"><Bold><Run Text="Third Party Components / Libraries"/></Bold><LineBreak/><Run Text="CommonServiceLocator"/><LineBreak/><Run Text="DeltaCompressionDotNet"/><LineBreak/><Run Text="Mono.Cecil"/><LineBreak/><Run Text="MvvmLightLibs"/><LineBreak/><Run Text="NuGet.CommandLine"/><LineBreak/><Run Text="PInvoke.Kernel32"/><LineBreak/><Run Text="PInvoke.User32"/><LineBreak/><Run Text="PInvoke.Windows.Core"/><LineBreak/><Run Text="PInvoke.Windows.ShellScalingApi"/><LineBreak/><Run Text="Splat"/><LineBreak/><Run Text="squirrel.windows"/></TextBlock>
+        </Grid>
+        
+        <ScrollViewer Background="{StaticResource Background.Main}" Grid.Row="1" Margin="4">
+            <TextBlock Padding="8">
+                <Bold><Run Text="Third Party Components / Libraries"/></Bold><LineBreak/>
+                <Run Text="CommonServiceLocator"/><LineBreak/>
+                <Run Text="DeltaCompressionDotNet"/><LineBreak/>
+                <Run Text="Mono.Cecil"/><LineBreak/>
+                <Run Text="MvvmLightLibs"/><LineBreak/>
+                <Run Text="NuGet.CommandLine"/><LineBreak/>
+                <Run Text="PInvoke.Kernel32"/><LineBreak/>
+                <Run Text="PInvoke.User32"/><LineBreak/>
+                <Run Text="PInvoke.Windows.Core"/><LineBreak/>
+                <Run Text="PInvoke.Windows.ShellScalingApi"/>
+                <LineBreak/><Run Text="Splat"/><LineBreak/>
+                <Run Text="squirrel.windows"/></TextBlock>
         </ScrollViewer>
-    </DockPanel>
+    </Grid>
+
 
 </Window>

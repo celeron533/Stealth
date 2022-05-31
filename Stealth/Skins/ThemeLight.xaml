@@ -1,0 +1,47 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--顶部背景、按钮、可点击文字-->
+    <SolidColorBrush x:Key="Primary" Color="#1A56F2"/>
+    <SolidColorBrush x:Key="Primary.Disabled" Color="#8CAAF8"/>
+    <SolidColorBrush x:Key="Primary.Light" Color="#FFCFEAFF"/>
+    <SolidColorBrush x:Key="Primary.Shadow" Color="#FF889AC4"/>
+    <SolidColorBrush x:Key="SecondaryBrush" Color="#3CD9E0"/>
+    <!--背景色-->
+    <SolidColorBrush x:Key="Background.Main" Color="#E8E9EC"/>
+    <SolidColorBrush x:Key="Background.Main.Disabled" Color="#FFE1E3E7"/>
+    <SolidColorBrush x:Key="Background.Secondary" Color="#E7E9ED"/>
+    <SolidColorBrush x:Key="Background.Block" Color="#F4F5F8"/>
+    <SolidColorBrush x:Key="Background.Button" Color="#F1F2F6"/>
+    <SolidColorBrush x:Key="Background.Button.Pressed" Color="#E9EAEf"/>
+    <SolidColorBrush x:Key="Background.Button.Focused" Color="#F8FBFD"/>
+    <SolidColorBrush x:Key="Background.Button.Disabled" Color="#E8E9EC"/>
+    <SolidColorBrush x:Key="Background.Pure" Color="White"/>
+    <SolidColorBrush x:Key="Background.TextField" Color="#FBFBFB"/>
+    <!--边框色-->
+    <SolidColorBrush x:Key="Border.Main" Color="#A6A9BB"/>
+    <SolidColorBrush x:Key="Border.Highlight" Color="#FF7EB4EA"/>
+    <SolidColorBrush x:Key="Border.Main.Focused" Color="#FF4B95E6"/>
+    <!--文本颜色-->
+    <SolidColorBrush x:Key="Text.Main" Color="#515A6E"/>
+    <SolidColorBrush x:Key="Text.Main.Disabled" Color="#80515A6E"/>
+    <SolidColorBrush x:Key="Text.Secondary" Color="#BABBBD"/>
+    <SolidColorBrush x:Key="Text.Contrast" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Text.Contrast.Disabled" Color="#80FFFFFF"/>
+    <!--光照-->
+    <Color x:Key="Shader.ShadowColor">#B3B5C1</Color>
+    <SolidColorBrush x:Key="Shader.Light" Color="#F9FAFE"/>
+    <SolidColorBrush x:Key="Shader.Shadow" Color="{StaticResource Shader.ShadowColor}"/>
+
+
+    <Style x:Key="FocusVisual">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle Margin="2" StrokeDashArray="1 2" 
+                               Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" 
+                               SnapsToDevicePixels="true" StrokeThickness="1"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

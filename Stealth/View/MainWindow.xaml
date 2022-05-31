@@ -4,27 +4,28 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:Custom="http://www.galasoft.ch/mvvmlight" x:Class="Stealth.MainWindow"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+        xmlns:Custom="http://www.galasoft.ch/mvvmlight" x:Class="Stealth.MainWindow"
         mc:Ignorable="d ignore"
-        Height="400"
-        Width="572"
-        Title="Stealth"
-        >
-
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Skins/MainSkin.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
+        Height="600" Width="580" Background="{StaticResource Background.Main}"
+        Title="Stealth">
 
     <Window.DataContext>
         <Binding Path="Main" Source="{StaticResource Locator}"/>
     </Window.DataContext>
-    <!-- Menu, Main container, StatusBar -->
-    <DockPanel x:Name="LayoutRoot">
-        <Menu x:Name="MainMenu" IsMainMenu="True" DockPanel.Dock="Top">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="24"/>
+        </Grid.RowDefinitions>
+        <!--菜单栏-->
+        <Menu Grid.Row="0" x:Name="MainMenu" IsMainMenu="True" 
+              FontSize="14" Background="Transparent" 
+              Foreground="{StaticResource Text.Main}">
             <MenuItem Header="_File">
                 <MenuItem Header="Exit"/>
             </MenuItem>
@@ -32,8 +33,113 @@
                 <MenuItem Header="About" Command="{Binding AboutCommand}"/>
             </MenuItem>
         </Menu>
+        <!--筛选框-->
+        <TextBox Grid.Row="1" x:Name="textFilterInput" Margin="4,2,4,0">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="TextChanged">
+                    <Custom:EventToCommand Command="{Binding TitleFilterCommand}" 
+                                           CommandParameter="{Binding ElementName=textFilterInput, Mode=OneWay}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </TextBox>
+        <!--选项-->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180"/>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border BorderThickness="1" BorderBrush="{StaticResource Border.Main}"
+                    CornerRadius="4" Grid.ColumnSpan="2" Margin="4,4,0,4"/>
+            <CheckBox x:Name="includeRemovedCheckBox" Content="Show closed window"
+                      Grid.Column="0" Margin="8,0,0,0">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <Custom:EventToCommand Command="{Binding IncludeRemovedCommand, Mode=OneWay}" CommandParameter="{Binding ElementName=includeRemovedCheckBox}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </CheckBox>
+            <CheckBox x:Name="includeEmptyTitleCheckBox" Content="Show empty title window"
+                      Grid.Column="1" Margin="4,0">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <Custom:EventToCommand Command="{Binding IncludeEmptyTitleCommand, Mode=OneWay}" CommandParameter="{Binding ElementName=includeEmptyTitleCheckBox}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </CheckBox>
+            <Button Content="Refresh" Command="{Binding RefreshCommand}"
+                    Grid.Column="2" Margin="4"/>
+        </Grid>
+        <ListBox Grid.Row="3"
+                 ItemsSource="{Binding windowsInfoItemList, Mode=TwoWay}"
+                 HorizontalContentAlignment="Stretch"
+                 ScrollViewer.CanContentScroll="false">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Background="{StaticResource Background.Block}" 
+                            BorderBrush="{StaticResource Border.Main}"
+                            BorderThickness="1" Margin="0,2"
+                            CornerRadius="8" >
+                        <Grid Height="72">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="64"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <!--缩略图-->
+                            <Image Source="{Binding ProcIcon}" Grid.RowSpan="2" Margin="8,8,4,8"/>
+                            <Grid Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Margin="4,4,4,0" HorizontalContentAlignment="Left">
+                                    <TextBlock Text="{Binding Title}" TextWrapping="Wrap"/>
+                                </Label>
+                                <Button Content="Detail" Grid.Column="1" Margin="0,4,4,0"
+                                        Command="{Binding Main.DetailCommand, 
+                                                  Source={StaticResource Locator}}"
+                                        CommandParameter="{Binding}"/>
+                            </Grid>
+                            <Grid Grid.Column="1" Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox Content="Top Most" IsChecked="{Binding IsTopMost}"
+                                          Grid.Column="0" Margin="4,0"
+                                          Command="{Binding Main.SetTopMostCommand, 
+                                                    Source={StaticResource Locator}}"
+                                          CommandParameter="{Binding}"/>
+                                <Slider Value="{Binding Opacity}" Maximum="255" Grid.Column="1"
+                                        VerticalAlignment="Center">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="ValueChanged">
+                                            <Custom:EventToCommand Command="{Binding Main.ChangeOpacityCommand, Source={StaticResource Locator}}"
+                                                                   CommandParameter="{Binding}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </Slider>
+                                <Label Content="{Binding Opacity}" Grid.Column="2" Margin="0,4,4,4"/>
+                            </Grid>
+                        </Grid>
 
-        <StatusBar x:Name="MainStatus" DockPanel.Dock="Bottom">
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Visibility" Value="{Binding IsVisible, 
+                            Converter={StaticResource BoolToVisibility}}" />
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+        <!--状态栏-->
+        <StatusBar x:Name="MainStatus" Grid.Row="4">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>
@@ -57,81 +163,6 @@
                 <TextBlock Text="world"/>
             </StatusBarItem>
         </StatusBar>
+    </Grid>
 
-        <DockPanel>
-            <TextBox x:Name="textFilterInput" DockPanel.Dock="Top"
-                     Margin="10" Padding="5,5,0,0" VerticalAlignment="Top">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="TextChanged">
-                        <Custom:EventToCommand Command="{Binding TitleFilterCommand}" CommandParameter="{Binding ElementName=textFilterInput, Mode=OneWay}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </TextBox>
-            <DockPanel DockPanel.Dock="Top">
-                <CheckBox x:Name="includeRemovedCheckBox" DockPanel.Dock="Left" Content="Show closed window">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <Custom:EventToCommand Command="{Binding IncludeRemovedCommand, Mode=OneWay}" CommandParameter="{Binding ElementName=includeRemovedCheckBox}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </CheckBox>
-                <CheckBox x:Name="includeEmptyTitleCheckBox" DockPanel.Dock="Left" Content="Show empty title window">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <Custom:EventToCommand Command="{Binding IncludeEmptyTitleCommand, Mode=OneWay}" CommandParameter="{Binding ElementName=includeEmptyTitleCheckBox}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </CheckBox>
-                <Button Content="Refresh" Command="{Binding RefreshCommand}"/>
-            </DockPanel>
-            <ListBox ItemsSource="{Binding windowsInfoItemList, Mode=TwoWay}"
-                     HorizontalContentAlignment="Stretch"
-                     ScrollViewer.CanContentScroll="false">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <DockPanel>
-                            <Border BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left">
-                                <StackPanel>
-                                    <StackPanel Orientation="Vertical">
-                                        <DockPanel x:Name="SummaryPanel">
-                                            <Image DockPanel.Dock="Left" Source="{Binding ProcIcon}" MinWidth="32"/>
-                                            <Label DockPanel.Dock="Top">
-                                                <TextBlock Text="{Binding Title}" TextWrapping="Wrap"/>
-                                            </Label>
-                                            <Label Content="{Binding Opacity}" DockPanel.Dock="Left"/>
-                                            <Grid/>
-                                        </DockPanel>
-                                        <StackPanel x:Name="DetailsPanel" Orientation="Vertical">
-                                            <DockPanel x:Name="OpacityPanel">
-                                                <Button Content="Detail" Width="70" DockPanel.Dock="Right"
-                                                        Command="{Binding Main.DetailCommand, Source={StaticResource Locator}}"
-                                                        CommandParameter="{Binding}"/>
-                                                <Slider Value="{Binding Opacity}" Maximum="255" DockPanel.Dock="Left">
-                                                    <i:Interaction.Triggers>
-                                                        <i:EventTrigger EventName="ValueChanged">
-                                                            <Custom:EventToCommand Command="{Binding Main.ChangeOpacityCommand, Source={StaticResource Locator}}"
-                                                                                   CommandParameter="{Binding}"/>
-                                                        </i:EventTrigger>
-                                                    </i:Interaction.Triggers>
-                                                </Slider>
-                                            </DockPanel>
-                                            <CheckBox Content="pin on top" IsChecked="{Binding IsTopMost}"
-                                                      Command="{Binding Main.SetTopMostCommand, Source={StaticResource Locator}}"
-                                                      CommandParameter="{Binding}"/>
-                                            <!--<CheckBox Content="IsRemoved" Checked="{Binding isRemoved}" IsEnabled="False"/>-->
-                                        </StackPanel>
-                                    </StackPanel>
-                                </StackPanel>
-                            </Border>
-                        </DockPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BoolToVisibility}}" />
-                    </Style>
-                </ListBox.ItemContainerStyle>
-            </ListBox>
-        </DockPanel>
-    </DockPanel>
 </Window>
