@@ -16,7 +16,7 @@ This is a tiny personal project for .Net coding practice.
 ## Screenshots (v0.6.1)
 ![Stealth](screenshot/Stealth.png)
 
-![Sample with notepad.exe](screenshot/notepad.png)
+![Sample with explorer](screenshot/Sample.png)
 
 ## License
 [GNU GENERAL PUBLIC LICENSE (GPL)](./LICENSE)\
