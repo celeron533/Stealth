@@ -13,7 +13,9 @@ This is a tiny personal project for .Net coding practice.
 - Filter: hide removed windows
 - Filter: on window title
 
-## Screenshots (v0.6.1)
+## Screenshots (v0.6.2)
+Thanks to [Symin](https://github.com/syminomega) provides new icon, UI sytle and screenshots.
+
 ![Stealth](screenshot/Stealth.png)
 
 ![Sample with explorer](screenshot/Sample.png)
