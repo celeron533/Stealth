@@ -18,8 +18,12 @@ namespace Stealth.ViewModel
     public class MainViewModel : ObservableObject
     {
         private readonly IMainService _mainService;
-
-        public ObservableCollection<WindowInfoItemModel> windowsInfoItemList { get; set; }
+        private ObservableCollection<WindowInfoItemModel> _windowsInfoItemList;
+        public ObservableCollection<WindowInfoItemModel> windowsInfoItemList
+        {
+            get { return _windowsInfoItemList; }
+            set { SetProperty(ref _windowsInfoItemList, value); }
+        }
 
         private bool _includeEmptyTitle;
         public bool includeEmptyTitle
@@ -43,7 +47,7 @@ namespace Stealth.ViewModel
             {
                 return _refreshCommand
                     ?? (_refreshCommand = new RelayCommand(
-                        () => _mainService.RefreshWindowData()
+                        () => RefreshWindows()
                         ));
             }
         }
@@ -141,6 +145,12 @@ namespace Stealth.ViewModel
         public MainViewModel(IMainService mainService)
         {
             _mainService = mainService;
+            windowsInfoItemList = _mainService.GetWindowListData();
+        }
+
+        private void RefreshWindows()
+        {
+            _mainService.RefreshWindowData();
             windowsInfoItemList = _mainService.GetWindowListData();
         }
 

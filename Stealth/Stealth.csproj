@@ -170,9 +170,6 @@
     <PackageReference Include="CommunityToolkit.Mvvm">
       <Version>8.4.2</Version>
     </PackageReference>
-    <PackageReference Include="MvvmLightLibs">
-      <Version>5.4.1.1</Version>
-    </PackageReference>
     <PackageReference Include="PInvoke.User32">
       <Version>0.7.124</Version>
     </PackageReference>

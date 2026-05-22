@@ -33,7 +33,7 @@ namespace Stealth.Model
         public ObservableCollection<WindowInfoItemModel> GetWindowListData()
         {
             UpdateWindowInfoItemModelList(windowInfoViewList, windowsInstanceList);
-            return windowInfoViewList;
+            return new ObservableCollection<WindowInfoItemModel>(windowInfoViewList);
         }
 
 
