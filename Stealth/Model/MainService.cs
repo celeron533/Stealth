@@ -1,5 +1,4 @@
-﻿using GalaSoft.MvvmLight.Command;
-using Stealth.Core;
+﻿using Stealth.Core;
 using Stealth.ViewModel;
 using System;
 using System.Collections.Generic;

@@ -10,8 +10,6 @@
 */
 
 using CommonServiceLocator;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Ioc;
 using Stealth.Model;
 
 namespace Stealth.ViewModel
@@ -25,24 +23,28 @@ namespace Stealth.ViewModel
     /// </summary>
     public class ViewModelLocator
     {
+        private static readonly IMainService MainServiceInstance;
+        private static readonly IAboutService AboutServiceInstance;
+        private static readonly MainViewModel MainViewModelInstance;
+        private static readonly AboutViewModel AboutViewModelInstance;
+
         static ViewModelLocator()
         {
-            ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
+            var isDesignMode = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject());
 
-            if (ViewModelBase.IsInDesignModeStatic)
+            if (isDesignMode)
             {
-                SimpleIoc.Default.Register<IMainService, Design.DesignMainService>();
-                SimpleIoc.Default.Register<IAboutService, Design.DesignAboutService>();
+                MainServiceInstance = new Design.DesignMainService();
+                AboutServiceInstance = new Design.DesignAboutService();
             }
             else
             {
-                SimpleIoc.Default.Register<IMainService, MainService>();
-                SimpleIoc.Default.Register<IAboutService, AboutService>();
+                MainServiceInstance = new MainService();
+                AboutServiceInstance = new AboutService();
             }
 
-            SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<AboutViewModel>();
-
+            MainViewModelInstance = new MainViewModel(MainServiceInstance);
+            AboutViewModelInstance = new AboutViewModel(AboutServiceInstance);
         }
 
         /// <summary>
@@ -55,7 +57,7 @@ namespace Stealth.ViewModel
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<MainViewModel>();
+                return MainViewModelInstance;
             }
         }
 
@@ -63,7 +65,7 @@ namespace Stealth.ViewModel
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<AboutViewModel>();
+                return AboutViewModelInstance;
             }
         }
 

@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Stealth.Model;
 
 namespace Stealth.ViewModel
@@ -9,7 +9,7 @@ namespace Stealth.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class AboutViewModel : ViewModelBase
+    public class AboutViewModel : ObservableObject
     {
         private readonly IAboutService _aboutService;
 
@@ -17,7 +17,7 @@ namespace Stealth.ViewModel
         public string version
         {
             get { return _version; }
-            set { Set(ref _version, value); }
+            set { SetProperty(ref _version, value); }
         }
 
         /// <summary>

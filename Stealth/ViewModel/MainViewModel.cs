@@ -1,6 +1,6 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Stealth.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,7 +15,7 @@ namespace Stealth.ViewModel
     /// See http://www.mvvmlight.net
     /// </para>
     /// </summary>
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : ObservableObject
     {
         private readonly IMainService _mainService;
 
@@ -25,14 +25,14 @@ namespace Stealth.ViewModel
         public bool includeEmptyTitle
         {
             get { return _includeEmptyTitle; }
-            set { Set(ref _includeEmptyTitle, value); }
+            set { SetProperty(ref _includeEmptyTitle, value); }
         }
 
         private bool _includeRemoved;
         public bool includeRemoved
         {
             get { return _includeRemoved; }
-            set { Set(ref _includeRemoved, value); }
+            set { SetProperty(ref _includeRemoved, value); }
         }
 
         #region Commands
@@ -55,7 +55,7 @@ namespace Stealth.ViewModel
             {
                 return _titleFilterCommand
                     ?? (_titleFilterCommand = new RelayCommand<TextBox>(
-                        (textbox) => _mainService.FilterByTitle(textbox.Text)
+                        textbox => _mainService.FilterByTitle(textbox.Text)
                         ));
             }
         }
@@ -67,7 +67,7 @@ namespace Stealth.ViewModel
             {
                 return _includeEmptyTitleCommand
                     ?? (_includeEmptyTitleCommand = new RelayCommand<CheckBox>(
-                        (checkbox) => _mainService.FilterByIncludeEmptyTitle(checkbox.IsChecked)
+                        checkbox => _mainService.FilterByIncludeEmptyTitle(checkbox.IsChecked)
                         ));
             }
         }
@@ -79,7 +79,7 @@ namespace Stealth.ViewModel
             {
                 return _includeRemovedCommand
                     ?? (_includeRemovedCommand = new RelayCommand<CheckBox>(
-                        (checkbox) => _mainService.FilterByIncludeRemoved(checkbox.IsChecked)
+                        checkbox => _mainService.FilterByIncludeRemoved(checkbox.IsChecked)
                         ));
             }
         }
@@ -91,7 +91,7 @@ namespace Stealth.ViewModel
             {
                 return _aboutCommand
                   ?? (_aboutCommand = new RelayCommand(
-                      () => Messenger.Default.Send(new NotificationMessage("ShowAboutView"))
+                      () => WeakReferenceMessenger.Default.Send(new ShowAboutViewMessage())
                       ));
             }
         }
@@ -104,7 +104,7 @@ namespace Stealth.ViewModel
             {
                 return _detailCommand
                     ?? (_detailCommand = new RelayCommand<WindowInfoItemModel>(
-                        (item) => _mainService.Detail(item)
+                        item => _mainService.Detail(item)
                         ));
             }
         }
@@ -117,7 +117,7 @@ namespace Stealth.ViewModel
             {
                 return _changeOpacityCommand
                     ?? (_changeOpacityCommand = new RelayCommand<WindowInfoItemModel>(
-                        (item) => _mainService.ChangeOpacity(item)
+                        item => _mainService.ChangeOpacity(item)
                         ));
             }
         }
@@ -129,7 +129,7 @@ namespace Stealth.ViewModel
             {
                 return _setTopMostCommand
                     ?? (_setTopMostCommand = new RelayCommand<WindowInfoItemModel>(
-                        (item) => _mainService.SetTopMost(item)
+                        item => _mainService.SetTopMost(item)
                         ));
             }
         }

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using Stealth.ViewModel;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using System;
 
 namespace Stealth
@@ -17,12 +17,12 @@ namespace Stealth
         {
             InitializeComponent();
             Closing += (s, e) => ViewModelLocator.Cleanup();
-            Messenger.Default.Register<NotificationMessage>(this, NotificationMessageReceived);
+            WeakReferenceMessenger.Default.Register<ShowAboutViewMessage>(this, (recipient, msg) => ((MainWindow)recipient).NotificationMessageReceived(msg));
         }
 
-        private void NotificationMessageReceived(NotificationMessage msg)
+        private void NotificationMessageReceived(ShowAboutViewMessage msg)
         {
-            if (msg.Notification=="ShowAboutView")
+            if (msg.Value == "ShowAboutView")
             {
                 new AboutView().ShowDialog();
             }
