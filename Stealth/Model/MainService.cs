@@ -75,6 +75,14 @@ namespace Stealth.Model
         public void RefreshWindowData()
         {
             //please note that the UI (ListBoxItem) content is not refershed if updating nested elements
+            if (windowsInstanceList != null)
+            {
+                foreach (var window in windowsInstanceList)
+                {
+                    window.Dispose();
+                }
+            }
+
             windowsInstanceList = util.RetrieveAllWindows(true);
             UpdateWindowInfoItemModelList(windowInfoViewList, windowsInstanceList);
             FilterByTitle(this.titleText);
@@ -139,20 +147,17 @@ namespace Stealth.Model
             }
             else
             {
-                string titleText_Lower = this.titleText.ToLower();
                 foreach (var item in windowInfoViewList)
                 {
-                    if (item.Title.ToLower().Contains(titleText_Lower))
-                        item.IsTitleFilteredVisible = true;
-                    else
-                        item.IsTitleFilteredVisible = false;
+                    item.IsTitleFilteredVisible = !string.IsNullOrWhiteSpace(item.Title) &&
+                        item.Title.IndexOf(this.titleText, StringComparison.OrdinalIgnoreCase) >= 0;
                 }
             }
         }
 
         public void FilterByIncludeEmptyTitle(bool? includeEmptyTitle)
         {
-            this.includeEmptyTitle = (bool)includeEmptyTitle;
+            this.includeEmptyTitle = includeEmptyTitle ?? false;
             foreach (var item in windowInfoViewList)
             {
                 item.IsIncludeEmptyTitleVisible = this.includeEmptyTitle;
@@ -161,7 +166,7 @@ namespace Stealth.Model
 
         public void FilterByIncludeRemoved(bool? includeRemoved)
         {
-            this.includeRemoved = (bool)includeRemoved;
+            this.includeRemoved = includeRemoved ?? false;
             foreach (var item in windowInfoViewList)
             {
                 item.IsIncludeRemovedVisible = this.includeRemoved;

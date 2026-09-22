@@ -11,7 +11,7 @@ using System.Drawing;
 
 namespace Stealth.Core
 {
-    public class WindowInstanceInfo
+    public class WindowInstanceInfo : IDisposable
     {
         unsafe private static readonly HWND HWND_TOPMOST = new HWND((void*)(-1));
         unsafe private static readonly HWND HWND_NOTOPMOST = new HWND((void*)(-2));
@@ -188,20 +188,26 @@ namespace Stealth.Core
         {
             if (process == null)
             {
-                //iconBitmap = Bitmap.FromHicon(SystemIcons.WinLogo.Handle);
+                DisposeIconBitmap();
                 return;
             }
+
             // https://stackoverflow.com/a/23978207/2075611
             try
             {
-                iconBitmap = Icon.ExtractAssociatedIcon(process.MainModule.FileName).ToBitmap();
+                using (var icon = Icon.ExtractAssociatedIcon(process.MainModule.FileName))
+                {
+                    ReplaceIconBitmap(icon != null
+                        ? icon.ToBitmap()
+                        : Bitmap.FromHicon(SystemIcons.Application.Handle));
+                }
             }
             catch (Exception ex)
             {
                 // expected errors if there is no icon or the process is 64-bit
                 if (ex is ArgumentException || ex is System.ComponentModel.Win32Exception)
                 {
-                    iconBitmap = Bitmap.FromHicon(SystemIcons.Application.Handle);
+                    ReplaceIconBitmap(Bitmap.FromHicon(SystemIcons.Application.Handle));
                 }
                 else
                 {
@@ -269,6 +275,26 @@ namespace Stealth.Core
                 sourceBits &= ~bitMask;
         }
 
+        private void ReplaceIconBitmap(Bitmap newBitmap)
+        {
+            DisposeIconBitmap();
+            iconBitmap = newBitmap;
+        }
+
+        private void DisposeIconBitmap()
+        {
+            if (iconBitmap != null)
+            {
+                iconBitmap.Dispose();
+                iconBitmap = null;
+            }
+        }
+
+        public void Dispose()
+        {
+            DisposeIconBitmap();
+            GC.SuppressFinalize(this);
+        }
 
         public override string ToString()
         {
