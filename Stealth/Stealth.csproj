@@ -15,8 +15,8 @@
     <AssemblyCompany></AssemblyCompany>
     <AssemblyProduct>Stealth</AssemblyProduct>
     <AssemblyCopyright>Copyright ©  2026</AssemblyCopyright>
-    <AssemblyVersion>0.6.2.0</AssemblyVersion>
-    <FileVersion>0.6.2.0</FileVersion>
+    <AssemblyVersion>0.7.0</AssemblyVersion>
+    <FileVersion>0.7.0</FileVersion>
     <ComVisible>false</ComVisible>
 
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -28,6 +28,7 @@
     <WarningLevel>4</WarningLevel>
     <LangVersion>preview</LangVersion>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
@@ -51,6 +52,10 @@
 
   <ItemGroup>
     <AdditionalFiles Include="NativeMethods.txt" />
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <Resource Include="Stealth.ico" />
   </ItemGroup>
 
