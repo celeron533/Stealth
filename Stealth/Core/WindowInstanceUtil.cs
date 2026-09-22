@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PInvoke;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.UI.WindowsAndMessaging;
 using System.Diagnostics;
 
 namespace Stealth.Core
@@ -13,9 +15,9 @@ namespace Stealth.Core
         public List<WindowInstanceInfo> RetrieveAllWindows(bool getDetailedInfo = false)
         {
             List<WindowInstanceInfo> hWndList = new List<WindowInstanceInfo>();
-            User32.EnumWindows((IntPtr hwnd, IntPtr lParam) =>
+            PInvoke.EnumWindows((HWND hwnd, LPARAM lParam) =>
                                 {
-                                    if (User32.IsWindow(hwnd))
+                                    if (PInvoke.IsWindow(hwnd))
                                     {
                                         // get basic info from targe window
                                         WindowInstanceInfo wii = new WindowInstanceInfo(hwnd);

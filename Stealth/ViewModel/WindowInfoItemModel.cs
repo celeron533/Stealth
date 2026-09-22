@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Stealth.Core;
 using System;
 using System.Collections.Generic;
@@ -13,10 +13,12 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Windows.Win32;
+using Windows.Win32.Graphics.Gdi;
 
 namespace Stealth.ViewModel
 {
-    public class WindowInfoItemModel : ViewModelBase
+    public class WindowInfoItemModel : ObservableObject
     {
         //// Base Properties
 
@@ -24,35 +26,35 @@ namespace Stealth.ViewModel
         public int HWnd
         {
             get { return _hWnd; }
-            set { Set(ref _hWnd, value); }
+            set { SetProperty(ref _hWnd, value); }
         }
 
         private string _title;
         public string Title
         {
             get { return _title; }
-            set { Set(ref _title, value); }
+            set { SetProperty(ref _title, value); }
         }
 
         private int _opacity;
         public int Opacity
         {
             get { return _opacity; }
-            set { Set(ref _opacity, value); }
+            set { SetProperty(ref _opacity, value); }
         }
 
         private bool _isTopMost;
         public bool IsTopMost
         {
             get { return _isTopMost; }
-            set { Set(ref _isTopMost, value); }
+            set { SetProperty(ref _isTopMost, value); }
         }
 
         private ImageSource _procIcon;
         public ImageSource ProcIcon
         {
             get { return _procIcon; }
-            set { Set(ref _procIcon, value); }
+            set { SetProperty(ref _procIcon, value); }
         }
 
 
@@ -62,17 +64,19 @@ namespace Stealth.ViewModel
         public bool IsModified
         {
             get { return _isModified; }
-            set { Set(ref _isModified, value); }
+            set { SetProperty(ref _isModified, value); }
         }
 
         private bool _isRemoved;
         public bool IsRemoved
         {
             get { return _isRemoved; }
-            set { Set(ref _isRemoved, value); }
+            set { SetProperty(ref _isRemoved, value); }
         }
 
         private Process _process;
+
+        internal bool IsUpdatingFromNative { get; private set; }
 
         // filters
         private bool _isTitleFilteredVisible;
@@ -81,7 +85,7 @@ namespace Stealth.ViewModel
             get { return _isTitleFilteredVisible; }
             set
             {
-                Set(ref _isTitleFilteredVisible, value);
+                SetProperty(ref _isTitleFilteredVisible, value);
                 UpdateVisibility();
             }
         }
@@ -92,7 +96,7 @@ namespace Stealth.ViewModel
             get { return _isIncludeEmptyTitleVisible; }
             set
             {
-                Set(ref _isIncludeEmptyTitleVisible, value);
+                SetProperty(ref _isIncludeEmptyTitleVisible, value);
                 UpdateVisibility();
             }
         }
@@ -103,7 +107,7 @@ namespace Stealth.ViewModel
             get { return _isIncludeRemovedVisible; }
             set
             {
-                Set(ref _isIncludeRemovedVisible, value);
+                SetProperty(ref _isIncludeRemovedVisible, value);
                 UpdateVisibility();
             }
         }
@@ -113,7 +117,7 @@ namespace Stealth.ViewModel
         public bool IsVisible
         {
             get { return _isVisible; }
-            set { Set(ref _isVisible, value); }
+            set { SetProperty(ref _isVisible, value); }
         }
 
         /// <summary>
@@ -132,12 +136,20 @@ namespace Stealth.ViewModel
         /// <param name="nativeSource">Native entity</param>
         public void CopyFrom(WindowInstanceInfo nativeSource)
         {
-            HWnd = nativeSource.HWnd.ToInt32();
-            Title = nativeSource.Title;
-            Opacity = nativeSource.BAlpha;
-            IsTopMost = nativeSource.IsTopMost;
-            _process = nativeSource.process;
-            ProcIcon = LoadBitmap(nativeSource.iconBitmap);
+            IsUpdatingFromNative = true;
+            try
+            {
+                HWnd = (int)(IntPtr)nativeSource.HWnd;
+                Title = nativeSource.Title;
+                Opacity = nativeSource.BAlpha;
+                IsTopMost = nativeSource.IsTopMost;
+                _process = nativeSource.process;
+                ProcIcon = LoadBitmap(nativeSource.iconBitmap);
+            }
+            finally
+            {
+                IsUpdatingFromNative = false;
+            }
         }
 
 
@@ -162,7 +174,7 @@ namespace Stealth.ViewModel
             finally
             {
                 // prevent memory leak
-                NativeMethods.DeleteObject(ip);
+                PInvoke.DeleteObject((HGDIOBJ)ip);
             }
 
             return bitmapSource;

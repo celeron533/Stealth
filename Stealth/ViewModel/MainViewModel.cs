@@ -1,6 +1,6 @@
-﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Stealth.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,24 +15,53 @@ namespace Stealth.ViewModel
     /// See http://www.mvvmlight.net
     /// </para>
     /// </summary>
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : ObservableObject
     {
         private readonly IMainService _mainService;
+        private ObservableCollection<WindowInfoItemModel> _windowsInfoItemList;
+        public ObservableCollection<WindowInfoItemModel> windowsInfoItemList
+        {
+            get { return _windowsInfoItemList; }
+            set { SetProperty(ref _windowsInfoItemList, value); }
+        }
 
-        public ObservableCollection<WindowInfoItemModel> windowsInfoItemList { get; set; }
+        private string _titleFilterText;
+        public string TitleFilterText
+        {
+            get { return _titleFilterText; }
+            set
+            {
+                if (SetProperty(ref _titleFilterText, value))
+                {
+                    _mainService.FilterByTitle(value);
+                }
+            }
+        }
 
         private bool _includeEmptyTitle;
         public bool includeEmptyTitle
         {
             get { return _includeEmptyTitle; }
-            set { Set(ref _includeEmptyTitle, value); }
+            set
+            {
+                if (SetProperty(ref _includeEmptyTitle, value))
+                {
+                    _mainService.FilterByIncludeEmptyTitle(value);
+                }
+            }
         }
 
         private bool _includeRemoved;
         public bool includeRemoved
         {
             get { return _includeRemoved; }
-            set { Set(ref _includeRemoved, value); }
+            set
+            {
+                if (SetProperty(ref _includeRemoved, value))
+                {
+                    _mainService.FilterByIncludeRemoved(value);
+                }
+            }
         }
 
         #region Commands
@@ -43,43 +72,7 @@ namespace Stealth.ViewModel
             {
                 return _refreshCommand
                     ?? (_refreshCommand = new RelayCommand(
-                        () => _mainService.RefreshWindowData()
-                        ));
-            }
-        }
-
-        private RelayCommand<TextBox> _titleFilterCommand;
-        public RelayCommand<TextBox> TitleFilterCommand
-        {
-            get
-            {
-                return _titleFilterCommand
-                    ?? (_titleFilterCommand = new RelayCommand<TextBox>(
-                        (textbox) => _mainService.FilterByTitle(textbox.Text)
-                        ));
-            }
-        }
-
-        private RelayCommand<CheckBox> _includeEmptyTitleCommand;
-        public RelayCommand<CheckBox> IncludeEmptyTitleCommand
-        {
-            get
-            {
-                return _includeEmptyTitleCommand
-                    ?? (_includeEmptyTitleCommand = new RelayCommand<CheckBox>(
-                        (checkbox) => _mainService.FilterByIncludeEmptyTitle(checkbox.IsChecked)
-                        ));
-            }
-        }
-
-        private RelayCommand<CheckBox> _includeRemovedCommand;
-        public RelayCommand<CheckBox> IncludeRemovedCommand
-        {
-            get
-            {
-                return _includeRemovedCommand
-                    ?? (_includeRemovedCommand = new RelayCommand<CheckBox>(
-                        (checkbox) => _mainService.FilterByIncludeRemoved(checkbox.IsChecked)
+                        () => RefreshWindows()
                         ));
             }
         }
@@ -91,7 +84,19 @@ namespace Stealth.ViewModel
             {
                 return _aboutCommand
                   ?? (_aboutCommand = new RelayCommand(
-                      () => Messenger.Default.Send(new NotificationMessage("ShowAboutView"))
+                      () => WeakReferenceMessenger.Default.Send(new ShowAboutViewMessage())
+                      ));
+            }
+        }
+
+        private RelayCommand _exitCommand;
+        public RelayCommand ExitCommand
+        {
+            get
+            {
+                return _exitCommand
+                  ?? (_exitCommand = new RelayCommand(
+                      () => System.Windows.Application.Current.Shutdown()
                       ));
             }
         }
@@ -104,32 +109,7 @@ namespace Stealth.ViewModel
             {
                 return _detailCommand
                     ?? (_detailCommand = new RelayCommand<WindowInfoItemModel>(
-                        (item) => _mainService.Detail(item)
-                        ));
-            }
-        }
-
-
-        private RelayCommand<WindowInfoItemModel> _changeOpacityCommand;
-        public RelayCommand<WindowInfoItemModel> ChangeOpacityCommand
-        {
-            get
-            {
-                return _changeOpacityCommand
-                    ?? (_changeOpacityCommand = new RelayCommand<WindowInfoItemModel>(
-                        (item) => _mainService.ChangeOpacity(item)
-                        ));
-            }
-        }
-
-        private RelayCommand<WindowInfoItemModel> _setTopMostCommand;
-        public RelayCommand<WindowInfoItemModel> SetTopMostCommand
-        {
-            get
-            {
-                return _setTopMostCommand
-                    ?? (_setTopMostCommand = new RelayCommand<WindowInfoItemModel>(
-                        (item) => _mainService.SetTopMost(item)
+                        item => _mainService.Detail(item)
                         ));
             }
         }
@@ -141,6 +121,12 @@ namespace Stealth.ViewModel
         public MainViewModel(IMainService mainService)
         {
             _mainService = mainService;
+            windowsInfoItemList = _mainService.GetWindowListData();
+        }
+
+        private void RefreshWindows()
+        {
+            _mainService.RefreshWindowData();
             windowsInfoItemList = _mainService.GetWindowListData();
         }
 

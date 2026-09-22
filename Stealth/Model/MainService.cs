@@ -1,12 +1,14 @@
-﻿using GalaSoft.MvvmLight.Command;
-using Stealth.Core;
+﻿using Stealth.Core;
 using Stealth.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace Stealth.Model
 {
@@ -34,7 +36,7 @@ namespace Stealth.Model
         public ObservableCollection<WindowInfoItemModel> GetWindowListData()
         {
             UpdateWindowInfoItemModelList(windowInfoViewList, windowsInstanceList);
-            return windowInfoViewList;
+            return new ObservableCollection<WindowInfoItemModel>(windowInfoViewList);
         }
 
 
@@ -57,15 +59,16 @@ namespace Stealth.Model
             // then using the source to match target items one by one
             foreach (var windowInsatnceItem in sourceNativeList)
             {
-                var matchedTargetItem = targetModelList.SingleOrDefault(item => item.HWnd == windowInsatnceItem.HWnd.ToInt32());
+                var matchedTargetItem = targetModelList.SingleOrDefault(item => item.HWnd == (int)(IntPtr)windowInsatnceItem.HWnd);
                 if (matchedTargetItem == null)    // new (matchedTargetItem is created from default value)
                 {
                     matchedTargetItem = new WindowInfoItemModel();
+                    matchedTargetItem.PropertyChanged += WindowInfoItemModel_PropertyChanged;
                     targetModelList.Add(matchedTargetItem);
 
                 }
                 matchedTargetItem.CopyFrom(windowInsatnceItem);
-                
+
                 matchedTargetItem.IsRemoved = false;
             }
         }
@@ -74,6 +77,14 @@ namespace Stealth.Model
         public void RefreshWindowData()
         {
             //please note that the UI (ListBoxItem) content is not refershed if updating nested elements
+            if (windowsInstanceList != null)
+            {
+                foreach (var window in windowsInstanceList)
+                {
+                    window.Dispose();
+                }
+            }
+
             windowsInstanceList = util.RetrieveAllWindows(true);
             UpdateWindowInfoItemModelList(windowInfoViewList, windowsInstanceList);
             FilterByTitle(this.titleText);
@@ -84,7 +95,19 @@ namespace Stealth.Model
 
         public void Detail(WindowInfoItemModel item)
         {
-            Console.WriteLine(string.Format($"Reset window: {item.HWnd}, {item.Title}"));
+            if (item == null)
+            {
+                return;
+            }
+
+            MessageBox.Show(
+                $"Handle: 0x{item.HWnd:X}\n" +
+                $"Title: {(string.IsNullOrWhiteSpace(item.Title) ? "(empty)" : item.Title)}\n" +
+                $"Opacity: {item.Opacity}\n" +
+                $"TopMost: {item.IsTopMost}",
+                "Window Detail",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
 
 
@@ -96,7 +119,7 @@ namespace Stealth.Model
             {
                 nativeWindow.IsLayered = true;
                 nativeWindow.BAlpha = (byte)item.Opacity;
-                nativeWindow.DwFlags = (int)NativeMethods.LWA.LWA_ALPHA;
+                nativeWindow.DwFlags = (int)LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA;
                 nativeWindow.CommitChanges();
             }
         }
@@ -113,6 +136,24 @@ namespace Stealth.Model
             }
         }
 
+        private void WindowInfoItemModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var item = sender as WindowInfoItemModel;
+            if (item == null || item.IsUpdatingFromNative || item.IsRemoved)
+            {
+                return;
+            }
+
+            if (e.PropertyName == nameof(WindowInfoItemModel.Opacity))
+            {
+                ChangeOpacity(item);
+            }
+            else if (e.PropertyName == nameof(WindowInfoItemModel.IsTopMost))
+            {
+                SetTopMost(item);
+            }
+        }
+
 
         public void FilterByTitle(string titleText)
         {
@@ -126,20 +167,17 @@ namespace Stealth.Model
             }
             else
             {
-                string titleText_Lower = this.titleText.ToLower();
                 foreach (var item in windowInfoViewList)
                 {
-                    if (item.Title.ToLower().Contains(titleText_Lower))
-                        item.IsTitleFilteredVisible = true;
-                    else
-                        item.IsTitleFilteredVisible = false;
+                    item.IsTitleFilteredVisible = !string.IsNullOrWhiteSpace(item.Title) &&
+                        item.Title.IndexOf(this.titleText, StringComparison.OrdinalIgnoreCase) >= 0;
                 }
             }
         }
 
         public void FilterByIncludeEmptyTitle(bool? includeEmptyTitle)
         {
-            this.includeEmptyTitle = (bool)includeEmptyTitle;
+            this.includeEmptyTitle = includeEmptyTitle ?? false;
             foreach (var item in windowInfoViewList)
             {
                 item.IsIncludeEmptyTitleVisible = this.includeEmptyTitle;
@@ -148,7 +186,7 @@ namespace Stealth.Model
 
         public void FilterByIncludeRemoved(bool? includeRemoved)
         {
-            this.includeRemoved = (bool)includeRemoved;
+            this.includeRemoved = includeRemoved ?? false;
             foreach (var item in windowInfoViewList)
             {
                 item.IsIncludeRemovedVisible = this.includeRemoved;

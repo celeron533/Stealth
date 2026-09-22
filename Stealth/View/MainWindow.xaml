@@ -4,8 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
-        xmlns:Custom="http://www.galasoft.ch/mvvmlight" x:Class="Stealth.MainWindow"
+        x:Class="Stealth.MainWindow"
         mc:Ignorable="d ignore"
         Height="600" Width="580" Background="{StaticResource Background.Main}"
         Title="Stealth">
@@ -27,21 +26,15 @@
               FontSize="14" Background="Transparent" 
               Foreground="{StaticResource Text.Main}">
             <MenuItem Header="_File">
-                <MenuItem Header="Exit"/>
+                <MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="About" Command="{Binding AboutCommand}"/>
             </MenuItem>
         </Menu>
         <!--筛选框-->
-        <TextBox Grid.Row="1" x:Name="textFilterInput" Margin="4,2,4,0">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="TextChanged">
-                    <Custom:EventToCommand Command="{Binding TitleFilterCommand}" 
-                                           CommandParameter="{Binding ElementName=textFilterInput, Mode=OneWay}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </TextBox>
+        <TextBox Grid.Row="1" x:Name="textFilterInput" Margin="4,2,4,0"
+                 Text="{Binding TitleFilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <!--选项-->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
@@ -52,21 +45,11 @@
             <Border BorderThickness="1" BorderBrush="{StaticResource Border.Main}"
                     CornerRadius="4" Grid.ColumnSpan="2" Margin="4,4,0,4"/>
             <CheckBox x:Name="includeRemovedCheckBox" Content="Show closed window"
-                      Grid.Column="0" Margin="8,0,0,0">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <Custom:EventToCommand Command="{Binding IncludeRemovedCommand, Mode=OneWay}" CommandParameter="{Binding ElementName=includeRemovedCheckBox}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </CheckBox>
+                      Grid.Column="0" Margin="8,0,0,0"
+                      IsChecked="{Binding includeRemoved, Mode=TwoWay}"/>
             <CheckBox x:Name="includeEmptyTitleCheckBox" Content="Show empty title window"
-                      Grid.Column="1" Margin="4,0">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <Custom:EventToCommand Command="{Binding IncludeEmptyTitleCommand, Mode=OneWay}" CommandParameter="{Binding ElementName=includeEmptyTitleCheckBox}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </CheckBox>
+                      Grid.Column="1" Margin="4,0"
+                      IsChecked="{Binding includeEmptyTitle, Mode=TwoWay}"/>
             <Button Content="Refresh" Command="{Binding RefreshCommand}"
                     Grid.Column="2" Margin="4"/>
         </Grid>
@@ -110,20 +93,10 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="80"/>
                                 </Grid.ColumnDefinitions>
-                                <CheckBox Content="Top Most" IsChecked="{Binding IsTopMost}"
-                                          Grid.Column="0" Margin="4,0"
-                                          Command="{Binding Main.SetTopMostCommand, 
-                                                    Source={StaticResource Locator}}"
-                                          CommandParameter="{Binding}"/>
-                                <Slider Value="{Binding Opacity}" Maximum="255" Grid.Column="1"
-                                        VerticalAlignment="Center">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="ValueChanged">
-                                            <Custom:EventToCommand Command="{Binding Main.ChangeOpacityCommand, Source={StaticResource Locator}}"
-                                                                   CommandParameter="{Binding}"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </Slider>
+                                <CheckBox Content="Top Most" IsChecked="{Binding IsTopMost, Mode=TwoWay}"
+                                          Grid.Column="0" Margin="4,0"/>
+                                <Slider Value="{Binding Opacity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="255" Grid.Column="1"
+                                        VerticalAlignment="Center"/>
                                 <Label Content="{Binding Opacity}" Grid.Column="2" Margin="0,4,4,4"/>
                             </Grid>
                         </Grid>

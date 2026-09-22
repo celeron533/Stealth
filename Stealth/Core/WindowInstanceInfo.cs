@@ -3,20 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PInvoke;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.UI.WindowsAndMessaging;
 using System.Diagnostics;
 using System.Drawing;
 
 namespace Stealth.Core
 {
-    public class WindowInstanceInfo
+    public class WindowInstanceInfo : IDisposable
     {
+        unsafe private static readonly HWND HWND_TOPMOST = new HWND((void*)(-1));
+        unsafe private static readonly HWND HWND_NOTOPMOST = new HWND((void*)(-2));
+        unsafe private static readonly HWND HWND_TOP = new HWND((void*)(0));
+        unsafe private static readonly HWND HWND_BOTTOM = new HWND((void*)(1));
+
+
         #region Basic Info
 
         /// <summary>
         /// Window hWnd
         /// </summary>
-        public readonly IntPtr HWnd;
+        internal readonly HWND HWnd;
 
         /// <summary>
         /// Window Title
@@ -31,7 +39,7 @@ namespace Stealth.Core
         /// <summary>
         /// User32.WINDOWINFO, contains window information
         /// </summary>
-        public User32.WINDOWINFO WindowInfo;
+        internal WINDOWINFO WindowInfo;
         #endregion
 
         #region Detailed Info
@@ -111,7 +119,7 @@ namespace Stealth.Core
 
         #endregion
 
-        public WindowInstanceInfo(IntPtr hWnd) : base()
+        internal WindowInstanceInfo(HWND hWnd) : base()
         {
             this.HWnd = hWnd;
             GetBasicInfo();
@@ -122,13 +130,13 @@ namespace Stealth.Core
         /// </summary>
         public void GetBasicInfo()
         {
-            IsVisible = User32.IsWindowVisible(HWnd);
-            char[] t = new char[255];
-            // User32.GetWindowText(hWnd); may have some exceptions when accessing system processes
-            User32.GetWindowText(HWnd, t, t.Length + 1);
-            Title =
-                t[0] == '\0' ? string.Empty : new string(t).Trim('\0');
-            User32.GetWindowInfo(HWnd, ref WindowInfo);
+            IsVisible = PInvoke.IsWindowVisible(HWnd);
+            char[] t = new char[256];
+            Span<char> span = new Span<char>(t);
+            // PInvoke.GetWindowText(hWnd); may have some exceptions when accessing system processes
+            PInvoke.GetWindowText(HWnd, span);
+            Title = span.Slice(0, span.IndexOf('\0')).ToString();
+            PInvoke.GetWindowInfo(HWnd, ref WindowInfo);
         }
 
         /// <summary>
@@ -140,22 +148,23 @@ namespace Stealth.Core
             //transparency  https://msdn.microsoft.com/en-us/library/windows/desktop/ms632599(v=vs.85).aspx#layered
 
             // Get opacity
-            uint tempCrKey, tempDwFlags;
-            byte tempBAlpha;
-            NativeMethods.GetLayeredWindowAttributes(HWnd, out tempCrKey, out tempBAlpha, out tempDwFlags);
+            COLORREF tempCrKey;
+            LAYERED_WINDOW_ATTRIBUTES_FLAGS tempDwFlags;
+            Span<byte> tempBAlpha = stackalloc byte[1];
+            PInvoke.GetLayeredWindowAttributes(HWnd, out tempCrKey, tempBAlpha, out tempDwFlags);
             CrKey = tempCrKey;
-            BAlpha = tempBAlpha;
-            DwFlags = tempDwFlags;
+            BAlpha = tempBAlpha[0];
+            DwFlags = (uint)tempDwFlags;
 
             // Get IsLayered. Opacity works when IsLayered = true
-            _extendedStyle = User32.GetWindowLong(HWnd, User32.WindowLongIndexFlags.GWL_EXSTYLE);
-            IsLayered = (_extendedStyle & (int)User32.SetWindowLongFlags.WS_EX_LAYERED) != 0;
-            IsTopMost = (_extendedStyle & (int)User32.SetWindowLongFlags.WS_EX_TOPMOST) != 0;
+            _extendedStyle = PInvoke.GetWindowLong(HWnd, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+            IsLayered = (_extendedStyle & (int)WINDOW_EX_STYLE.WS_EX_LAYERED) != 0;
+            IsTopMost = (_extendedStyle & (int)WINDOW_EX_STYLE.WS_EX_TOPMOST) != 0;
 
             try
             {
                 uint processId = 0;
-                NativeMethods.GetWindowThreadProcessId(HWnd, out processId);
+                PInvoke.GetWindowThreadProcessId(HWnd, out processId);
                 if (processId > 0)
                 process = Process.GetProcessById((int)processId);
             }
@@ -179,20 +188,26 @@ namespace Stealth.Core
         {
             if (process == null)
             {
-                //iconBitmap = Bitmap.FromHicon(SystemIcons.WinLogo.Handle);
+                DisposeIconBitmap();
                 return;
             }
+
             // https://stackoverflow.com/a/23978207/2075611
             try
             {
-                iconBitmap = Icon.ExtractAssociatedIcon(process.MainModule.FileName).ToBitmap();
+                using (var icon = Icon.ExtractAssociatedIcon(process.MainModule.FileName))
+                {
+                    ReplaceIconBitmap(icon != null
+                        ? icon.ToBitmap()
+                        : Bitmap.FromHicon(SystemIcons.Application.Handle));
+                }
             }
             catch (Exception ex)
             {
                 // expected errors if there is no icon or the process is 64-bit
-                if (ex is ArgumentException || ex is Win32Exception)
+                if (ex is ArgumentException || ex is System.ComponentModel.Win32Exception)
                 {
-                    iconBitmap = Bitmap.FromHicon(SystemIcons.Application.Handle);
+                    ReplaceIconBitmap(Bitmap.FromHicon(SystemIcons.Application.Handle));
                 }
                 else
                 {
@@ -211,23 +226,23 @@ namespace Stealth.Core
                 _isTopMostChanged = false;
                 if (IsTopMost)
                 {
-                    User32.SetWindowPos(HWnd,
-                                        User32.SpecialWindowHandles.HWND_TOPMOST, 0, 0, 0, 0,
-                                        User32.SetWindowPosFlags.SWP_NOMOVE | User32.SetWindowPosFlags.SWP_NOSIZE | User32.SetWindowPosFlags.SWP_NOACTIVATE);
+                    PInvoke.SetWindowPos(HWnd,
+                                        HWND_TOPMOST, 0, 0, 0, 0,
+                                        SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
                 }
                 else
                 {
-                    User32.SetWindowPos(HWnd,
-                                        User32.SpecialWindowHandles.HWND_NOTOPMOST, 0, 0, 0, 0,
-                                        User32.SetWindowPosFlags.SWP_NOMOVE | User32.SetWindowPosFlags.SWP_NOSIZE);
+                    PInvoke.SetWindowPos(HWnd,
+                                        HWND_NOTOPMOST, 0, 0, 0, 0,
+                                        SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE);
                 }
             }
 
             if (_isLayeredChanged)
             {
                 _isLayeredChanged = false;
-                SetBitFlag(ref _extendedStyle, (int)User32.SetWindowLongFlags.WS_EX_LAYERED, IsLayered);
-                User32.SetWindowLong(HWnd, User32.WindowLongIndexFlags.GWL_EXSTYLE, (User32.SetWindowLongFlags)_extendedStyle);
+                SetBitFlag(ref _extendedStyle, (int)WINDOW_EX_STYLE.WS_EX_LAYERED, IsLayered);
+                PInvoke.SetWindowLong(HWnd, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, _extendedStyle);
             }
 
             if (_crKeyChanged || _bAlphaChanged || _dwFlagsChanged)
@@ -235,7 +250,7 @@ namespace Stealth.Core
                 _crKeyChanged = false;
                 _bAlphaChanged = false;
                 _dwFlagsChanged = false;
-                NativeMethods.SetLayeredWindowAttributes(HWnd, CrKey, BAlpha, DwFlags);
+                PInvoke.SetLayeredWindowAttributes(HWnd, (COLORREF)CrKey, BAlpha, (LAYERED_WINDOW_ATTRIBUTES_FLAGS)DwFlags);
             }
         }
 
@@ -260,6 +275,26 @@ namespace Stealth.Core
                 sourceBits &= ~bitMask;
         }
 
+        private void ReplaceIconBitmap(Bitmap newBitmap)
+        {
+            DisposeIconBitmap();
+            iconBitmap = newBitmap;
+        }
+
+        private void DisposeIconBitmap()
+        {
+            if (iconBitmap != null)
+            {
+                iconBitmap.Dispose();
+                iconBitmap = null;
+            }
+        }
+
+        public void Dispose()
+        {
+            DisposeIconBitmap();
+            GC.SuppressFinalize(this);
+        }
 
         public override string ToString()
         {

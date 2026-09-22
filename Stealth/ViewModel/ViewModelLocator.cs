@@ -1,48 +1,37 @@
-﻿/*
-  In App.xaml:
-  <Application.Resources>
-      <vm:ViewModelLocatorTemplate xmlns:vm="clr-namespace:Stealth.ViewModel"
-                                   x:Key="Locator" />
-  </Application.Resources>
-  
-  In the View:
-  DataContext="{Binding Source={StaticResource Locator}, Path=ViewModelName}"
-*/
-
-using CommonServiceLocator;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Ioc;
-using Stealth.Model;
+﻿using Stealth.Model;
 
 namespace Stealth.ViewModel
 {
     /// <summary>
-    /// This class contains static references to all the view models in the
-    /// application and provides an entry point for the bindings.
+    /// This class provides an entry point for the bindings.
     /// <para>
     /// See http://www.mvvmlight.net
     /// </para>
     /// </summary>
     public class ViewModelLocator
     {
-        static ViewModelLocator()
-        {
-            ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
+        private readonly IMainService _mainService;
+        private readonly IAboutService _aboutService;
+        private readonly MainViewModel _mainViewModel;
+        private readonly AboutViewModel _aboutViewModel;
 
-            if (ViewModelBase.IsInDesignModeStatic)
+        public ViewModelLocator()
+        {
+            var isDesignMode = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject());
+
+            if (isDesignMode)
             {
-                SimpleIoc.Default.Register<IMainService, Design.DesignMainService>();
-                SimpleIoc.Default.Register<IAboutService, Design.DesignAboutService>();
+                _mainService = new Design.DesignMainService();
+                _aboutService = new Design.DesignAboutService();
             }
             else
             {
-                SimpleIoc.Default.Register<IMainService, MainService>();
-                SimpleIoc.Default.Register<IAboutService, AboutService>();
+                _mainService = new MainService();
+                _aboutService = new AboutService();
             }
 
-            SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<AboutViewModel>();
-
+            _mainViewModel = new MainViewModel(_mainService);
+            _aboutViewModel = new AboutViewModel(_aboutService);
         }
 
         /// <summary>
@@ -55,7 +44,7 @@ namespace Stealth.ViewModel
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<MainViewModel>();
+                return _mainViewModel;
             }
         }
 
@@ -63,10 +52,9 @@ namespace Stealth.ViewModel
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<AboutViewModel>();
+                return _aboutViewModel;
             }
         }
-
 
         /// <summary>
         /// Cleans up all the resources.
