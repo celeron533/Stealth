@@ -26,7 +26,7 @@
               FontSize="14" Background="Transparent" 
               Foreground="{StaticResource Text.Main}">
             <MenuItem Header="_File">
-                <MenuItem Header="Exit"/>
+                <MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="About" Command="{Binding AboutCommand}"/>

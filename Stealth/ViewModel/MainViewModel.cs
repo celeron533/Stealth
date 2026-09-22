@@ -100,6 +100,18 @@ namespace Stealth.ViewModel
             }
         }
 
+        private RelayCommand _exitCommand;
+        public RelayCommand ExitCommand
+        {
+            get
+            {
+                return _exitCommand
+                  ?? (_exitCommand = new RelayCommand(
+                      () => System.Windows.Application.Current.Shutdown()
+                      ));
+            }
+        }
+
         //items
         private RelayCommand<WindowInfoItemModel> _detailCommand;
         public RelayCommand<WindowInfoItemModel> DetailCommand
