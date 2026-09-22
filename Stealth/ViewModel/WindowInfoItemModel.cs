@@ -132,7 +132,7 @@ namespace Stealth.ViewModel
         /// <param name="nativeSource">Native entity</param>
         public void CopyFrom(WindowInstanceInfo nativeSource)
         {
-            HWnd = nativeSource.HWnd.ToInt32();
+            HWnd = (int)(IntPtr)nativeSource.HWnd;
             Title = nativeSource.Title;
             Opacity = nativeSource.BAlpha;
             IsTopMost = nativeSource.IsTopMost;

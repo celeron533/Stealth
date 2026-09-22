@@ -131,10 +131,11 @@ namespace Stealth.Core
         public void GetBasicInfo()
         {
             IsVisible = PInvoke.IsWindowVisible(HWnd);
-            Span<char> span = new Span<char>();
+            char[] t = new char[256];
+            Span<char> span = new Span<char>(t);
             // PInvoke.GetWindowText(hWnd); may have some exceptions when accessing system processes
             PInvoke.GetWindowText(HWnd, span);
-            Title = span.ToString();
+            Title = span.Slice(0, span.IndexOf('\0')).ToString();
             PInvoke.GetWindowInfo(HWnd, ref WindowInfo);
         }
 

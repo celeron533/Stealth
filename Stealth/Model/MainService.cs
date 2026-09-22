@@ -56,7 +56,7 @@ namespace Stealth.Model
             // then using the source to match target items one by one
             foreach (var windowInsatnceItem in sourceNativeList)
             {
-                var matchedTargetItem = targetModelList.SingleOrDefault(item => item.HWnd == windowInsatnceItem.HWnd.ToInt32());
+                var matchedTargetItem = targetModelList.SingleOrDefault(item => item.HWnd == (int)(IntPtr)windowInsatnceItem.HWnd);
                 if (matchedTargetItem == null)    // new (matchedTargetItem is created from default value)
                 {
                     matchedTargetItem = new WindowInfoItemModel();
