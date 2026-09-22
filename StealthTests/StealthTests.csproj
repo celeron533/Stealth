@@ -7,7 +7,16 @@
     <RootNamespace>StealthTests</RootNamespace>
     <AssemblyName>StealthTests</AssemblyName>
 
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <AssemblyTitle>StealthTests</AssemblyTitle>
+    <AssemblyDescription></AssemblyDescription>
+    <AssemblyCompany></AssemblyCompany>
+    <AssemblyProduct>StealthTests</AssemblyProduct>
+    <AssemblyCopyright>Copyright ©  2026</AssemblyCopyright>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <ComVisible>false</ComVisible>
+
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
 
