@@ -1,50 +1,37 @@
-﻿/*
-  In App.xaml:
-  <Application.Resources>
-      <vm:ViewModelLocatorTemplate xmlns:vm="clr-namespace:Stealth.ViewModel"
-                                   x:Key="Locator" />
-  </Application.Resources>
-  
-  In the View:
-  DataContext="{Binding Source={StaticResource Locator}, Path=ViewModelName}"
-*/
-
-using CommonServiceLocator;
-using Stealth.Model;
+﻿using Stealth.Model;
 
 namespace Stealth.ViewModel
 {
     /// <summary>
-    /// This class contains static references to all the view models in the
-    /// application and provides an entry point for the bindings.
+    /// This class provides an entry point for the bindings.
     /// <para>
     /// See http://www.mvvmlight.net
     /// </para>
     /// </summary>
     public class ViewModelLocator
     {
-        private static readonly IMainService MainServiceInstance;
-        private static readonly IAboutService AboutServiceInstance;
-        private static readonly MainViewModel MainViewModelInstance;
-        private static readonly AboutViewModel AboutViewModelInstance;
+        private readonly IMainService _mainService;
+        private readonly IAboutService _aboutService;
+        private readonly MainViewModel _mainViewModel;
+        private readonly AboutViewModel _aboutViewModel;
 
-        static ViewModelLocator()
+        public ViewModelLocator()
         {
             var isDesignMode = System.ComponentModel.DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject());
 
             if (isDesignMode)
             {
-                MainServiceInstance = new Design.DesignMainService();
-                AboutServiceInstance = new Design.DesignAboutService();
+                _mainService = new Design.DesignMainService();
+                _aboutService = new Design.DesignAboutService();
             }
             else
             {
-                MainServiceInstance = new MainService();
-                AboutServiceInstance = new AboutService();
+                _mainService = new MainService();
+                _aboutService = new AboutService();
             }
 
-            MainViewModelInstance = new MainViewModel(MainServiceInstance);
-            AboutViewModelInstance = new AboutViewModel(AboutServiceInstance);
+            _mainViewModel = new MainViewModel(_mainService);
+            _aboutViewModel = new AboutViewModel(_aboutService);
         }
 
         /// <summary>
@@ -57,7 +44,7 @@ namespace Stealth.ViewModel
         {
             get
             {
-                return MainViewModelInstance;
+                return _mainViewModel;
             }
         }
 
@@ -65,10 +52,9 @@ namespace Stealth.ViewModel
         {
             get
             {
-                return AboutViewModelInstance;
+                return _aboutViewModel;
             }
         }
-
 
         /// <summary>
         /// Cleans up all the resources.
