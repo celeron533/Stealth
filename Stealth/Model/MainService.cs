@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace Stealth.Model
@@ -65,7 +66,7 @@ namespace Stealth.Model
 
                 }
                 matchedTargetItem.CopyFrom(windowInsatnceItem);
-                
+
                 matchedTargetItem.IsRemoved = false;
             }
         }
@@ -84,7 +85,19 @@ namespace Stealth.Model
 
         public void Detail(WindowInfoItemModel item)
         {
-            Console.WriteLine(string.Format($"Reset window: {item.HWnd}, {item.Title}"));
+            if (item == null)
+            {
+                return;
+            }
+
+            MessageBox.Show(
+                $"Handle: 0x{item.HWnd:X}\n" +
+                $"Title: {(string.IsNullOrWhiteSpace(item.Title) ? "(empty)" : item.Title)}\n" +
+                $"Opacity: {item.Opacity}\n" +
+                $"TopMost: {item.IsTopMost}",
+                "Window Detail",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
 
 
