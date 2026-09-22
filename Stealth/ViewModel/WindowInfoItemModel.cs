@@ -76,6 +76,8 @@ namespace Stealth.ViewModel
 
         private Process _process;
 
+        internal bool IsUpdatingFromNative { get; private set; }
+
         // filters
         private bool _isTitleFilteredVisible;
         public bool IsTitleFilteredVisible
@@ -134,12 +136,20 @@ namespace Stealth.ViewModel
         /// <param name="nativeSource">Native entity</param>
         public void CopyFrom(WindowInstanceInfo nativeSource)
         {
-            HWnd = (int)(IntPtr)nativeSource.HWnd;
-            Title = nativeSource.Title;
-            Opacity = nativeSource.BAlpha;
-            IsTopMost = nativeSource.IsTopMost;
-            _process = nativeSource.process;
-            ProcIcon = LoadBitmap(nativeSource.iconBitmap);
+            IsUpdatingFromNative = true;
+            try
+            {
+                HWnd = (int)(IntPtr)nativeSource.HWnd;
+                Title = nativeSource.Title;
+                Opacity = nativeSource.BAlpha;
+                IsTopMost = nativeSource.IsTopMost;
+                _process = nativeSource.process;
+                ProcIcon = LoadBitmap(nativeSource.iconBitmap);
+            }
+            finally
+            {
+                IsUpdatingFromNative = false;
+            }
         }
 
 

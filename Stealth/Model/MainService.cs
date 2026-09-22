@@ -3,6 +3,7 @@ using Stealth.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,6 +63,7 @@ namespace Stealth.Model
                 if (matchedTargetItem == null)    // new (matchedTargetItem is created from default value)
                 {
                     matchedTargetItem = new WindowInfoItemModel();
+                    matchedTargetItem.PropertyChanged += WindowInfoItemModel_PropertyChanged;
                     targetModelList.Add(matchedTargetItem);
 
                 }
@@ -131,6 +133,24 @@ namespace Stealth.Model
             {
                 nativeWindow.IsTopMost = item.IsTopMost;
                 nativeWindow.CommitChanges();
+            }
+        }
+
+        private void WindowInfoItemModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var item = sender as WindowInfoItemModel;
+            if (item == null || item.IsUpdatingFromNative || item.IsRemoved)
+            {
+                return;
+            }
+
+            if (e.PropertyName == nameof(WindowInfoItemModel.Opacity))
+            {
+                ChangeOpacity(item);
+            }
+            else if (e.PropertyName == nameof(WindowInfoItemModel.IsTopMost))
+            {
+                SetTopMost(item);
             }
         }
 

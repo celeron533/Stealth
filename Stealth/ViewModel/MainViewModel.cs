@@ -25,18 +25,43 @@ namespace Stealth.ViewModel
             set { SetProperty(ref _windowsInfoItemList, value); }
         }
 
+        private string _titleFilterText;
+        public string TitleFilterText
+        {
+            get { return _titleFilterText; }
+            set
+            {
+                if (SetProperty(ref _titleFilterText, value))
+                {
+                    _mainService.FilterByTitle(value);
+                }
+            }
+        }
+
         private bool _includeEmptyTitle;
         public bool includeEmptyTitle
         {
             get { return _includeEmptyTitle; }
-            set { SetProperty(ref _includeEmptyTitle, value); }
+            set
+            {
+                if (SetProperty(ref _includeEmptyTitle, value))
+                {
+                    _mainService.FilterByIncludeEmptyTitle(value);
+                }
+            }
         }
 
         private bool _includeRemoved;
         public bool includeRemoved
         {
             get { return _includeRemoved; }
-            set { SetProperty(ref _includeRemoved, value); }
+            set
+            {
+                if (SetProperty(ref _includeRemoved, value))
+                {
+                    _mainService.FilterByIncludeRemoved(value);
+                }
+            }
         }
 
         #region Commands
@@ -48,42 +73,6 @@ namespace Stealth.ViewModel
                 return _refreshCommand
                     ?? (_refreshCommand = new RelayCommand(
                         () => RefreshWindows()
-                        ));
-            }
-        }
-
-        private RelayCommand<TextBox> _titleFilterCommand;
-        public RelayCommand<TextBox> TitleFilterCommand
-        {
-            get
-            {
-                return _titleFilterCommand
-                    ?? (_titleFilterCommand = new RelayCommand<TextBox>(
-                        textbox => _mainService.FilterByTitle(textbox.Text)
-                        ));
-            }
-        }
-
-        private RelayCommand<CheckBox> _includeEmptyTitleCommand;
-        public RelayCommand<CheckBox> IncludeEmptyTitleCommand
-        {
-            get
-            {
-                return _includeEmptyTitleCommand
-                    ?? (_includeEmptyTitleCommand = new RelayCommand<CheckBox>(
-                        checkbox => _mainService.FilterByIncludeEmptyTitle(checkbox.IsChecked)
-                        ));
-            }
-        }
-
-        private RelayCommand<CheckBox> _includeRemovedCommand;
-        public RelayCommand<CheckBox> IncludeRemovedCommand
-        {
-            get
-            {
-                return _includeRemovedCommand
-                    ?? (_includeRemovedCommand = new RelayCommand<CheckBox>(
-                        checkbox => _mainService.FilterByIncludeRemoved(checkbox.IsChecked)
                         ));
             }
         }
@@ -121,31 +110,6 @@ namespace Stealth.ViewModel
                 return _detailCommand
                     ?? (_detailCommand = new RelayCommand<WindowInfoItemModel>(
                         item => _mainService.Detail(item)
-                        ));
-            }
-        }
-
-
-        private RelayCommand<WindowInfoItemModel> _changeOpacityCommand;
-        public RelayCommand<WindowInfoItemModel> ChangeOpacityCommand
-        {
-            get
-            {
-                return _changeOpacityCommand
-                    ?? (_changeOpacityCommand = new RelayCommand<WindowInfoItemModel>(
-                        item => _mainService.ChangeOpacity(item)
-                        ));
-            }
-        }
-
-        private RelayCommand<WindowInfoItemModel> _setTopMostCommand;
-        public RelayCommand<WindowInfoItemModel> SetTopMostCommand
-        {
-            get
-            {
-                return _setTopMostCommand
-                    ?? (_setTopMostCommand = new RelayCommand<WindowInfoItemModel>(
-                        item => _mainService.SetTopMost(item)
                         ));
             }
         }
