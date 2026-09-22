@@ -37,19 +37,7 @@
         </Grid>
         
         <ScrollViewer Background="{StaticResource Background.Main}" Grid.Row="1" Margin="4">
-            <TextBlock Padding="8">
-                <Bold><Run Text="Third Party Components / Libraries"/></Bold><LineBreak/>
-                <Run Text="CommonServiceLocator"/><LineBreak/>
-                <Run Text="DeltaCompressionDotNet"/><LineBreak/>
-                <Run Text="Mono.Cecil"/><LineBreak/>
-                <Run Text="MvvmLightLibs"/><LineBreak/>
-                <Run Text="NuGet.CommandLine"/><LineBreak/>
-                <Run Text="PInvoke.Kernel32"/><LineBreak/>
-                <Run Text="PInvoke.User32"/><LineBreak/>
-                <Run Text="PInvoke.Windows.Core"/><LineBreak/>
-                <Run Text="PInvoke.Windows.ShellScalingApi"/>
-                <LineBreak/><Run Text="Splat"/><LineBreak/>
-                <Run Text="squirrel.windows"/></TextBlock>
+            <TextBlock Padding="8"><Run Text="CommonServiceLocator"/><LineBreak/><Run Text="CommunityToolkit.Mvvm"/><LineBreak/><Run Text="Microsoft.Windows.CsWin32"/></TextBlock>
         </ScrollViewer>
     </Grid>
 
