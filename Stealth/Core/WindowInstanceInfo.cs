@@ -148,12 +148,13 @@ namespace Stealth.Core
             //transparency  https://msdn.microsoft.com/en-us/library/windows/desktop/ms632599(v=vs.85).aspx#layered
 
             // Get opacity
-            uint tempCrKey, tempDwFlags;
-            byte tempBAlpha;
-            NativeMethods.GetLayeredWindowAttributes(HWnd, out tempCrKey, out tempBAlpha, out tempDwFlags);
+            COLORREF tempCrKey;
+            LAYERED_WINDOW_ATTRIBUTES_FLAGS tempDwFlags;
+            Span<byte> tempBAlpha = stackalloc byte[1];
+            PInvoke.GetLayeredWindowAttributes(HWnd, out tempCrKey, tempBAlpha, out tempDwFlags);
             CrKey = tempCrKey;
-            BAlpha = tempBAlpha;
-            DwFlags = tempDwFlags;
+            BAlpha = tempBAlpha[0];
+            DwFlags = (uint)tempDwFlags;
 
             // Get IsLayered. Opacity works when IsLayered = true
             _extendedStyle = PInvoke.GetWindowLong(HWnd, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
@@ -163,7 +164,7 @@ namespace Stealth.Core
             try
             {
                 uint processId = 0;
-                NativeMethods.GetWindowThreadProcessId(HWnd, out processId);
+                PInvoke.GetWindowThreadProcessId(HWnd, out processId);
                 if (processId > 0)
                 process = Process.GetProcessById((int)processId);
             }
@@ -243,7 +244,7 @@ namespace Stealth.Core
                 _crKeyChanged = false;
                 _bAlphaChanged = false;
                 _dwFlagsChanged = false;
-                NativeMethods.SetLayeredWindowAttributes(HWnd, CrKey, BAlpha, DwFlags);
+                PInvoke.SetLayeredWindowAttributes(HWnd, (COLORREF)CrKey, BAlpha, (LAYERED_WINDOW_ATTRIBUTES_FLAGS)DwFlags);
             }
         }
 

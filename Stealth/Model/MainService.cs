@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace Stealth.Model
 {
@@ -95,7 +96,7 @@ namespace Stealth.Model
             {
                 nativeWindow.IsLayered = true;
                 nativeWindow.BAlpha = (byte)item.Opacity;
-                nativeWindow.DwFlags = (int)NativeMethods.LWA.LWA_ALPHA;
+                nativeWindow.DwFlags = (int)LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA;
                 nativeWindow.CommitChanges();
             }
         }

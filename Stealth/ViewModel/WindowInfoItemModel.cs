@@ -13,6 +13,8 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Windows.Win32;
+using Windows.Win32.Graphics.Gdi;
 
 namespace Stealth.ViewModel
 {
@@ -162,7 +164,7 @@ namespace Stealth.ViewModel
             finally
             {
                 // prevent memory leak
-                NativeMethods.DeleteObject(ip);
+                PInvoke.DeleteObject((HGDIOBJ)ip);
             }
 
             return bitmapSource;

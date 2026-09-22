@@ -43,7 +43,6 @@
 
   <ItemGroup>
     <AdditionalFiles Include="NativeMethods.txt" />
-    <Resource Include="Core\FunctionList_User32.txt" />
     <Resource Include="Stealth.ico" />
   </ItemGroup>
 

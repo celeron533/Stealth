@@ -13,3 +13,7 @@ IsWindowVisible
 SetWindowPos
 EnumWindows
 IsWindow
+SetLayeredWindowAttributes
+GetLayeredWindowAttributes
+GetWindowThreadProcessId
+DeleteObject
