@@ -125,6 +125,22 @@ namespace Stealth.Core
             GetBasicInfo();
         }
 
+        public unsafe static WindowInstanceInfo CreateFromHandle(IntPtr hWnd, bool getDetailedInfo = false, bool includeProcessDetails = true)
+        {
+            if (hWnd == IntPtr.Zero)
+            {
+                return null;
+            }
+
+            var info = new WindowInstanceInfo(new HWND((void*)hWnd));
+            if (getDetailedInfo)
+            {
+                info.GetDetailedInfo(includeProcessDetails);
+            }
+
+            return info;
+        }
+
         /// <summary>
         /// Get basic info from window
         /// </summary>
@@ -142,37 +158,45 @@ namespace Stealth.Core
         /// <summary>
         /// Get more details from a window
         /// </summary>
-        public void GetDetailedInfo()
+        public void GetDetailedInfo(bool includeProcessDetails = true)
         {
             //windowInfo.dwExStyle: you must set WS_EX_LAYERED before using window alpha
             //transparency  https://msdn.microsoft.com/en-us/library/windows/desktop/ms632599(v=vs.85).aspx#layered
 
             // Get opacity
-            COLORREF tempCrKey;
-            LAYERED_WINDOW_ATTRIBUTES_FLAGS tempDwFlags;
+            COLORREF tempCrKey = default;
+            LAYERED_WINDOW_ATTRIBUTES_FLAGS tempDwFlags = 0;
             Span<byte> tempBAlpha = stackalloc byte[1];
-            PInvoke.GetLayeredWindowAttributes(HWnd, out tempCrKey, tempBAlpha, out tempDwFlags);
+            tempBAlpha[0] = byte.MaxValue;
+            var layeredWindowAttributesLoaded = PInvoke.GetLayeredWindowAttributes(HWnd, out tempCrKey, tempBAlpha, out tempDwFlags);
             CrKey = tempCrKey;
-            BAlpha = tempBAlpha[0];
-            DwFlags = (uint)tempDwFlags;
+            BAlpha = layeredWindowAttributesLoaded ? tempBAlpha[0] : byte.MaxValue;
+            DwFlags = layeredWindowAttributesLoaded ? (uint)tempDwFlags : 0u;
 
             // Get IsLayered. Opacity works when IsLayered = true
             _extendedStyle = PInvoke.GetWindowLong(HWnd, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
             IsLayered = (_extendedStyle & (int)WINDOW_EX_STYLE.WS_EX_LAYERED) != 0;
             IsTopMost = (_extendedStyle & (int)WINDOW_EX_STYLE.WS_EX_TOPMOST) != 0;
 
+            if (!includeProcessDetails)
+            {
+                return;
+            }
+
             try
             {
                 uint processId = 0;
                 PInvoke.GetWindowThreadProcessId(HWnd, out processId);
                 if (processId > 0)
-                process = Process.GetProcessById((int)processId);
+                {
+                    process = Process.GetProcessById((int)processId);
+                }
             }
-            catch(ArgumentException)
+            catch (ArgumentException)
             {
                 // normally caused by process not running
             }
-            catch(Exception)
+            catch (Exception)
             {
                 // other unknown exceptions
             }

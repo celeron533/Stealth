@@ -2,9 +2,11 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Stealth.Model;
+using Stealth.Properties;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Stealth.ViewModel
@@ -60,6 +62,21 @@ namespace Stealth.ViewModel
                 if (SetProperty(ref _includeRemoved, value))
                 {
                     _mainService.FilterByIncludeRemoved(value);
+                }
+            }
+        }
+
+        private bool _isOverlayEnabled;
+        public bool IsOverlayEnabled
+        {
+            get { return _isOverlayEnabled; }
+            set
+            {
+                if (SetProperty(ref _isOverlayEnabled, value))
+                {
+                    Settings.Default.OverlayEnabled = value;
+                    Settings.Default.Save();
+                    ((App)Application.Current)?.SetOverlayEnabled(value);
                 }
             }
         }
@@ -121,6 +138,7 @@ namespace Stealth.ViewModel
         public MainViewModel(IMainService mainService)
         {
             _mainService = mainService;
+            _isOverlayEnabled = Settings.Default.OverlayEnabled;
             windowsInfoItemList = _mainService.GetWindowListData();
         }
 
