@@ -59,7 +59,7 @@ namespace Stealth.Model
             // then using the source to match target items one by one
             foreach (var windowInsatnceItem in sourceNativeList)
             {
-                var matchedTargetItem = targetModelList.SingleOrDefault(item => item.HWnd == (int)(IntPtr)windowInsatnceItem.HWnd);
+                var matchedTargetItem = targetModelList.SingleOrDefault(item => item.HWnd == (IntPtr)windowInsatnceItem.HWnd);
                 if (matchedTargetItem == null)    // new (matchedTargetItem is created from default value)
                 {
                     matchedTargetItem = new WindowInfoItemModel();
@@ -101,7 +101,7 @@ namespace Stealth.Model
             }
 
             MessageBox.Show(
-                $"Handle: 0x{item.HWnd:X}\n" +
+                $"Handle: 0x{item.HWnd.ToInt64():X}\n" +
                 $"Title: {(string.IsNullOrWhiteSpace(item.Title) ? "(empty)" : item.Title)}\n" +
                 $"Opacity: {item.Opacity}\n" +
                 $"TopMost: {item.IsTopMost}",
@@ -114,13 +114,11 @@ namespace Stealth.Model
         public void ChangeOpacity(WindowInfoItemModel item)
         {
             Console.WriteLine(string.Format($"Change opacity: {item.Title}, {item.Opacity}"));
-            var nativeWindow = windowsInstanceList.SingleOrDefault(window => window.HWnd == (IntPtr)item.HWnd);
+            var nativeWindow = windowsInstanceList.SingleOrDefault(window => (IntPtr)window.HWnd == item.HWnd);
             if (nativeWindow != null)
             {
-                nativeWindow.IsLayered = true;
-                nativeWindow.BAlpha = (byte)item.Opacity;
-                nativeWindow.DwFlags = (int)LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA;
-                nativeWindow.CommitChanges();
+                var opacity = (byte)Math.Max(byte.MinValue, Math.Min(byte.MaxValue, item.Opacity));
+                item.OpacityError = nativeWindow.TrySetOpacity(opacity, out var error) ? null : error;
             }
         }
 
@@ -128,7 +126,7 @@ namespace Stealth.Model
         public void SetTopMost(WindowInfoItemModel item)
         {
             Console.WriteLine(string.Format($"Set TopMost: {item.Title}, {item.IsTopMost}"));
-            var nativeWindow = windowsInstanceList.SingleOrDefault(window => window.HWnd == (IntPtr)item.HWnd);
+            var nativeWindow = windowsInstanceList.SingleOrDefault(window => (IntPtr)window.HWnd == item.HWnd);
             if (nativeWindow != null)
             {
                 nativeWindow.IsTopMost = item.IsTopMost;

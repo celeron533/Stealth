@@ -1,4 +1,7 @@
 ﻿using System.Windows;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("StealthTests")]
 
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located

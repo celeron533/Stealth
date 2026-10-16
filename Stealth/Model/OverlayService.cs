@@ -201,10 +201,9 @@ namespace Stealth.Model
                     return;
                 }
 
-                targetWindow.IsLayered = true;
-                targetWindow.BAlpha = (byte)Math.Max(byte.MinValue, Math.Min(byte.MaxValue, opacity));
-                targetWindow.DwFlags = (uint)LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA;
-                targetWindow.CommitChanges();
+                var alpha = (byte)Math.Max(byte.MinValue, Math.Min(byte.MaxValue, opacity));
+                targetWindow.TrySetOpacity(alpha, out var error);
+                _overlayWindow.SetOpacityError(error);
             }
         }
 

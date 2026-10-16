@@ -22,8 +22,8 @@ namespace Stealth.ViewModel
     {
         //// Base Properties
 
-        private int _hWnd;
-        public int HWnd
+        private IntPtr _hWnd;
+        public IntPtr HWnd
         {
             get { return _hWnd; }
             set { SetProperty(ref _hWnd, value); }
@@ -41,6 +41,13 @@ namespace Stealth.ViewModel
         {
             get { return _opacity; }
             set { SetProperty(ref _opacity, value); }
+        }
+
+        private string _opacityError;
+        public string OpacityError
+        {
+            get { return _opacityError; }
+            set { SetProperty(ref _opacityError, value); }
         }
 
         private bool _isTopMost;
@@ -139,7 +146,7 @@ namespace Stealth.ViewModel
             IsUpdatingFromNative = true;
             try
             {
-                HWnd = (int)(IntPtr)nativeSource.HWnd;
+                HWnd = (IntPtr)nativeSource.HWnd;
                 Title = nativeSource.Title;
                 Opacity = nativeSource.BAlpha;
                 IsTopMost = nativeSource.IsTopMost;
@@ -182,7 +189,7 @@ namespace Stealth.ViewModel
 
         public override string ToString()
         {
-            return $"hWnd={_hWnd}, title={_title}, opacity={_opacity}";
+            return $"hWnd=0x{_hWnd.ToInt64():X}, title={_title}, opacity={_opacity}";
         }
     }
 }

@@ -1,11 +1,26 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Stealth.ViewModel;
+using System;
 
 namespace Stealth.ViewModel.Tests
 {
     [TestClass]
     public class WindowInfoItemModelTests
     {
+        [TestMethod]
+        public void HWnd_PreservesPointerSizedValue()
+        {
+            if (IntPtr.Size != 8)
+            {
+                Assert.Inconclusive("This test requires a 64-bit process.");
+            }
+
+            var expected = new IntPtr(0x123456789L);
+            var item = new WindowInfoItemModel { HWnd = expected };
+
+            Assert.AreEqual(expected, item.HWnd);
+        }
+
         [TestMethod]
         public void UpdateVisibility_HidesEmptyTitleWhenConfigured()
         {

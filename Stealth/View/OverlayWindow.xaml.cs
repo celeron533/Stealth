@@ -59,6 +59,11 @@ namespace Stealth
             }
         }
 
+        public void SetOpacityError(string error)
+        {
+            OpacitySlider.ToolTip = error;
+        }
+
         public void SetAnchorPosition(double left, double top)
         {
             _anchorLeft = left;

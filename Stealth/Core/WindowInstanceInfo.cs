@@ -13,6 +13,8 @@ namespace Stealth.Core
 {
     public class WindowInstanceInfo : IDisposable
     {
+        private static readonly WindowOpacityWriter OpacityWriter = new WindowOpacityWriter(new NativeWindowOpacityApi());
+
         unsafe private static readonly HWND HWND_TOPMOST = new HWND((void*)(-1));
         unsafe private static readonly HWND HWND_NOTOPMOST = new HWND((void*)(-2));
         unsafe private static readonly HWND HWND_TOP = new HWND((void*)(0));
@@ -276,6 +278,24 @@ namespace Stealth.Core
                 _dwFlagsChanged = false;
                 PInvoke.SetLayeredWindowAttributes(HWnd, (COLORREF)CrKey, BAlpha, (LAYERED_WINDOW_ATTRIBUTES_FLAGS)DwFlags);
             }
+        }
+
+        public bool TrySetOpacity(byte alpha, out string error)
+        {
+            if (!OpacityWriter.TrySetOpacity((IntPtr)HWnd, alpha, out error))
+            {
+                return false;
+            }
+
+            _extendedStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYERED;
+            _isLayered = true;
+            _isLayeredChanged = false;
+            _bAlpha = alpha;
+            _bAlphaChanged = false;
+            _dwFlags = (uint)LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA |
+                (_dwFlags & (uint)LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_COLORKEY);
+            _dwFlagsChanged = false;
+            return true;
         }
 
 
