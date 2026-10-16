@@ -118,7 +118,8 @@ namespace Stealth.Model
             if (nativeWindow != null)
             {
                 var opacity = (byte)Math.Max(byte.MinValue, Math.Min(byte.MaxValue, item.Opacity));
-                item.OpacityError = nativeWindow.TrySetOpacity(opacity, out var error) ? null : error;
+                nativeWindow.TrySetOpacity(opacity, out var diagnostic);
+                item.OpacityError = diagnostic;
             }
         }
 

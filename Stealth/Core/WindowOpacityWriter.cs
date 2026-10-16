@@ -36,20 +36,21 @@ namespace Stealth.Core
             uint existingFlags = 0;
 
             var attributesLoaded = _api.TryGetLayeredAttributes(handle, out colorKey, out currentAlpha, out existingFlags, out var readError);
-            if (isLayered && !attributesLoaded)
-            {
-                error = $"Cannot read the existing layered-window attributes (Win32 error {readError}). The target may use per-pixel transparency, which cannot be safely changed externally.";
-                return false;
-            }
+            var attributesUnknown = isLayered && !attributesLoaded;
 
             if (!isLayered)
             {
                 colorKey = 0;
                 existingFlags = 0;
             }
-            else
+            else if (attributesLoaded)
             {
                 existingFlags &= LayeredColorKey;
+            }
+            else
+            {
+                colorKey = 0;
+                existingFlags = 0;
             }
 
             var enabledLayeredStyle = false;
@@ -67,13 +68,20 @@ namespace Stealth.Core
             var flags = LayeredAlpha | existingFlags;
             if (_api.TrySetLayeredAttributes(handle, colorKey, alpha, flags, out var alphaError))
             {
-                error = null;
+                error = attributesUnknown
+                    ? $"Best-effort opacity update succeeded, but existing layered attributes could not be read (Win32 error {readError}). The target may use WPF per-pixel transparency, which can conflict with this update."
+                    : null;
                 return true;
             }
 
             var rollbackError = 0;
             var rollbackFailed = enabledLayeredStyle && !_api.TrySetExtendedStyle(handle, style, out rollbackError);
             error = $"SetLayeredWindowAttributes failed (Win32 error {alphaError}).";
+            if (attributesUnknown)
+            {
+                error += $" Existing layered attributes could not be read (Win32 error {readError}); the target may use WPF per-pixel transparency.";
+            }
+
             if (rollbackFailed)
             {
                 error += $" Restoring the original window style also failed (Win32 error {rollbackError}).";

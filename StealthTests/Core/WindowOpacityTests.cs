@@ -45,16 +45,36 @@ namespace Stealth.Core.Tests
         }
 
         [TestMethod]
-        public void TrySetOpacity_RejectsLayeredWindowWithUnreadableAttributes()
+        public void TrySetOpacity_AttemptsLayeredWindowWithUnreadableAttributes()
         {
             var api = new FakeOpacityApi { Style = LayeredStyle };
             var writer = new WindowOpacityWriter(api);
 
             var succeeded = writer.TrySetOpacity(new IntPtr(42), 128, out var error);
 
-            Assert.IsFalse(succeeded);
+            Assert.IsTrue(succeeded, error);
+            StringAssert.Contains(error, "Best-effort opacity update succeeded");
             StringAssert.Contains(error, "per-pixel transparency");
-            Assert.IsFalse(api.SetAttributesCalled);
+            Assert.IsTrue(api.SetAttributesCalled);
+            Assert.AreEqual(AlphaFlag, api.AppliedFlags);
+        }
+
+        [TestMethod]
+        public void TrySetOpacity_ReportsFailedBestEffortAttempt()
+        {
+            var api = new FakeOpacityApi
+            {
+                Style = LayeredStyle,
+                SetAttributesSucceeds = false
+            };
+            var writer = new WindowOpacityWriter(api);
+
+            var succeeded = writer.TrySetOpacity(new IntPtr(42), 128, out var error);
+
+            Assert.IsFalse(succeeded);
+            StringAssert.Contains(error, "SetLayeredWindowAttributes failed");
+            StringAssert.Contains(error, "per-pixel transparency");
+            Assert.IsTrue(api.SetAttributesCalled);
         }
 
         [TestMethod]
