@@ -40,18 +40,22 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="180"/>
                 <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="170"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Border BorderThickness="1" BorderBrush="{StaticResource Border.Main}"
-                    CornerRadius="4" Grid.ColumnSpan="2" Margin="4,4,0,4"/>
+                    CornerRadius="4" Grid.ColumnSpan="3" Margin="4,4,0,4"/>
             <CheckBox x:Name="includeRemovedCheckBox" Content="Show closed window"
                       Grid.Column="0" Margin="8,0,0,0"
                       IsChecked="{Binding includeRemoved, Mode=TwoWay}"/>
             <CheckBox x:Name="includeEmptyTitleCheckBox" Content="Show empty title window"
                       Grid.Column="1" Margin="4,0"
                       IsChecked="{Binding includeEmptyTitle, Mode=TwoWay}"/>
+            <CheckBox x:Name="overlayEnabledCheckBox" Content="Enable floating overlay"
+                      Grid.Column="2" Margin="4,0"
+                      IsChecked="{Binding IsOverlayEnabled, Mode=TwoWay}"/>
             <Button Content="Refresh" Command="{Binding RefreshCommand}"
-                    Grid.Column="2" Margin="4"/>
+                    Grid.Column="3" Margin="4"/>
         </Grid>
         <ListBox Grid.Row="3"
                  ItemsSource="{Binding windowsInfoItemList, Mode=TwoWay}"

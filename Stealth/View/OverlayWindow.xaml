@@ -1,0 +1,70 @@
+<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ignore="http://www.galasoft.ch/ignore"
+        x:Class="Stealth.OverlayWindow"
+        mc:Ignorable="d ignore"
+        Width="32"
+        Height="32"
+        MinWidth="32"
+        MinHeight="32"
+        ShowActivated="False"
+        ShowInTaskbar="False"
+        Topmost="True"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Focusable="False"
+        WindowStartupLocation="Manual"
+        MouseEnter="Window_MouseEnter"
+        MouseLeave="Window_MouseLeave"
+        MouseMove="Window_MouseMove"
+        MouseLeftButtonUp="Window_MouseLeftButtonUp">
+    <Border x:Name="RootBorder"
+            BorderBrush="{StaticResource Border.Main}"
+            BorderThickness="1"
+            Background="{StaticResource Background.Block}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="32"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="BadgeHost"
+                    Grid.Column="0"
+                    Width="32"
+                    Height="32"
+                    Background="{StaticResource Primary}"
+                    Cursor="SizeAll"
+                    MouseLeftButtonDown="BadgeHost_MouseLeftButtonDown" />
+            <Grid x:Name="ExpandedPanel"
+                  Grid.Column="1"
+                  Margin="8,0,8,0"
+                  VerticalAlignment="Center"
+                  Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="24"/>
+                </Grid.ColumnDefinitions>
+                <Slider x:Name="OpacitySlider"
+                        Grid.Column="0"
+                        Minimum="32"
+                        Maximum="255"
+                        TickFrequency="1"
+                        IsSnapToTickEnabled="False"
+                        VerticalAlignment="Center"
+                        ValueChanged="OpacitySlider_ValueChanged"/>
+                <TextBlock x:Name="OpacityValueText"
+                           Grid.Column="1"
+                           Margin="8,0,0,0"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Right"
+                           Foreground="{StaticResource Text.Main}"
+                           Text="255"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

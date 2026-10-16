@@ -7,9 +7,12 @@ SendMessage
 PostMessage
 GetCursorPos
 SetForegroundWindow
+GetForegroundWindow
 GetWindowInfo
 GetWindowText
+GetWindowRect
 IsWindowVisible
+IsIconic
 SetWindowPos
 EnumWindows
 IsWindow
