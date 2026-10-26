@@ -85,58 +85,6 @@ namespace Stealth.ViewModel
 
         internal bool IsUpdatingFromNative { get; private set; }
 
-        // filters
-        private bool _isTitleFilteredVisible;
-        public bool IsTitleFilteredVisible
-        {
-            get { return _isTitleFilteredVisible; }
-            set
-            {
-                SetProperty(ref _isTitleFilteredVisible, value);
-                UpdateVisibility();
-            }
-        }
-
-        private bool _isIncludeEmptyTitleVisible;
-        public bool IsIncludeEmptyTitleVisible
-        {
-            get { return _isIncludeEmptyTitleVisible; }
-            set
-            {
-                SetProperty(ref _isIncludeEmptyTitleVisible, value);
-                UpdateVisibility();
-            }
-        }
-
-        private bool _isIncludeRemovedVisible;
-        public bool IsIncludeRemovedVisible
-        {
-            get { return _isIncludeRemovedVisible; }
-            set
-            {
-                SetProperty(ref _isIncludeRemovedVisible, value);
-                UpdateVisibility();
-            }
-        }
-
-        // TODO: Computed from isRemoved, isTitleFilteredVisible or other attributes based on settings.
-        private bool _isVisible = true;
-        public bool IsVisible
-        {
-            get { return _isVisible; }
-            set { SetProperty(ref _isVisible, value); }
-        }
-
-        /// <summary>
-        /// Will be called when global setting changed. Such as 'hide all removed windows'
-        /// </summary>
-        public void UpdateVisibility()
-        {
-            IsVisible = IsTitleFilteredVisible &&
-                        (IsIncludeRemovedVisible || !IsRemoved) &&
-                        (IsIncludeEmptyTitleVisible || !string.IsNullOrWhiteSpace(Title));
-        }
-
         /// <summary>
         /// Copy the base properties from native entity.
         /// </summary>

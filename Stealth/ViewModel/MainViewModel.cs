@@ -3,11 +3,14 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Stealth.Model;
 using Stealth.Properties;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace Stealth.ViewModel
 {
@@ -20,12 +23,8 @@ namespace Stealth.ViewModel
     public class MainViewModel : ObservableObject
     {
         private readonly IMainService _mainService;
-        private ObservableCollection<WindowInfoItemModel> _windowsInfoItemList;
-        public ObservableCollection<WindowInfoItemModel> windowsInfoItemList
-        {
-            get { return _windowsInfoItemList; }
-            set { SetProperty(ref _windowsInfoItemList, value); }
-        }
+        public ObservableCollection<WindowInfoItemModel> windowsInfoItemList { get; }
+        public ICollectionView WindowsView { get; }
 
         private string _titleFilterText;
         public string TitleFilterText
@@ -35,7 +34,7 @@ namespace Stealth.ViewModel
             {
                 if (SetProperty(ref _titleFilterText, value))
                 {
-                    _mainService.FilterByTitle(value);
+                    WindowsView.Refresh();
                 }
             }
         }
@@ -48,7 +47,7 @@ namespace Stealth.ViewModel
             {
                 if (SetProperty(ref _includeEmptyTitle, value))
                 {
-                    _mainService.FilterByIncludeEmptyTitle(value);
+                    WindowsView.Refresh();
                 }
             }
         }
@@ -61,7 +60,7 @@ namespace Stealth.ViewModel
             {
                 if (SetProperty(ref _includeRemoved, value))
                 {
-                    _mainService.FilterByIncludeRemoved(value);
+                    WindowsView.Refresh();
                 }
             }
         }
@@ -140,12 +139,25 @@ namespace Stealth.ViewModel
             _mainService = mainService;
             _isOverlayEnabled = Settings.Default.OverlayEnabled;
             windowsInfoItemList = _mainService.GetWindowListData();
+            WindowsView = CollectionViewSource.GetDefaultView(windowsInfoItemList);
+            WindowsView.Filter = IsWindowVisible;
+        }
+
+        private bool IsWindowVisible(object value)
+        {
+            var item = value as WindowInfoItemModel;
+            return item != null
+                && (includeRemoved || !item.IsRemoved)
+                && (includeEmptyTitle || !string.IsNullOrWhiteSpace(item.Title))
+                && (string.IsNullOrWhiteSpace(TitleFilterText)
+                    || (!string.IsNullOrWhiteSpace(item.Title)
+                        && item.Title.IndexOf(TitleFilterText, StringComparison.OrdinalIgnoreCase) >= 0));
         }
 
         private void RefreshWindows()
         {
             _mainService.RefreshWindowData();
-            windowsInfoItemList = _mainService.GetWindowListData();
+            WindowsView.Refresh();
         }
 
         ////public override void Cleanup()

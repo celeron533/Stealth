@@ -59,8 +59,9 @@ namespace Stealth.ViewModel
         /// <summary>
         /// Cleans up all the resources.
         /// </summary>
-        public static void Cleanup()
+        public void Cleanup()
         {
+            (_mainService as System.IDisposable)?.Dispose();
         }
     }
 }

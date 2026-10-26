@@ -13,9 +13,6 @@ namespace Stealth.Model
         ObservableCollection<WindowInfoItemModel> GetWindowListData();
         void RefreshWindowData();
         void Detail(WindowInfoItemModel item);
-        void FilterByTitle(string titleText);
-        void FilterByIncludeEmptyTitle(bool? isChecked);
-        void FilterByIncludeRemoved(bool? isChecked);
         void ChangeOpacity(WindowInfoItemModel item);
         void SetTopMost(WindowInfoItemModel item);
     }

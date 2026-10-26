@@ -29,12 +29,6 @@ namespace Stealth.Design
 
         public void Detail(WindowInfoItemModel item) { }
 
-        public void FilterByTitle(string titleText) { }
-
-        public void FilterByIncludeEmptyTitle(bool? isChecked) { }
-
-        public void FilterByIncludeRemoved(bool? isChecked) { }
-
         public void ChangeOpacity(WindowInfoItemModel item) { }
 
         public void SetTopMost(WindowInfoItemModel item) { }

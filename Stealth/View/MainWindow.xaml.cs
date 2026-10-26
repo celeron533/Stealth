@@ -16,7 +16,7 @@ namespace Stealth
         public MainWindow()
         {
             InitializeComponent();
-            Closing += (s, e) => ViewModelLocator.Cleanup();
+            Closed += (s, e) => ((ViewModelLocator)Application.Current.Resources["Locator"]).Cleanup();
             WeakReferenceMessenger.Default.Register<ShowAboutViewMessage>(this, (recipient, msg) => ((MainWindow)recipient).NotificationMessageReceived(msg));
         }
 

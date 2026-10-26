@@ -1,69 +1,36 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Stealth.ViewModel;
-using System.Collections.ObjectModel;
-using System.Runtime.Serialization;
+using System.Reflection;
 
 namespace Stealth.Model.Tests
 {
     [TestClass]
     public class MainServiceTests
     {
-        private static MainService CreateServiceWithItems(params WindowInfoItemModel[] items)
+        [TestMethod]
+        public void RefreshWindowData_KeepsTheSameCollection()
         {
-            var service = (MainService)FormatterServices.GetUninitializedObject(typeof(MainService));
-            service.windowInfoViewList = new ObservableCollection<WindowInfoItemModel>(items);
-            return service;
+            using (var service = new MainService())
+            {
+                var items = service.GetWindowListData();
+
+                service.RefreshWindowData();
+
+                Assert.AreSame(items, service.GetWindowListData());
+            }
         }
 
         [TestMethod]
-        public void FilterByTitle_UsesCaseInsensitiveMatching()
+        public void Dispose_ReleasesCurrentWindowSnapshots()
         {
-            var visibleMatch = new WindowInfoItemModel { Title = "Notepad", IsTitleFilteredVisible = true, IsIncludeEmptyTitleVisible = true, IsIncludeRemovedVisible = true };
-            var visibleMismatch = new WindowInfoItemModel { Title = "Calculator", IsTitleFilteredVisible = true, IsIncludeEmptyTitleVisible = true, IsIncludeRemovedVisible = true };
-            var nullTitle = new WindowInfoItemModel { Title = null, IsTitleFilteredVisible = true, IsIncludeEmptyTitleVisible = true, IsIncludeRemovedVisible = true };
-            var service = CreateServiceWithItems(visibleMatch, visibleMismatch, nullTitle);
+            var service = new MainService();
+            var snapshots = typeof(MainService).GetField("windowsInstanceList", BindingFlags.Instance | BindingFlags.NonPublic);
 
-            service.FilterByTitle("NOTE");
+            Assert.IsNotNull(snapshots.GetValue(service));
 
-            Assert.IsTrue(visibleMatch.IsVisible);
-            Assert.IsFalse(visibleMismatch.IsVisible);
-            Assert.IsFalse(nullTitle.IsVisible);
-        }
+            service.Dispose();
+            service.Dispose();
 
-        [TestMethod]
-        public void FilterByIncludeEmptyTitle_TogglesVisibilityForEmptyItems()
-        {
-            var emptyTitle = new WindowInfoItemModel { Title = string.Empty, IsTitleFilteredVisible = true, IsIncludeEmptyTitleVisible = true, IsIncludeRemovedVisible = true };
-            var normalTitle = new WindowInfoItemModel { Title = "Editor", IsTitleFilteredVisible = true, IsIncludeEmptyTitleVisible = true, IsIncludeRemovedVisible = true };
-            var service = CreateServiceWithItems(emptyTitle, normalTitle);
-
-            service.FilterByIncludeEmptyTitle(false);
-
-            Assert.IsFalse(emptyTitle.IsVisible);
-            Assert.IsTrue(normalTitle.IsVisible);
-
-            service.FilterByIncludeEmptyTitle(true);
-
-            Assert.IsTrue(emptyTitle.IsVisible);
-            Assert.IsTrue(normalTitle.IsVisible);
-        }
-
-        [TestMethod]
-        public void FilterByIncludeRemoved_TogglesVisibilityForRemovedItems()
-        {
-            var removedItem = new WindowInfoItemModel { Title = "Removed", IsRemoved = true, IsTitleFilteredVisible = true, IsIncludeEmptyTitleVisible = true, IsIncludeRemovedVisible = true };
-            var activeItem = new WindowInfoItemModel { Title = "Active", IsRemoved = false, IsTitleFilteredVisible = true, IsIncludeEmptyTitleVisible = true, IsIncludeRemovedVisible = true };
-            var service = CreateServiceWithItems(removedItem, activeItem);
-
-            service.FilterByIncludeRemoved(false);
-
-            Assert.IsFalse(removedItem.IsVisible);
-            Assert.IsTrue(activeItem.IsVisible);
-
-            service.FilterByIncludeRemoved(true);
-
-            Assert.IsTrue(removedItem.IsVisible);
-            Assert.IsTrue(activeItem.IsVisible);
+            Assert.IsNull(snapshots.GetValue(service));
         }
     }
 }

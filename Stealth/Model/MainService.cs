@@ -12,18 +12,14 @@ using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace Stealth.Model
 {
-    public class MainService : IMainService
+    public class MainService : IMainService, IDisposable
     {
         // window info from native user32
         private WindowInstanceUtil util;
         private List<WindowInstanceInfo> windowsInstanceList;
 
         // window info for view
-        public ObservableCollection<WindowInfoItemModel> windowInfoViewList { get; set; }
-
-        // filters
-        private string titleText;
-        private bool includeEmptyTitle, includeRemoved;
+        public ObservableCollection<WindowInfoItemModel> windowInfoViewList { get; private set; }
 
         public MainService()
         {
@@ -35,8 +31,7 @@ namespace Stealth.Model
 
         public ObservableCollection<WindowInfoItemModel> GetWindowListData()
         {
-            UpdateWindowInfoItemModelList(windowInfoViewList, windowsInstanceList);
-            return new ObservableCollection<WindowInfoItemModel>(windowInfoViewList);
+            return windowInfoViewList;
         }
 
 
@@ -77,19 +72,35 @@ namespace Stealth.Model
         public void RefreshWindowData()
         {
             //please note that the UI (ListBoxItem) content is not refershed if updating nested elements
-            if (windowsInstanceList != null)
-            {
-                foreach (var window in windowsInstanceList)
-                {
-                    window.Dispose();
-                }
-            }
+            DisposeWindowSnapshots();
 
             windowsInstanceList = util.RetrieveAllWindows(true);
             UpdateWindowInfoItemModelList(windowInfoViewList, windowsInstanceList);
-            FilterByTitle(this.titleText);
-            FilterByIncludeEmptyTitle(this.includeEmptyTitle);
-            FilterByIncludeRemoved(this.includeRemoved);
+        }
+
+        private void DisposeWindowSnapshots()
+        {
+            if (windowsInstanceList == null)
+            {
+                return;
+            }
+
+            foreach (var window in windowsInstanceList)
+            {
+                window.Dispose();
+            }
+
+            windowsInstanceList = null;
+        }
+
+        public void Dispose()
+        {
+            foreach (var item in windowInfoViewList)
+            {
+                item.PropertyChanged -= WindowInfoItemModel_PropertyChanged;
+            }
+
+            DisposeWindowSnapshots();
         }
 
 
@@ -150,45 +161,6 @@ namespace Stealth.Model
             else if (e.PropertyName == nameof(WindowInfoItemModel.IsTopMost))
             {
                 SetTopMost(item);
-            }
-        }
-
-
-        public void FilterByTitle(string titleText)
-        {
-            this.titleText = titleText;
-            if (string.IsNullOrWhiteSpace(this.titleText)) //disable filter
-            {
-                foreach (var item in windowInfoViewList)
-                {
-                    item.IsTitleFilteredVisible = true;
-                }
-            }
-            else
-            {
-                foreach (var item in windowInfoViewList)
-                {
-                    item.IsTitleFilteredVisible = !string.IsNullOrWhiteSpace(item.Title) &&
-                        item.Title.IndexOf(this.titleText, StringComparison.OrdinalIgnoreCase) >= 0;
-                }
-            }
-        }
-
-        public void FilterByIncludeEmptyTitle(bool? includeEmptyTitle)
-        {
-            this.includeEmptyTitle = includeEmptyTitle ?? false;
-            foreach (var item in windowInfoViewList)
-            {
-                item.IsIncludeEmptyTitleVisible = this.includeEmptyTitle;
-            }
-        }
-
-        public void FilterByIncludeRemoved(bool? includeRemoved)
-        {
-            this.includeRemoved = includeRemoved ?? false;
-            foreach (var item in windowInfoViewList)
-            {
-                item.IsIncludeRemovedVisible = this.includeRemoved;
             }
         }
     }
