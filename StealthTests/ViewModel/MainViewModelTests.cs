@@ -55,6 +55,19 @@ namespace Stealth.ViewModel.Tests
             Assert.AreEqual(0, viewModel.WindowsView.Cast<WindowInfoItemModel>().Count());
         }
 
+        [TestMethod]
+        public void UpdateOpacityFromOverlay_ForwardsWindowHandleAndOpacity()
+        {
+            var service = new FakeMainService();
+            var viewModel = new MainViewModel(service);
+            var handle = new IntPtr(12345);
+
+            viewModel.UpdateOpacityFromOverlay(handle, 120);
+
+            Assert.AreEqual(handle, service.LastUpdatedHandle);
+            Assert.AreEqual((byte)120, service.LastUpdatedOpacity);
+        }
+
         private sealed class FakeMainService : IMainService
         {
             private readonly ObservableCollection<WindowInfoItemModel> _items;
@@ -65,10 +78,17 @@ namespace Stealth.ViewModel.Tests
             }
 
             public Action OnRefresh { get; set; }
+            public IntPtr LastUpdatedHandle { get; private set; }
+            public byte LastUpdatedOpacity { get; private set; }
             public ObservableCollection<WindowInfoItemModel> GetWindowListData() => _items;
             public void RefreshWindowData() => OnRefresh?.Invoke();
             public void Detail(WindowInfoItemModel item) { }
             public void ChangeOpacity(WindowInfoItemModel item) { }
+            public void UpdateOpacityFromOverlay(IntPtr handle, byte opacity)
+            {
+                LastUpdatedHandle = handle;
+                LastUpdatedOpacity = opacity;
+            }
             public void SetTopMost(WindowInfoItemModel item) { }
         }
     }

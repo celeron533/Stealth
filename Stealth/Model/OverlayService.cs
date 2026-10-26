@@ -24,6 +24,8 @@ namespace Stealth.Model
         private IntPtr _lastAnchoredTargetHandle;
         private bool _disposed;
 
+        public event Action<IntPtr, byte> OpacityApplied;
+
         public OverlayService()
         {
             _timer = new DispatcherTimer(
@@ -202,8 +204,12 @@ namespace Stealth.Model
                 }
 
                 var alpha = (byte)Math.Max(byte.MinValue, Math.Min(byte.MaxValue, opacity));
-                targetWindow.TrySetOpacity(alpha, out var error);
+                var applied = targetWindow.TrySetOpacity(alpha, out var error);
                 _overlayWindow.SetOpacityError(error);
+                if (applied)
+                {
+                    OpacityApplied?.Invoke(_currentTargetHandle, alpha);
+                }
             }
         }
 

@@ -143,6 +143,11 @@ namespace Stealth.ViewModel
             WindowsView.Filter = IsWindowVisible;
         }
 
+        public void UpdateOpacityFromOverlay(IntPtr handle, byte opacity)
+        {
+            _mainService.UpdateOpacityFromOverlay(handle, opacity);
+        }
+
         private bool IsWindowVisible(object value)
         {
             var item = value as WindowInfoItemModel;

@@ -31,6 +31,8 @@ namespace Stealth.Design
 
         public void ChangeOpacity(WindowInfoItemModel item) { }
 
+        public void UpdateOpacityFromOverlay(IntPtr handle, byte opacity) { }
+
         public void SetTopMost(WindowInfoItemModel item) { }
 
         private void DummyDataSource()

@@ -1,5 +1,7 @@
 ﻿using Stealth.Model;
 using Stealth.Properties;
+using Stealth.ViewModel;
+using System;
 using System.Windows;
 
 namespace Stealth
@@ -32,26 +34,41 @@ namespace Stealth
                 if (_overlayService == null)
                 {
                     _overlayService = new OverlayService();
+                    _overlayService.OpacityApplied += OverlayService_OpacityApplied;
                     _overlayService.Start();
                 }
 
                 return;
             }
 
-            _overlayService?.Dispose();
+            DisposeOverlayService();
+        }
+
+        private void OverlayService_OpacityApplied(IntPtr handle, byte opacity)
+        {
+            ((ViewModelLocator)Resources["Locator"]).Main.UpdateOpacityFromOverlay(handle, opacity);
+        }
+
+        private void DisposeOverlayService()
+        {
+            if (_overlayService == null)
+            {
+                return;
+            }
+
+            _overlayService.OpacityApplied -= OverlayService_OpacityApplied;
+            _overlayService.Dispose();
             _overlayService = null;
         }
 
-        private void MainWindow_Closed(object sender, System.EventArgs e)
+        private void MainWindow_Closed(object sender, EventArgs e)
         {
-            _overlayService?.Dispose();
-            _overlayService = null;
+            DisposeOverlayService();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
-            _overlayService?.Dispose();
-            _overlayService = null;
+            DisposeOverlayService();
             base.OnExit(e);
         }
     }

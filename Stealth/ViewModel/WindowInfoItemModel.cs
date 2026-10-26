@@ -85,6 +85,20 @@ namespace Stealth.ViewModel
 
         internal bool IsUpdatingFromNative { get; private set; }
 
+        internal void UpdateOpacityFromNative(byte opacity)
+        {
+            IsUpdatingFromNative = true;
+            try
+            {
+                Opacity = opacity;
+                OpacityError = null;
+            }
+            finally
+            {
+                IsUpdatingFromNative = false;
+            }
+        }
+
         /// <summary>
         /// Copy the base properties from native entity.
         /// </summary>
